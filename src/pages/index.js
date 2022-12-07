@@ -1,10 +1,6 @@
 import { useEffect } from 'react';
-// next
 import { useRouter } from 'next/router';
-// routes
-import { PATH_AUTH } from '../routes/paths';
-
-// ----------------------------------------------------------------------
+import { PATH_AUTH } from 'src/routes/paths';
 
 export default function Index() {
   const { pathname, push } = useRouter();

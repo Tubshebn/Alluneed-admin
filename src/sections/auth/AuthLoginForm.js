@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
-import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, Stack, Alert, IconButton, InputAdornment, Box } from '@mui/material';
+import { Stack, Alert, IconButton, InputAdornment, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import Iconify from 'src/components/iconify';

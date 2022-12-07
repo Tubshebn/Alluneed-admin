@@ -1,14 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-// next
 import { useRouter } from 'next/router';
-// components
-import LoadingScreen from '../components/loading-screen';
-//
-import Login from '../pages/auth/login';
+import LoadingScreen from 'src/components/loading-screen';
+import Login from 'src/pages/auth/login';
 import { useAuthContext } from './useAuthContext';
-
-// ----------------------------------------------------------------------
 
 AuthGuard.propTypes = {
   children: PropTypes.node,
@@ -16,9 +11,7 @@ AuthGuard.propTypes = {
 
 export default function AuthGuard({ children }) {
   const { isAuthenticated, isInitialized } = useAuthContext();
-
   const { pathname, push } = useRouter();
-
   const [requestedLocation, setRequestedLocation] = useState(null);
 
   useEffect(() => {

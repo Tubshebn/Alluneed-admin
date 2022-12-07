@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
-// utils
 import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
 import { isValidToken, setSession } from './utils';
@@ -83,7 +82,6 @@ export function AuthProvider({ children }) {
         });
       }
     } catch (error) {
-      console.error(error);
       dispatch({
         type: 'INITIAL',
         payload: {
