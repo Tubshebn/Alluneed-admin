@@ -1,17 +1,9 @@
 import PropTypes from 'prop-types';
-// next
-import NextLink from 'next/link';
-// @mui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, Box, Link } from '@mui/material';
-// config
-import { HEADER } from '../../config-global';
-// utils
-import { bgBlur } from '../../utils/cssStyles';
-// components
-import Logo from '../../components/logo';
-
-// ----------------------------------------------------------------------
+import { AppBar, Toolbar, Box } from '@mui/material';
+import { HEADER } from 'src/config-global';
+import { bgBlur } from 'src/utils/cssStyles';
+import Logo from 'src/components/logo';
 
 Header.propTypes = {
   isOffset: PropTypes.bool,
@@ -48,8 +40,6 @@ export default function Header({ isOffset }) {
     </AppBar>
   );
 }
-
-// ----------------------------------------------------------------------
 
 Shadow.propTypes = {
   sx: PropTypes.object,

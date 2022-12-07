@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
 
-// ----------------------------------------------------------------------
-
 export default function useActiveLink(path, deep = true) {
   const { pathname, asPath } = useRouter();
 

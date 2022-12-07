@@ -1,16 +1,9 @@
 import PropTypes from 'prop-types';
-// next
 import dynamic from 'next/dynamic';
-// @mui
 import { Stack, Container } from '@mui/material';
-// hooks
-import useOffSetTop from '../../hooks/useOffSetTop';
-// config
-import { HEADER } from '../../config-global';
-//
+import useOffSetTop from 'src/hooks/useOffSetTop';
+import { HEADER } from 'src/config-global';
 const Header = dynamic(() => import('./Header'), { ssr: false });
-
-// ----------------------------------------------------------------------
 
 CompactLayout.propTypes = {
   children: PropTypes.node,

@@ -1,8 +1,4 @@
-import { PATH_DASHBOARD } from './routes/paths';
-
 export const HOST_API_KEY = process.env.HOST_API_KEY || '';
-
-export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
 
 export const HEADER = {
   H_MOBILE: 64,

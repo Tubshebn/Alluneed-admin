@@ -1,15 +1,9 @@
 import * as React from 'react';
-// next
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-// @emotion
 import createEmotionServer from '@emotion/server/create-instance';
-// utils
-import createEmotionCache from '../utils/createEmotionCache';
-// theme
-import palette from '../theme/palette';
-import { primaryFont } from '../theme/typography';
-
-// ----------------------------------------------------------------------
+import createEmotionCache from 'src/utils/createEmotionCache';
+import palette from 'src/theme/palette';
+import { primaryFont } from 'src/theme/typography';
 
 export default class MyDocument extends Document {
   render() {
@@ -48,8 +42,6 @@ export default class MyDocument extends Document {
     );
   }
 }
-
-// ----------------------------------------------------------------------
 
 MyDocument.getInitialProps = async (ctx) => {
   const originalRenderPage = ctx.renderPage;

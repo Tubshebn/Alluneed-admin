@@ -1,9 +1,5 @@
-// routes
-import { PATH_AUTH } from '../routes/paths';
-// utils
-import axios from '../utils/axios';
-
-// ----------------------------------------------------------------------
+import { PATH_AUTH } from 'src/routes/paths';
+import axios from 'src/utils/axios';
 
 function jwtDecode(token) {
   const base64Url = token.split('.')[1];
@@ -19,8 +15,6 @@ function jwtDecode(token) {
   return JSON.parse(jsonPayload);
 }
 
-// ----------------------------------------------------------------------
-
 export const isValidToken = (accessToken) => {
   if (!accessToken) {
     return false;
@@ -32,8 +26,6 @@ export const isValidToken = (accessToken) => {
 
   return decoded.exp > currentTime;
 };
-
-// ----------------------------------------------------------------------
 
 export const tokenExpired = (exp) => {
   // eslint-disable-next-line prefer-const
@@ -55,8 +47,6 @@ export const tokenExpired = (exp) => {
     window.location.href = PATH_AUTH.login;
   }, timeLeft);
 };
-
-// ----------------------------------------------------------------------
 
 export const setSession = (accessToken) => {
   if (accessToken) {

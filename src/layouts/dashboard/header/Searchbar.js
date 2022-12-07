@@ -1,9 +1,7 @@
 import { useState, memo, useEffect } from 'react';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
-// next
 import { useRouter } from 'next/router';
-// @mui
 import { alpha, styled } from '@mui/material/styles';
 import {
   Box,
@@ -14,17 +12,12 @@ import {
   ClickAwayListener,
   Autocomplete,
 } from '@mui/material';
-// utils
-import { bgBlur } from '../../../utils/cssStyles';
-import flattenArray from '../../../utils/flattenArray';
-// components
-import Iconify from '../../../components/iconify';
-import { IconButtonAnimate } from '../../../components/animate';
-import SearchNotFound from '../../../components/search-not-found';
-//
+import { bgBlur } from 'src/utils/cssStyles';
+import flattenArray from 'src/utils/flattenArray';
+import Iconify from 'src/components/iconify';
+import { IconButtonAnimate } from 'src/components/animate';
+import SearchNotFound from 'src/components/search-not-found';
 import NavConfig from '../nav/config-navigation';
-
-// ----------------------------------------------------------------------
 
 const APPBAR_MOBILE = 64;
 const APPBAR_DESKTOP = 92;
@@ -85,8 +78,6 @@ const StyledPopper = styled((props) => <Popper {...props} />)(({ theme }) => ({
     },
   },
 }));
-
-// ----------------------------------------------------------------------
 
 function Searchbar() {
   const { push, pathname } = useRouter();
@@ -229,8 +220,6 @@ function Searchbar() {
 
 export default memo(Searchbar);
 
-// ----------------------------------------------------------------------
-
 function splitPath(array, key) {
   let stack = array.map((item) => ({
     path: [item.title],
@@ -255,8 +244,6 @@ function splitPath(array, key) {
   }
   return null;
 }
-
-// ----------------------------------------------------------------------
 
 function handleLoop(array, subheader = '') {
   return array?.map((list) => ({

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-// ----------------------------------------------------------------------
-
 export default function useCountdown(date) {
   const [countdown, setCountdown] = useState({
     days: '00',

@@ -1,8 +1,6 @@
 import { useScroll } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-// ----------------------------------------------------------------------
-
 export default function useOffSetTop(top = 100, options) {
   const { scrollY } = useScroll(options);
 

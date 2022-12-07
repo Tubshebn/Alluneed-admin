@@ -11,8 +11,6 @@ import { NavSectionMini } from '../../../components/nav-section';
 import navConfig from './config-navigation';
 import NavToggleButton from './NavToggleButton';
 
-// ----------------------------------------------------------------------
-
 export default function NavMini() {
   return (
     <Box

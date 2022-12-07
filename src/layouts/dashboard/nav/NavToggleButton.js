@@ -1,15 +1,9 @@
 import PropTypes from 'prop-types';
-// @mui
 import { IconButton } from '@mui/material';
-// hooks
-import useResponsive from '../../../hooks/useResponsive';
-// config
-import { NAV } from '../../../config-global';
-// components
-import Iconify from '../../../components/iconify';
-import { useSettingsContext } from '../../../components/settings';
-
-// ----------------------------------------------------------------------
+import useResponsive from 'src/hooks/useResponsive';
+import { NAV } from 'src/config-global';
+import Iconify from 'src/components/iconify';
+import { useSettingsContext } from 'src/components/settings';
 
 NavToggleButton.propTypes = {
   sx: PropTypes.object,

@@ -11,8 +11,6 @@ import navConfig from './config-navigation';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
 
-// ----------------------------------------------------------------------
-
 NavVertical.propTypes = {
   openNav: PropTypes.bool,
   onCloseNav: PropTypes.func,

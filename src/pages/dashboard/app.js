@@ -6,7 +6,6 @@ import { useSettingsContext } from 'src/components/settings';
 GeneralAppPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function GeneralAppPage() {
   const { themeStretch } = useSettingsContext();
-
   return (
     <>
       <Head>

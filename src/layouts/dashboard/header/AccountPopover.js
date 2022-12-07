@@ -1,20 +1,13 @@
 import { useState } from 'react';
-// next
 import { useRouter } from 'next/router';
-// @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
-// routes
-import { PATH_DASHBOARD, PATH_AUTH } from '../../../routes/paths';
-// auth
-import { useAuthContext } from '../../../auth/useAuthContext';
-// components
-import { CustomAvatar } from '../../../components/custom-avatar';
-import { useSnackbar } from '../../../components/snackbar';
-import MenuPopover from '../../../components/menu-popover';
-import { IconButtonAnimate } from '../../../components/animate';
-
-// ----------------------------------------------------------------------
+import { PATH_DASHBOARD, PATH_AUTH } from 'src/routes/paths';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { CustomAvatar } from 'src/components/custom-avatar';
+import { useSnackbar } from 'src/components/snackbar';
+import MenuPopover from 'src/components/menu-popover';
+import { IconButtonAnimate } from 'src/components/animate';
 
 const OPTIONS = [
   {
@@ -23,11 +16,11 @@ const OPTIONS = [
   },
   {
     label: 'Би',
-    linkTo: PATH_DASHBOARD.user.profile,
+    linkTo: PATH_DASHBOARD.general.app,
   },
   {
     label: 'Тохиргоо',
-    linkTo: PATH_DASHBOARD.user.account,
+    linkTo: PATH_DASHBOARD.general.app,
   },
 ];
 

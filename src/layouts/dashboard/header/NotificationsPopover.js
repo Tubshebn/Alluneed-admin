@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
 import { useState } from 'react';
-// @mui
 import {
   Box,
   Stack,
@@ -18,22 +17,16 @@ import {
   ListItemAvatar,
   ListItemButton,
 } from '@mui/material';
-// utils
-import { fToNow } from '../../../utils/formatTime';
-// _mock_
-import { _notifications } from '../../../_mock/arrays';
-// components
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import MenuPopover from '../../../components/menu-popover';
-import { IconButtonAnimate } from '../../../components/animate';
-
-// ----------------------------------------------------------------------
+import { fToNow } from 'src/utils/formatTime';
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
+import MenuPopover from 'src/components/menu-popover';
+import { IconButtonAnimate } from 'src/components/animate';
 
 export default function NotificationsPopover() {
   const [openPopover, setOpenPopover] = useState(null);
 
-  const [notifications, setNotifications] = useState(_notifications);
+  const [notifications, setNotifications] = useState([]);
 
   const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
@@ -119,15 +112,13 @@ export default function NotificationsPopover() {
 
         <Box sx={{ p: 1 }}>
           <Button fullWidth disableRipple>
-            View All
+            Бүгдийг харах
           </Button>
         </Box>
       </MenuPopover>
     </>
   );
 }
-
-// ----------------------------------------------------------------------
 
 NotificationItem.propTypes = {
   notification: PropTypes.shape({

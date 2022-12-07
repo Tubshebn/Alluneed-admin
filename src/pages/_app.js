@@ -1,49 +1,26 @@
-// i18n
 import 'src/locales/i18n';
-
-// scroll bar
 import 'simplebar/src/simplebar.css';
-
-// lightbox
 /* eslint-disable import/no-unresolved */
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
-
-// map
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-// editor
 import 'react-quill/dist/quill.snow.css';
-
-// slick-carousel
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-// lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
-
-// ----------------------------------------------------------------------
-
 import PropTypes from 'prop-types';
 import { CacheProvider } from '@emotion/react';
-// next
 import Head from 'next/head';
-// @mui
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// utils
 import createEmotionCache from 'src/utils/createEmotionCache';
-// theme
 import ThemeProvider from '../theme';
-// locales
 import ThemeLocalization from '../locales';
-// components
 import { StyledChart } from 'src/components/chart';
 import ProgressBar from 'src/components/progress-bar';
 import SnackbarProvider from 'src/components/snackbar';
 import { MotionLazyContainer } from 'src/components/animate';
-
 import { AuthProvider } from 'src/auth/JwtContext';
 
 const clientSideEmotionCache = createEmotionCache();

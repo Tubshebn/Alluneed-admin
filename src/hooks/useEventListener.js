@@ -1,7 +1,5 @@
 import { useEffect, useRef, useLayoutEffect } from 'react';
 
-// ----------------------------------------------------------------------
-
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 function useEventListener(eventName, handler, element, options) {

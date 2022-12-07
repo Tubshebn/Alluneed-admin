@@ -1,21 +1,12 @@
 import { m } from 'framer-motion';
-// next
 import Head from 'next/head';
 import NextLink from 'next/link';
-// @mui
 import { Button, Typography } from '@mui/material';
-// layouts
-import CompactLayout from '../layouts/compact';
-// components
-import { MotionContainer, varBounce } from '../components/animate';
-// assets
-import { ForbiddenIllustration } from '../assets/illustrations';
-
-// ----------------------------------------------------------------------
+import CompactLayout from 'src/layouts/compact';
+import { MotionContainer, varBounce } from 'src/components/animate';
+import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 Page403.getLayout = (page) => <CompactLayout>{page}</CompactLayout>;
-
-// ----------------------------------------------------------------------
 
 export default function Page403() {
   return (

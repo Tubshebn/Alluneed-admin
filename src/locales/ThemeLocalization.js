@@ -1,10 +1,6 @@
 import PropTypes from 'prop-types';
-// @mui
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
-//
 import useLocales from './useLocales';
-
-// ----------------------------------------------------------------------
 
 ThemeLocalization.propTypes = {
   children: PropTypes.node,
