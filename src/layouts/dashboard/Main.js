@@ -1,14 +1,8 @@
 import PropTypes from 'prop-types';
-// @mui
 import { Box } from '@mui/material';
-// hooks
-import useResponsive from '../../hooks/useResponsive';
-// config
-import { HEADER, NAV } from '../../config-global';
-// components
-import { useSettingsContext } from '../../components/settings';
-
-// ----------------------------------------------------------------------
+import useResponsive from 'src/hooks/useResponsive';
+import { HEADER, NAV } from 'src/config-global';
+import { useSettingsContext } from 'src/components/settings';
 
 const SPACING = 8;
 

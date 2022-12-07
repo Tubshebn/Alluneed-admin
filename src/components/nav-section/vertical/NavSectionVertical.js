@@ -27,7 +27,6 @@ export default function NavSectionVertical({ data, sx, ...other }) {
             {group.subheader && (
               <StyledSubheader disableSticky>{`${translate(group.subheader)}`}</StyledSubheader>
             )}
-
             {group.items.map((list) => (
               <NavList
                 key={list.title + list.path}

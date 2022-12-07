@@ -18,15 +18,15 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const OPTIONS = [
   {
-    label: 'Home',
+    label: 'Нүүр',
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    label: 'Би',
     linkTo: PATH_DASHBOARD.user.profile,
   },
   {
-    label: 'Settings',
+    label: 'Тохиргоо',
     linkTo: PATH_DASHBOARD.user.account,
   },
 ];
@@ -56,7 +56,6 @@ export default function AccountPopover() {
       replace(PATH_AUTH.login);
       handleClosePopover();
     } catch (error) {
-      console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }
   };
@@ -91,11 +90,11 @@ export default function AccountPopover() {
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            Amarjargal Batbold
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            amarjargalbatbold@gmail.com
           </Typography>
         </Box>
 
@@ -112,7 +111,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          Гарах
         </MenuItem>
       </MenuPopover>
     </>

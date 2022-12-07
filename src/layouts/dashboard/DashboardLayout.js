@@ -1,21 +1,14 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-// @mui
 import { Box } from '@mui/material';
-// hooks
-import useResponsive from '../../hooks/useResponsive';
-// auth
-import AuthGuard from '../../auth/AuthGuard';
-// components
-import { useSettingsContext } from '../../components/settings';
-//
+import useResponsive from 'src/hooks/useResponsive';
+import AuthGuard from 'src/auth/AuthGuard';
+import { useSettingsContext } from 'src/components/settings';
 import Main from './Main';
 import Header from './header';
 import NavMini from './nav/NavMini';
 import NavVertical from './nav/NavVertical';
 import NavHorizontal from './nav/NavHorizontal';
-
-// ----------------------------------------------------------------------
 
 DashboardLayout.propTypes = {
   children: PropTypes.node,

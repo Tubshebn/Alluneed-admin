@@ -1,16 +1,9 @@
-// next
 import NextLink from 'next/link';
-// @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
-// auth
-import { useAuthContext } from '../../../auth/useAuthContext';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-// components
-import { CustomAvatar } from '../../../components/custom-avatar';
-
-// ----------------------------------------------------------------------
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { PATH_DASHBOARD } from 'src/routes/paths';
+import { CustomAvatar } from 'src/components/custom-avatar';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -23,23 +16,19 @@ const StyledRoot = styled('div')(({ theme }) => ({
   }),
 }));
 
-// ----------------------------------------------------------------------
-
 export default function NavAccount() {
   const { user } = useAuthContext();
 
   return (
     <Link component={NextLink} href={PATH_DASHBOARD.user.account} underline="none" color="inherit">
       <StyledRoot>
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
-
+        <CustomAvatar src={user?.photoURL} alt={'Amarjargal'} name={'Amarjargal'} />
         <Box sx={{ ml: 2, minWidth: 0 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            Amarjargal
           </Typography>
-
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.role}
+            admin
           </Typography>
         </Box>
       </StyledRoot>

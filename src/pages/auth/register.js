@@ -3,20 +3,19 @@ import Head from 'next/head';
 // auth
 import GuestGuard from '../../auth/GuestGuard';
 // sections
-import Login from '../../sections/auth/Login';
-// import Login from '../../sections/auth/LoginAuth0';
+import Register from '../../sections/auth/Register';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <>
       <Head>
-        <title> Login | Minimal UI</title>
+        <title> Register | Minimal UI</title>
       </Head>
 
       <GuestGuard>
-        <Login />
+        <Register />
       </GuestGuard>
     </>
   );

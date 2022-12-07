@@ -1,22 +1,15 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-// next
 import { useRouter } from 'next/router';
-// @mui
 import { Box, Stack, Drawer } from '@mui/material';
-// hooks
-import useResponsive from '../../../hooks/useResponsive';
-// config
-import { NAV } from '../../../config-global';
-// components
-import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
-import { NavSectionVertical } from '../../../components/nav-section';
-//
+import useResponsive from 'src/hooks/useResponsive';
+import { NAV } from 'src/config-global';
+import Logo from 'src/components/logo';
+import Scrollbar from 'src/components/scrollbar';
+import { NavSectionVertical } from 'src/components/nav-section';
 import navConfig from './config-navigation';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
-import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
 
@@ -61,11 +54,8 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
         <NavAccount />
       </Stack>
-
       <NavSectionVertical data={navConfig} />
-
       <Box sx={{ flexGrow: 1 }} />
-
       <NavDocs />
     </Scrollbar>
   );
@@ -78,8 +68,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
         width: { lg: NAV.W_DASHBOARD },
       }}
     >
-      <NavToggleButton />
-
       {isDesktop ? (
         <Drawer
           open

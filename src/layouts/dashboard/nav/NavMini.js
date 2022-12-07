@@ -40,7 +40,6 @@ export default function NavMini() {
         }}
       >
         <Logo sx={{ mx: 'auto', my: 2 }} />
-
         <NavSectionMini data={navConfig} />
       </Stack>
     </Box>
