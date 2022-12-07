@@ -1,7 +1,5 @@
-// @mui
 import { GlobalStyles as MUIGlobalStyles } from '@mui/material';
-
-// ----------------------------------------------------------------------
+import { baseCss } from './css/base';
 
 export default function GlobalStyles() {
   const inputGlobalStyles = (
@@ -23,6 +21,7 @@ export default function GlobalStyles() {
           width: '100%',
           height: '100%',
         },
+        ...baseCss,
         '#__next': {
           width: '100%',
           height: '100%',

@@ -1,5 +1,5 @@
 // i18n
-import '../locales/i18n';
+import 'src/locales/i18n';
 
 // scroll bar
 import 'simplebar/src/simplebar.css';
@@ -33,23 +33,18 @@ import Head from 'next/head';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // utils
-import createEmotionCache from '../utils/createEmotionCache';
+import createEmotionCache from 'src/utils/createEmotionCache';
 // theme
 import ThemeProvider from '../theme';
 // locales
 import ThemeLocalization from '../locales';
 // components
-import { StyledChart } from '../components/chart';
-import ProgressBar from '../components/progress-bar';
-import SnackbarProvider from '../components/snackbar';
-import { MotionLazyContainer } from '../components/animate';
+import { StyledChart } from 'src/components/chart';
+import ProgressBar from 'src/components/progress-bar';
+import SnackbarProvider from 'src/components/snackbar';
+import { MotionLazyContainer } from 'src/components/animate';
 
-import { AuthProvider } from '../auth/JwtContext';
-// import { AuthProvider } from '../auth/Auth0Context';
-// import { AuthProvider } from '../auth/FirebaseContext';
-// import { AuthProvider } from '../auth/AwsCognitoContext';
-
-// ----------------------------------------------------------------------
+import { AuthProvider } from 'src/auth/JwtContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
