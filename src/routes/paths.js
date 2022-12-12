@@ -16,8 +16,11 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  kanban: path(ROOTS_DASHBOARD, '/kanban'),
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
+  },
+  ad: {
+    root: path(ROOTS_DASHBOARD, '/ad'),
+    posts: path(ROOTS_DASHBOARD, '/ad/posts'),
   },
 };

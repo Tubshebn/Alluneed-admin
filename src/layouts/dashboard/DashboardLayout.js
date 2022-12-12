@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import Head from 'next/head';
 import { Box } from '@mui/material';
 import useResponsive from 'src/hooks/useResponsive';
 import AuthGuard from 'src/auth/AuthGuard';
@@ -14,15 +15,11 @@ DashboardLayout.propTypes = {
   children: PropTypes.node,
 };
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ children, headTitle }) {
   const { themeLayout } = useSettingsContext();
-
   const isDesktop = useResponsive('up', 'lg');
-
   const [open, setOpen] = useState(false);
-
   const isNavHorizontal = themeLayout === 'horizontal';
-
   const isNavMini = themeLayout === 'mini';
 
   const handleOpen = () => {
@@ -47,12 +44,10 @@ export default function DashboardLayout({ children }) {
         </>
       );
     }
-
     if (isNavMini) {
       return (
         <>
           <Header onOpenNav={handleOpen} />
-
           <Box
             sx={{
               display: { lg: 'flex' },
@@ -60,17 +55,14 @@ export default function DashboardLayout({ children }) {
             }}
           >
             {isDesktop ? <NavMini /> : renderNavVertical}
-
             <Main>{children}</Main>
           </Box>
         </>
       );
     }
-
     return (
       <>
         <Header onOpenNav={handleOpen} />
-
         <Box
           sx={{
             display: { lg: 'flex' },
@@ -85,5 +77,12 @@ export default function DashboardLayout({ children }) {
     );
   };
 
-  return <AuthGuard> {renderContent()} </AuthGuard>;
+  return (
+    <AuthGuard>
+      <Head>
+        <title>{headTitle || `Удирдах хуудас`}</title>
+      </Head>
+      {renderContent()}
+    </AuthGuard>
+  );
 }
