@@ -19,8 +19,4 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
   },
-  ad: {
-    root: path(ROOTS_DASHBOARD, '/ad'),
-    posts: path(ROOTS_DASHBOARD, '/ad/posts'),
-  },
 };
