@@ -1,38 +1,33 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import LoadingScreen from 'src/components/loading-screen';
-import Login from 'src/pages/auth/login';
 import { useAuthContext } from './useAuthContext';
+import { PATH_AUTH } from 'src/routes/paths';
+import LoadingScreen from 'src/components/loading-screen';
 
 AuthGuard.propTypes = {
   children: PropTypes.node,
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated, isInitialized } = useAuthContext();
-  const { pathname, push } = useRouter();
-  const [requestedLocation, setRequestedLocation] = useState(null);
+  const [loading, setloading] = useState(true);
+  const {
+    state: { isLoggedIn },
+  } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
-    if (requestedLocation && pathname !== requestedLocation) {
-      push(requestedLocation);
-    }
-    if (isAuthenticated) {
-      setRequestedLocation(null);
-    }
-  }, [isAuthenticated, pathname, push, requestedLocation]);
+    setTimeout(() => {
+      setloading(false);
+    }, 300);
+  }, [isLoggedIn]);
 
-  if (!isInitialized) {
+  if (loading) {
     return <LoadingScreen />;
   }
 
-  if (!isAuthenticated) {
-    if (pathname !== requestedLocation) {
-      setRequestedLocation(pathname);
-    }
-    return <Login />;
+  if (isLoggedIn) {
+    return <> {children} </>;
   }
-
-  return <> {children} </>;
+  router.replace(PATH_AUTH.login);
 }

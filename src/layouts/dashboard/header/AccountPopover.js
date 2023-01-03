@@ -24,12 +24,12 @@ const OPTIONS = [
   },
 ];
 
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
   const { replace, push } = useRouter();
-
-  const { user, logout } = useAuthContext();
+  const {
+    handlers: { logOut },
+    user,
+  } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -45,7 +45,7 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
-      logout();
+      logOut();
       replace(PATH_AUTH.login);
       handleClosePopover();
     } catch (error) {

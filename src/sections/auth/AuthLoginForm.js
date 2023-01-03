@@ -7,9 +7,12 @@ import { LoadingButton } from '@mui/lab';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import axios from 'axios';
 
 export default function AuthLoginForm() {
-  const { login } = useAuthContext();
+  const {
+    handlers: { signIn },
+  } = useAuthContext();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,7 +40,11 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      await login(data.email, data.password);
+      const response = await axios.post('https://api-dev-minimal-v4.vercel.app/api/account/login', {
+        email: data.email,
+        password: data.password,
+      });
+      signIn(response.data.accessToken);
     } catch (error) {
       reset();
       setError('afterSubmit', {
