@@ -21,7 +21,10 @@ import { StyledChart } from 'src/components/chart';
 import ProgressBar from 'src/components/progress-bar';
 import SnackbarProvider from 'src/components/snackbar';
 import { MotionLazyContainer } from 'src/components/animate';
-import { AuthProvider } from 'src/auth/JwtContext';
+import { AuthContext } from 'src/context/Auth/authContext';
+import { Api } from 'src/auth/Api';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -32,6 +35,7 @@ MyApp.propTypes = {
 };
 
 export default function MyApp(props) {
+  const { handlers, state } = Api();
   const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -42,7 +46,12 @@ export default function MyApp(props) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
-      <AuthProvider>
+      <AuthContext.Provider
+        value={{
+          handlers,
+          state,
+        }}
+      >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <MotionLazyContainer>
             <ThemeProvider>
@@ -50,13 +59,14 @@ export default function MyApp(props) {
                 <SnackbarProvider>
                   <StyledChart />
                   <ProgressBar />
+                  <ToastContainer />
                   {getLayout(<Component {...pageProps} />)}
                 </SnackbarProvider>
               </ThemeLocalization>
             </ThemeProvider>
           </MotionLazyContainer>
         </LocalizationProvider>
-      </AuthProvider>
+      </AuthContext.Provider>
     </CacheProvider>
   );
 }

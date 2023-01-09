@@ -1,29 +1,33 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
-import LoadingScreen from 'src/components/loading-screen';
 import { useAuthContext } from './useAuthContext';
+import LoadingScreen from 'src/components/loading-screen';
 
 GuestGuard.propTypes = {
   children: PropTypes.node,
 };
 
 export default function GuestGuard({ children }) {
-  const { push } = useRouter();
-
-  const { isAuthenticated, isInitialized } = useAuthContext();
+  const [loading, setloading] = useState(true);
+  const {
+    state: { isLoggedIn },
+  } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      push(PATH_DASHBOARD.general.app);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+    setTimeout(() => {
+      setloading(false);
+    }, 300);
+  }, [isLoggedIn]);
 
-  if (isInitialized === isAuthenticated) {
+  if (loading) {
     return <LoadingScreen />;
   }
 
-  return <> {children} </>;
+  if (!isLoggedIn) {
+    return <> {children} </>;
+  }
+  router.replace(PATH_DASHBOARD.general.app);
 }
