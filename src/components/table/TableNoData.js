@@ -17,12 +17,12 @@ export default function TableNoData({ isNotFound }) {
         <TableRow>
           {isNotFound ? (
             <TableCell colSpan={12}>
-              {/* <EmptyContent
+              <EmptyContent
                 title="No Data"
                 sx={{
                   '& span.MuiBox-root': { height: 160 },
                 }}
-              /> */}
+              />
             </TableCell>
           ) : (
             <TableCell colSpan={12} sx={{ p: 0 }} />
