@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Box, Stack, Button, IconButton, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import { UploadIllustration } from '../../assets/illustrations';
-import Iconify from '../Iconify';
+import Iconify from '../iconify';
 import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
