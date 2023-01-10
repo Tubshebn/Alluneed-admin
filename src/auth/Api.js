@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import AuthReducer from 'src/context/Auth/authReducer';
 import axios from 'axios';
-import { HOST_API_KEY } from '../config-global';
+import { HOST_API_KEY, HOST_IMAGE_KEY } from '../config-global';
 import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } from './utils';
 
 const instance = axios.create({
@@ -104,6 +104,40 @@ export const Api = () => {
             handlers.logOut();
             toastExpireAccess();
           }
+          return e;
+        }
+      },
+      IMAGEUPLOAD: async (url, isToken = false, data) => {
+        try {
+          return await axios.post(
+            `${HOST_IMAGE_KEY}${url}`,
+            data,
+            isToken
+              ? {
+                  headers: {
+                    Authorization: `Bearer ${state.userToken}`,
+                  },
+                }
+              : ''
+          );
+        } catch (e) {
+          return e;
+        }
+      },
+      FILEUPLOAD: async (url, isToken = false, data) => {
+        try {
+          return await axios.post(
+            `${HOST_FILE_KEY}${url}`,
+            data,
+            isToken
+              ? {
+                  headers: {
+                    Authorization: `Bearer ${state.userToken}`,
+                  },
+                }
+              : ''
+          );
+        } catch (e) {
           return e;
         }
       },

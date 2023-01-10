@@ -1,4 +1,6 @@
 export const HOST_API_KEY = process.env.HOST_API_KEY || '';
+export const HOST_IMAGE_KEY = process.env.HOST_IMAGE_KEY || '';
+export const HOST_FILE_KEY = process.env.HOST_FILE_KEY || '';
 
 export const HEADER = {
   H_MOBILE: 64,
