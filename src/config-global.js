@@ -2,6 +2,10 @@ export const HOST_API_KEY = process.env.HOST_API_KEY || '';
 export const HOST_IMAGE_KEY = process.env.HOST_IMAGE_KEY || '';
 export const HOST_FILE_KEY = process.env.HOST_FILE_KEY || '';
 
+export const LOGIN_URL = process.env.LOGIN_URL || '';
+export const LOGIN_AUTH_USERNAME = process.env.LOGIN_AUTH_USERNAME || '';
+export const LOGIN_AUTH_PASSWORD = process.env.LOGIN_AUTH_PASSWORD || '';
+
 export const HEADER = {
   H_MOBILE: 64,
   H_MAIN_DESKTOP: 88,

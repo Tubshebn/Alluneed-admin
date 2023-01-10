@@ -16,6 +16,9 @@ module.exports = withTM({
     HOST_API_KEY: 'http://localhost:3000/',
     HOST_IMAGE_KEY: 'http://localhost:3000/',
     HOST_FILE_KEY: 'http://localhost:3000/',
+    LOGIN_URL: 'http://localhost:3000/',
+    LOGIN_AUTH_USERNAME: 'http://localhost:3000/',
+    LOGIN_AUTH_PASSWORD: 'http://localhost:3000/',
     // MAPBOX
     MAPBOX_API: '',
     // FIREBASE
