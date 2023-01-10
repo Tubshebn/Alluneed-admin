@@ -43,7 +43,7 @@ export const Api = () => {
         dispatch({ type: 'SIGN_OUT' });
       },
 
-      GET: async (url, isToken = false) => {
+      GET: async (url, isToken = false,responseType = 'json') => {
         try {
           return instance.get(
             url,
@@ -52,6 +52,7 @@ export const Api = () => {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
                   },
+                  responseType
                 }
               : ''
           );
@@ -64,7 +65,7 @@ export const Api = () => {
         }
       },
 
-      POST: async (url, isToken = false, data) => {
+      POST: async (url, isToken = false, data,responseType = 'json') => {
         try {
           return await instance.post(
             url,
@@ -74,6 +75,7 @@ export const Api = () => {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
                   },
+                  responseType
                 }
               : ''
           );
