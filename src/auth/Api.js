@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import AuthReducer from 'src/context/Auth/authReducer';
 import axios from 'axios';
 import { HOST_API_KEY } from '../config-global';
-import { setSession, removeSession, tokenCheck, toastExpireAccess } from './utils';
+import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } from './utils';
 
 const instance = axios.create({
   baseURL: HOST_API_KEY,
@@ -14,6 +14,7 @@ export const Api = () => {
   const initialState = {
     userToken: null,
     isLoggedIn: false,
+    user: null,
   };
   useEffect(() => {
     isCheckUser();
@@ -30,6 +31,7 @@ export const Api = () => {
         let payload = {
           token,
           isLoggedIn: true,
+          user: jwtDecode(token),
         };
         setSession(token);
         dispatch({ type: 'IS_LOGGED_IN', payload });
@@ -54,7 +56,7 @@ export const Api = () => {
               : ''
           );
         } catch (e) {
-          if (e?.response?.status === 401 || e?.response?.status === 403) {
+          if (e?.response?.status === 401) {
             handlers.logOut();
             toastExpireAccess();
           }
@@ -76,7 +78,7 @@ export const Api = () => {
               : ''
           );
         } catch (e) {
-          if (e?.response?.status === 401 || e?.response?.status === 403) {
+          if (e?.response?.status === 401) {
             handlers.logOut();
             toastExpireAccess();
           }
@@ -98,7 +100,7 @@ export const Api = () => {
               : ''
           );
         } catch (e) {
-          if (e?.response?.status === 401 || e?.response?.status === 403) {
+          if (e?.response?.status === 401) {
             handlers.logOut();
             toastExpireAccess();
           }

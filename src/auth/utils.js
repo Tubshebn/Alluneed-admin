@@ -1,30 +1,9 @@
 import Cookies from 'js-cookie';
+import jwt_decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 
-function jwtDecode(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split('')
-      .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-      .join('')
-  );
-
-  return JSON.parse(jsonPayload);
-}
-
-export const isValidToken = (accessToken) => {
-  if (!accessToken) {
-    return false;
-  }
-
-  const decoded = jwtDecode(accessToken);
-
-  const currentTime = Date.now() / 1000;
-
-  return decoded.exp > currentTime;
+export const jwtDecode = (token) => {
+  return jwt_decode(token);
 };
 
 export const setSession = (accessToken) => {
@@ -40,14 +19,17 @@ export const removeSession = () => {
 export const tokenCheck = () => {
   let payload;
   if (Cookies.get('accessToken')) {
+    let user = jwt_decode(Cookies.get('accessToken'));
     payload = {
       token: Cookies.get('accessToken'),
       isLoggedIn: true,
+      user,
     };
   } else {
     payload = {
       token: null,
       isLoggedIn: false,
+      user: null,
     };
   }
   return payload;
