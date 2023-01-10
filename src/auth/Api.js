@@ -43,6 +43,13 @@ export const Api = () => {
         dispatch({ type: 'SIGN_OUT' });
       },
 
+      stateDynamicUpdate : (obj) => {
+      //   payload = {
+      //    type:obj.type
+      //    value:obj.value
+      //  }
+       dispatch({ type: 'DYNAMIC_UPDATE', payload:obj});
+      },
       GET: async (url, isToken = false,responseType = 'json') => {
         try {
           return instance.get(

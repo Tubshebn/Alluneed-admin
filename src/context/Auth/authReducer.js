@@ -20,6 +20,12 @@ const reducer = (state, action) => {
         userToken: null,
         isLoggedIn: false,
       };
+    case 'DYNAMIC_UPDATE':
+      return {
+        ...state,
+         [action.payload.type]: action.payload.value,
+      };
+
     default:
       return state;
   }
