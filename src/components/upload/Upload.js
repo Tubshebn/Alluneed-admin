@@ -1,25 +1,21 @@
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-// @mui
 import { Box, Stack, Button, IconButton, Typography } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-// assets
 import { UploadIllustration } from '../../assets/illustrations';
-//
 import Iconify from '../iconify';
-//
 import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
 
-// ----------------------------------------------------------------------
+
 
 const StyledDropZone = styled('div')(({ theme }) => ({
   outline: 'none',
   cursor: 'pointer',
   overflow: 'hidden',
   position: 'relative',
-  padding: theme.spacing(5),
+  padding: theme.spacing(5, 1),
   borderRadius: theme.shape.borderRadius,
   transition: theme.transitions.create('padding'),
   backgroundColor: theme.palette.background.neutral,
@@ -29,12 +25,12 @@ const StyledDropZone = styled('div')(({ theme }) => ({
   },
 }));
 
-// ----------------------------------------------------------------------
+
 
 Upload.propTypes = {
   sx: PropTypes.object,
   error: PropTypes.bool,
-  files: PropTypes.array,
+  files: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -48,13 +44,14 @@ Upload.propTypes = {
 
 export default function Upload({
   disabled,
+  pdfMessage,
   multiple = false,
   error,
   helperText,
-  //
+  
   file,
   onDelete,
-  //
+  
   files,
   thumbnail,
   onUpload,
@@ -63,7 +60,13 @@ export default function Upload({
   sx,
   ...other
 }) {
-  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragReject,
+    fileRejections,
+  } = useDropzone({
     multiple,
     disabled,
     ...other,
@@ -110,8 +113,6 @@ export default function Upload({
         {hasFile && <SingleFilePreview file={file} />}
       </StyledDropZone>
 
-      {helperText && helperText}
-
       <RejectionFiles fileRejections={fileRejections} />
 
       {hasFile && onDelete && (
@@ -137,29 +138,40 @@ export default function Upload({
       {hasFiles && (
         <>
           <Box sx={{ my: 3 }}>
-            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={onRemove} />
+            <MultiFilePreview
+              files={files}
+              thumbnail={thumbnail}
+              onRemove={onRemove}
+            />
           </Box>
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             {onRemoveAll && (
-              <Button color="inherit" variant="outlined" size="small" onClick={onRemoveAll}>
-                Remove all
+              <Button
+                color="error"
+                variant="outlined"
+                size="small"
+                onClick={onRemoveAll}
+              >
+                Арилгах
               </Button>
             )}
 
             {onUpload && (
               <Button size="small" variant="contained" onClick={onUpload}>
-                Upload files
+                Зураг нэмэх
               </Button>
             )}
           </Stack>
         </>
       )}
+
+      {helperText && helperText}
     </Box>
   );
 }
 
-// ----------------------------------------------------------------------
+
 
 Placeholder.propTypes = {
   sx: PropTypes.object,
@@ -168,7 +180,7 @@ Placeholder.propTypes = {
 function Placeholder({ sx, ...other }) {
   return (
     <Stack
-      spacing={5}
+      spacing={2}
       alignItems="center"
       justifyContent="center"
       direction={{
@@ -187,13 +199,12 @@ function Placeholder({ sx, ...other }) {
     >
       <UploadIllustration sx={{ width: 220 }} />
 
-      <div>
+      <Box sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5">
-          Drop or Select file
+          Файл сонгох
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Drop files here or click
           <Typography
             variant="body2"
             component="span"
@@ -203,11 +214,11 @@ function Placeholder({ sx, ...other }) {
               textDecoration: 'underline',
             }}
           >
-            browse
+            Энд
           </Typography>
-          thorough your machine
+          дарж та файлаа сонгоно уу
         </Typography>
-      </div>
+      </Box>
     </Stack>
   );
 }
