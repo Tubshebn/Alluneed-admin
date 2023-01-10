@@ -1,16 +1,13 @@
-import PropTypes from 'prop-types';
 import { m, AnimatePresence } from 'framer-motion';
-// @mui
 import { alpha } from '@mui/material/styles';
 import { IconButton, Stack, Typography } from '@mui/material';
-// utils
-import { fData } from '../../../utils/formatNumber';
-//
-import Iconify from '../../iconify';
+import { fData } from 'src/utils/formatNumber';
 import { varFade } from '../../animate';
 import FileThumbnail, { fileData } from '../../file-thumbnail';
+import PropTypes from 'prop-types';
+import Iconify from '../../iconify';
 
-// ----------------------------------------------------------------------
+
 
 MultiFilePreview.propTypes = {
   sx: PropTypes.object,
@@ -26,7 +23,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
 
   return (
     <AnimatePresence initial={false}>
-      {files.map((file) => {
+      {files.map((file, i) => {
         const { key, name = '', size = 0 } = fileData(file);
 
         const isNotFormatFile = typeof file === 'string';
@@ -34,7 +31,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
         if (thumbnail) {
           return (
             <Stack
-              key={key}
+              key={i}
               component={m.div}
               {...varFade().inUp}
               alignItems="center"
@@ -112,7 +109,11 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
             </Stack>
 
             {onRemove && (
-              <IconButton edge="end" size="small" onClick={() => onRemove(file)}>
+              <IconButton
+                edge="end"
+                size="small"
+                onClick={() => onRemove(file)}
+              >
                 <Iconify icon="eva:close-fill" />
               </IconButton>
             )}
