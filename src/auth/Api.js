@@ -43,14 +43,14 @@ export const Api = () => {
         dispatch({ type: 'SIGN_OUT' });
       },
 
-      stateDynamicUpdate : (obj) => {
-      //   payload = {
-      //    type:obj.type
-      //    value:obj.value
-      //  }
-       dispatch({ type: 'DYNAMIC_UPDATE', payload:obj});
+      stateDynamicUpdate: (obj) => {
+        //   payload = {
+        //    type:obj.type
+        //    value:obj.value
+        //  }
+        dispatch({ type: 'DYNAMIC_UPDATE', payload: obj });
       },
-      GET: async (url, isToken = false,responseType = 'json') => {
+      GET: async (url, isToken = false, responseType = 'json') => {
         try {
           return instance.get(
             url,
@@ -59,7 +59,7 @@ export const Api = () => {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
                   },
-                  responseType
+                  responseType,
                 }
               : ''
           );
@@ -72,7 +72,7 @@ export const Api = () => {
         }
       },
 
-      POST: async (url, isToken = false, data,responseType = 'json') => {
+      POST: async (url, isToken = false, data, responseType = 'json') => {
         try {
           return await instance.post(
             url,
@@ -82,7 +82,7 @@ export const Api = () => {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
                   },
-                  responseType
+                  responseType,
                 }
               : ''
           );
