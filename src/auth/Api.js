@@ -117,6 +117,28 @@ export const Api = () => {
           return e;
         }
       },
+      DELETE: async (url, isToken = false, responseType = 'json') => {
+        try {
+          return instance.delete(
+            url,
+            isToken
+              ? {
+                  headers: {
+                    Authorization: `Bearer ${state.userToken}`,
+                  },
+                  responseType,
+                }
+              : ''
+          );
+        } catch (e) {
+          if (e?.response?.status === 401) {
+            handlers.logOut();
+            toastExpireAccess();
+          }
+          return e;
+        }
+      },
+      
       IMAGEUPLOAD: async (url, isToken = false, data) => {
         try {
           return await axios.post(
