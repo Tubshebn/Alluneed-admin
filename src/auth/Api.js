@@ -7,7 +7,6 @@ import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } f
 const instance = axios.create({
   baseURL: HOST_API_KEY,
   timeout: 30000,
-  headers: { 'Content-Type': 'application/json ' },
 });
 
 export const Api = () => {
@@ -50,7 +49,7 @@ export const Api = () => {
         //  }
         dispatch({ type: 'DYNAMIC_UPDATE', payload: obj });
       },
-      GET: async (url, isToken = false, responseType = 'json') => {
+      GET: async (url, isToken = false, contentType = 'application/json',responseType = 'json') => {
         try {
           return instance.get(
             url,
@@ -58,6 +57,7 @@ export const Api = () => {
               ? {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
+                    'Content-Type': contentType
                   },
                   responseType,
                 }
@@ -72,7 +72,7 @@ export const Api = () => {
         }
       },
 
-      POST: async (url, isToken = false, data, responseType = 'json') => {
+      POST: async (url, isToken = false, data, contentType = 'application/json',responseType = 'json') => {
         try {
           return await instance.post(
             url,
@@ -81,6 +81,7 @@ export const Api = () => {
               ? {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
+                     'Content-Type': contentType
                   },
                   responseType,
                 }
