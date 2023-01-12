@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import AuthReducer from 'src/context/Auth/authReducer';
 import axios from 'axios';
-import { HOST_API_KEY, HOST_IMAGE_KEY, HOST_FILE_KEY } from '../config-global';
+import { HOST_API_KEY, HOST_IMAGE_UPLOAD_KEY, HOST_FILE_UPLOAD_KEY } from '../config-global';
 import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } from './utils';
 
 const instance = axios.create({
@@ -49,7 +49,12 @@ export const Api = () => {
         //  }
         dispatch({ type: 'DYNAMIC_UPDATE', payload: obj });
       },
-      GET: async (url, isToken = false, contentType = 'application/json',responseType = 'json') => {
+      GET: async (
+        url,
+        isToken = false,
+        contentType = 'application/json',
+        responseType = 'json'
+      ) => {
         try {
           return instance.get(
             url,
@@ -57,7 +62,7 @@ export const Api = () => {
               ? {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
-                    'Content-Type': contentType
+                    'Content-Type': contentType,
                   },
                   responseType,
                 }
@@ -72,7 +77,13 @@ export const Api = () => {
         }
       },
 
-      POST: async (url, isToken = false, data, contentType = 'application/json',responseType = 'json') => {
+      POST: async (
+        url,
+        isToken = false,
+        data,
+        contentType = 'application/json',
+        responseType = 'json'
+      ) => {
         try {
           return await instance.post(
             url,
@@ -81,7 +92,7 @@ export const Api = () => {
               ? {
                   headers: {
                     Authorization: `Bearer ${state.userToken}`,
-                     'Content-Type': contentType
+                    'Content-Type': contentType,
                   },
                   responseType,
                 }
@@ -138,11 +149,11 @@ export const Api = () => {
           return e;
         }
       },
-      
+
       IMAGEUPLOAD: async (url, isToken = false, data) => {
         try {
           return await axios.post(
-            `${HOST_IMAGE_KEY}${url}`,
+            `${HOST_IMAGE_UPLOAD_KEY}${url}`,
             data,
             isToken
               ? {
@@ -159,7 +170,7 @@ export const Api = () => {
       FILEUPLOAD: async (url, isToken = false, data) => {
         try {
           return await axios.post(
-            `${HOST_FILE_KEY}${url}`,
+            `${HOST_FILE_UPLOAD_KEY}${url}`,
             data,
             isToken
               ? {
