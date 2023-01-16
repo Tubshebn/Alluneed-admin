@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import { useAuthContext } from './useAuthContext';
+import PropTypes from 'prop-types';
 import LoadingScreen from 'src/components/loading-screen';
 
 GuestGuard.propTypes = {

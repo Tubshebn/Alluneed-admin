@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Table,TableBody, TableRow, TableCell } from '@mui/material';
+import { Table, TableBody, TableRow, TableCell } from '@mui/material';
 //
 import EmptyContent from '../empty-content';
 

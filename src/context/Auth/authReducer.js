@@ -23,7 +23,7 @@ const reducer = (state, action) => {
     case 'DYNAMIC_UPDATE':
       return {
         ...state,
-         [action.payload.type]: action.payload.value,
+        [action.payload.type]: action.payload.value,
       };
 
     default:

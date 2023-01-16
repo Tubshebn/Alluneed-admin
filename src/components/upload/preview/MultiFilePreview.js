@@ -7,8 +7,6 @@ import FileThumbnail, { fileData } from '../../file-thumbnail';
 import PropTypes from 'prop-types';
 import Iconify from '../../iconify';
 
-
-
 MultiFilePreview.propTypes = {
   sx: PropTypes.object,
   files: PropTypes.array,
@@ -109,11 +107,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
             </Stack>
 
             {onRemove && (
-              <IconButton
-                edge="end"
-                size="small"
-                onClick={() => onRemove(file)}
-              >
+              <IconButton edge="end" size="small" onClick={() => onRemove(file)}>
                 <Iconify icon="eva:close-fill" />
               </IconButton>
             )}

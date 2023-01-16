@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
-import AuthReducer from 'src/context/Auth/authReducer';
-import axios from 'axios';
 import { HOST_API_KEY, HOST_IMAGE_UPLOAD_KEY, HOST_FILE_UPLOAD_KEY } from '../config-global';
 import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } from './utils';
+import AuthReducer from 'src/context/Auth/authReducer';
+import axios from 'axios';
 
 const instance = axios.create({
   baseURL: HOST_API_KEY,

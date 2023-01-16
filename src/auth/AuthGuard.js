@@ -1,8 +1,10 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import { useAuthContext } from './useAuthContext';
 import { PATH_AUTH } from 'src/routes/paths';
+
+import PropTypes from 'prop-types';
 import LoadingScreen from 'src/components/loading-screen';
 
 AuthGuard.propTypes = {

@@ -8,8 +8,6 @@ import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
 
-
-
 const StyledDropZone = styled('div')(({ theme }) => ({
   outline: 'none',
   cursor: 'pointer',
@@ -24,8 +22,6 @@ const StyledDropZone = styled('div')(({ theme }) => ({
     opacity: 0.72,
   },
 }));
-
-
 
 Upload.propTypes = {
   sx: PropTypes.object,
@@ -48,10 +44,10 @@ export default function Upload({
   multiple = false,
   error,
   helperText,
-  
+
   file,
   onDelete,
-  
+
   files,
   thumbnail,
   onUpload,
@@ -60,13 +56,7 @@ export default function Upload({
   sx,
   ...other
 }) {
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-    fileRejections,
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple,
     disabled,
     ...other,
@@ -138,21 +128,12 @@ export default function Upload({
       {hasFiles && (
         <>
           <Box sx={{ my: 3 }}>
-            <MultiFilePreview
-              files={files}
-              thumbnail={thumbnail}
-              onRemove={onRemove}
-            />
+            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={onRemove} />
           </Box>
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             {onRemoveAll && (
-              <Button
-                color="error"
-                variant="outlined"
-                size="small"
-                onClick={onRemoveAll}
-              >
+              <Button color="error" variant="outlined" size="small" onClick={onRemoveAll}>
                 Арилгах
               </Button>
             )}
@@ -170,8 +151,6 @@ export default function Upload({
     </Box>
   );
 }
-
-
 
 Placeholder.propTypes = {
   sx: PropTypes.object,
