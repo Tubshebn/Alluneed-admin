@@ -23,6 +23,7 @@ import SnackbarProvider from 'src/components/snackbar';
 import { MotionLazyContainer } from 'src/components/animate';
 import { AuthContext } from 'src/context/Auth/authContext';
 import { Api } from 'src/auth/Api';
+import { SWRConfig } from 'swr';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -45,28 +46,29 @@ export default function MyApp(props) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-
-      <AuthContext.Provider
-        value={{
-          handlers,
-          state,
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <MotionLazyContainer>
-            <ThemeProvider>
-              <ThemeLocalization>
-                <SnackbarProvider>
-                  <StyledChart />
-                  <ProgressBar />
-                  <ToastContainer />
-                  {getLayout(<Component {...pageProps} />)}
-                </SnackbarProvider>
-              </ThemeLocalization>
-            </ThemeProvider>
-          </MotionLazyContainer>
-        </LocalizationProvider>
-      </AuthContext.Provider>
+      <SWRConfig>
+        <AuthContext.Provider
+          value={{
+            handlers,
+            state,
+          }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <MotionLazyContainer>
+              <ThemeProvider>
+                <ThemeLocalization>
+                  <SnackbarProvider>
+                    <StyledChart />
+                    <ProgressBar />
+                    <ToastContainer />
+                    {getLayout(<Component {...pageProps} />)}
+                  </SnackbarProvider>
+                </ThemeLocalization>
+              </ThemeProvider>
+            </MotionLazyContainer>
+          </LocalizationProvider>
+        </AuthContext.Provider>
+      </SWRConfig>
     </CacheProvider>
   );
 }

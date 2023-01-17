@@ -49,12 +49,7 @@ export const Api = () => {
         //  }
         dispatch({ type: 'DYNAMIC_UPDATE', payload: obj });
       },
-      GET: async (
-        url,
-        isToken = false,
-        contentType = 'application/json',
-        responseType = 'json'
-      ) => {
+      GET: async (url, isToken = false, contentType = 'application/json', responseType = 'json') => {
         try {
           return instance.get(
             url,
@@ -73,17 +68,13 @@ export const Api = () => {
             handlers.logOut();
             toastExpireAccess();
           }
-          return e;
+          const error = new Error();
+          error.status = e?.response?.status;
+          throw error;
         }
       },
 
-      POST: async (
-        url,
-        isToken = false,
-        data,
-        contentType = 'application/json',
-        responseType = 'json'
-      ) => {
+      POST: async (url, isToken = false, data, contentType = 'application/json', responseType = 'json') => {
         try {
           return await instance.post(
             url,
@@ -103,7 +94,9 @@ export const Api = () => {
             handlers.logOut();
             toastExpireAccess();
           }
-          return e;
+          const error = new Error();
+          error.status = e?.response?.status;
+          throw error;
         }
       },
 
@@ -146,7 +139,9 @@ export const Api = () => {
             handlers.logOut();
             toastExpireAccess();
           }
-          return e;
+          const error = new Error();
+          error.status = e?.response?.status;
+          throw error;
         }
       },
 
