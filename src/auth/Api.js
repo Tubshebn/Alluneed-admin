@@ -51,7 +51,7 @@ export const Api = () => {
       },
       GET: async (url, isToken = false, contentType = 'application/json', responseType = 'json') => {
         try {
-          return instance.get(
+          let response = await instance.get(
             url,
             isToken
               ? {
@@ -63,6 +63,9 @@ export const Api = () => {
                 }
               : ''
           );
+          if (response?.status === 200 && response?.data) {
+            return response.data;
+          }
         } catch (e) {
           if (e?.response?.status === 401) {
             handlers.logOut();
@@ -76,7 +79,7 @@ export const Api = () => {
 
       POST: async (url, isToken = false, data, contentType = 'application/json', responseType = 'json') => {
         try {
-          return await instance.post(
+          let response = await instance.post(
             url,
             data,
             isToken
@@ -89,6 +92,9 @@ export const Api = () => {
                 }
               : ''
           );
+          if (response?.status === 200 && response?.data) {
+            return response.data;
+          }
         } catch (e) {
           if (e?.response?.status === 401) {
             handlers.logOut();
@@ -102,7 +108,7 @@ export const Api = () => {
 
       PUT: async (url, isToken = false, data) => {
         try {
-          return await instance.put(
+          let response = await instance.put(
             url,
             data,
             isToken
@@ -113,17 +119,22 @@ export const Api = () => {
                 }
               : ''
           );
+          if (response?.status === 200 && response?.data) {
+            return response.data;
+          }
         } catch (e) {
           if (e?.response?.status === 401) {
             handlers.logOut();
             toastExpireAccess();
           }
-          return e;
+          const error = new Error();
+          error.status = e?.response?.status;
+          throw error;
         }
       },
       DELETE: async (url, isToken = false, responseType = 'json') => {
         try {
-          return instance.delete(
+          let response = await instance.delete(
             url,
             isToken
               ? {
@@ -134,6 +145,9 @@ export const Api = () => {
                 }
               : ''
           );
+          if (response?.status === 200 && response?.data) {
+            return response.data;
+          }
         } catch (e) {
           if (e?.response?.status === 401) {
             handlers.logOut();
