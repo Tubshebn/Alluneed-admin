@@ -9,3 +9,4 @@ export { default as TableHeadCustom } from './TableHeadCustom';
 export { default as TableSelectedAction } from './TableSelectedAction';
 export { default as TablePaginationCustom } from './TablePaginationCustom';
 export { default as TableRenderBody } from './TableRenderBody';
+export const PER_PAGE = process.env.TABLE_ROW_PER_PAGE;
