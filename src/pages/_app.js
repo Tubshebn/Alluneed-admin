@@ -10,11 +10,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import PropTypes from 'prop-types';
-import { CacheProvider } from '@emotion/react';
 import Head from 'next/head';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import createEmotionCache from 'src/utils/createEmotionCache';
 import ThemeProvider from '../theme';
 import ThemeLocalization from '../locales';
 import { StyledChart } from 'src/components/chart';
@@ -27,48 +25,45 @@ import { SWRConfig } from 'swr';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const clientSideEmotionCache = createEmotionCache();
-
 MyApp.propTypes = {
-  Component: PropTypes.elementType,
-  pageProps: PropTypes.object,
-  emotionCache: PropTypes.object,
+    Component: PropTypes.elementType,
+    pageProps: PropTypes.object,
 };
 
 export default function MyApp(props) {
-  const { handlers, state } = Api();
-  const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
+    const { handlers, state } = Api();
+    const { Component, pageProps } = props;
 
-  const getLayout = Component.getLayout ?? ((page) => page);
+    const getLayout = Component.getLayout ?? ((page) => page);
 
-  return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <SWRConfig>
-        <AuthContext.Provider
-          value={{
-            handlers,
-            state,
-          }}
-        >
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MotionLazyContainer>
-              <ThemeProvider>
-                <ThemeLocalization>
-                  <SnackbarProvider>
-                    <StyledChart />
-                    <ProgressBar />
-                    <ToastContainer />
-                    {getLayout(<Component {...pageProps} />)}
-                  </SnackbarProvider>
-                </ThemeLocalization>
-              </ThemeProvider>
-            </MotionLazyContainer>
-          </LocalizationProvider>
-        </AuthContext.Provider>
-      </SWRConfig>
-    </CacheProvider>
-  );
+    return (
+        <>
+            <Head>
+                <meta name="viewport" content="initial-scale=1, width=device-width" />
+            </Head>
+            <SWRConfig>
+                <AuthContext.Provider
+                    value={{
+                        handlers,
+                        state,
+                    }}
+                >
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <MotionLazyContainer>
+                            <ThemeProvider>
+                                <ThemeLocalization>
+                                    <SnackbarProvider>
+                                        <StyledChart />
+                                        <ProgressBar />
+                                        <ToastContainer />
+                                        {getLayout(<Component {...pageProps} />)}
+                                    </SnackbarProvider>
+                                </ThemeLocalization>
+                            </ThemeProvider>
+                        </MotionLazyContainer>
+                    </LocalizationProvider>
+                </AuthContext.Provider>
+            </SWRConfig>
+        </>
+    );
 }
