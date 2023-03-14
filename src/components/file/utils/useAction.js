@@ -1,13 +1,27 @@
 // react
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // default import
 import useForm from 'src/hooks/useForm';
 // section
 import { FileSchema, defaultValues } from './schema';
 
-const useAction = () => {
+const useAction = (open = false, onClose = null, item = {}) => {
     const { form } = useForm(FileSchema(), defaultValues());
     const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        if (!open) {
+            setFiles([]);
+            form.reset({
+                title: item?.title ? item?.title : '',
+                description: item?.description ? item?.description : '',
+                caption: item?.caption ? item?.caption : '',
+                file_type_id: item?.file_type_id ? item?.file_type_id : 0,
+                category_id: item?.category_id ? item?.category_id : 0,
+                file_url: item?.file_url ? item?.file_url : null,
+            });
+        }
+    }, [open]);
 
     const handleDrop = useCallback(
         (acceptedFiles) => {
@@ -34,6 +48,7 @@ const useAction = () => {
     };
 
     const handleClose = () => {
+        onClose !== null && onClose();
         form.reset(defaultValues);
         setFiles([]);
     };

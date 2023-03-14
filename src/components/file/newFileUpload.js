@@ -15,6 +15,7 @@ import FormProvider from 'src/components/hook-form/FormProvider';
 // section
 import { fileFormat } from './utils/func';
 import useAction from './utils/useAction';
+import { ACCEPT_FILE_TYPES } from './utils/schema';
 
 NewFileUpload.propTypes = {
     categoryList: PropTypes.array,
@@ -118,6 +119,7 @@ export default function NewFileUpload({ categoryList = [], categoryLoading = fal
                                 files={actionState.files}
                                 onDrop={actionFunction.handleDrop}
                                 onRemove={actionFunction.handleRemoveFile}
+                                acceptedFiles={ACCEPT_FILE_TYPES}
                             />
                         )}
                     />

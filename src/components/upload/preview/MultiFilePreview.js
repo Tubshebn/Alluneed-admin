@@ -32,9 +32,9 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
                             key={i}
                             component={m.div}
                             {...varFade().inUp}
-                            alignItems="center"
-                            display="inline-flex"
-                            justifyContent="center"
+                            alignItems='center'
+                            display='inline-flex'
+                            justifyContent='center'
                             sx={{
                                 m: 0.5,
                                 width: 80,
@@ -50,7 +50,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
 
                             {onRemove && (
                                 <IconButton
-                                    size="small"
+                                    size='small'
                                     onClick={() => onRemove(file)}
                                     sx={{
                                         top: 4,
@@ -64,7 +64,7 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
                                         },
                                     }}
                                 >
-                                    <Iconify icon="eva:close-fill" width={16} />
+                                    <Iconify icon='eva:close-fill' width={16} />
                                 </IconButton>
                             )}
                         </Stack>
@@ -77,8 +77,8 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
                         component={m.div}
                         {...varFade().inUp}
                         spacing={2}
-                        direction="row"
-                        alignItems="center"
+                        direction='row'
+                        alignItems='center'
                         sx={{
                             my: 1,
                             px: 1,
@@ -91,18 +91,18 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }) {
                         <FileThumbnail file={file} />
 
                         <Stack flexGrow={1} sx={{ minWidth: 0 }}>
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography variant='subtitle2' noWrap>
                                 {isNotFormatFile ? file : name}
                             </Typography>
 
-                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                            <Typography variant='caption' sx={{ color: 'text.secondary' }}>
                                 {isNotFormatFile ? '' : fData(size)}
                             </Typography>
                         </Stack>
 
                         {onRemove && (
-                            <IconButton edge="end" size="small" onClick={() => onRemove(file)}>
-                                <Iconify icon="eva:close-fill" />
+                            <IconButton edge='end' size='small' onClick={() => onRemove(file)}>
+                                <Iconify icon='eva:close-fill' />
                             </IconButton>
                         )}
                     </Stack>

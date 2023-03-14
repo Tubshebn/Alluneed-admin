@@ -14,9 +14,10 @@ import { fileTypeName, NumberToString } from '../utils/func';
 FileSortName.propTypes = {
     onFilterName: PropTypes.func,
     categoryList: PropTypes.array,
+    location: PropTypes.bool,
 };
 
-export default function FileSortName({ onFilterName, categoryList = [] }) {
+export default function FileSortName({ onFilterName, categoryList = [], location = false }) {
     const [filterModel, setFilterModel] = useState({});
     const [filterType, setFilterType] = useState([]);
     const [fileType, setFileType] = useState([]);
@@ -94,7 +95,7 @@ export default function FileSortName({ onFilterName, categoryList = [] }) {
         setIsFiltered(false);
     };
     return (
-        <>
+        <Stack spacing={1} direction={{ xs: 'column', md: 'column', lg: location ? 'row' : 'column' }}>
             <Stack spacing={1} direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} sx={{ width: 1 }}>
                 <TextField
                     size='small'
@@ -167,6 +168,6 @@ export default function FileSortName({ onFilterName, categoryList = [] }) {
                     </Button>
                 )}
             </Stack>
-        </>
+        </Stack>
     );
 }

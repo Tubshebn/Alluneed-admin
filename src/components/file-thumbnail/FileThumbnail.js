@@ -39,8 +39,8 @@ export default function FileThumbnail({ file, tooltip, imageView, onDownload, sx
                         component='img'
                         src={preview.replace(`w-${wSize}`, '')}
                         sx={{
-                            width: 32,
-                            height: 32,
+                            width: wSize,
+                            height: wSize,
                             flexShrink: 0,
                             ...sx,
                         }}
@@ -59,16 +59,31 @@ export default function FileThumbnail({ file, tooltip, imageView, onDownload, sx
                 )}
             </>
         ) : (
-            <Box
-                component='img'
-                src={fileThumb(format)}
-                sx={{
-                    width: 32,
-                    height: 32,
-                    flexShrink: 0,
-                    ...sx,
-                }}
-            />
+            <>
+                {wSize ? (
+                    <Box
+                        component='img'
+                        src={fileThumb(format)}
+                        sx={{
+                            width: wSize,
+                            height: wSize,
+                            flexShrink: 0,
+                            ...sx,
+                        }}
+                    />
+                ) : (
+                    <Box
+                        component='img'
+                        src={fileThumb(format)}
+                        sx={{
+                            width: 32,
+                            height: 32,
+                            flexShrink: 0,
+                            ...sx,
+                        }}
+                    />
+                )}
+            </>
         );
 
     if (tooltip) {

@@ -72,8 +72,7 @@ export default function FileFilterType({ optionsType, filterType, onFilterType, 
                                     }}
                                 >
                                     <Stack spacing={0.5} direction='row' alignItems='center'>
-                                        <FileThumbnail file={type} />
-
+                                        <FileThumbnail file={type} wSize={32} />
                                         <Typography variant='body2'>{type}</Typography>
                                     </Stack>
                                 </CardActionArea>
@@ -87,7 +86,7 @@ export default function FileFilterType({ optionsType, filterType, onFilterType, 
                         </Button>
 
                         <Button variant='contained' onClick={handleClosePopover}>
-                            Хайх
+                            Хаах
                         </Button>
                     </Stack>
                 </Stack>
