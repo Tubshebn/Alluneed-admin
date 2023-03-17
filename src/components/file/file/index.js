@@ -18,7 +18,7 @@ export default function FileMedia({ selectData = {}, onFiles }) {
     const [selected, setSelected] = useState(0);
     const [refresh, setRefresh] = useState(false);
     const { postFetcher } = useSwrFetcher();
-    let { select = false, selectButton = 'Сонгох', removeButton = 'Устгах', uploadButton = 'Upload хийх' } = selectData;
+    let { select = false, selectButton = 'Сонгох' } = selectData;
 
     // swr
     const { data: categoryList, isLoading: categoryLoading } = useSWR(
@@ -97,8 +97,7 @@ export default function FileMedia({ selectData = {}, onFiles }) {
                         categoryLoading={categoryLoading}
                         onFiles={onFiles}
                         onRefresh={() => handleRefresh()}
-                        removeButton={removeButton}
-                        uploadButton={uploadButton}
+                        selectData={selectData}
                     />
                 </Stack>
             ) : (

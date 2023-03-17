@@ -10,9 +10,8 @@ import PropTypes from 'prop-types';
 // components
 import { useTable } from 'src/components/table';
 // sections
+import { FileFilterName, FileSortName } from './filter';
 import FileListView from './FileListView';
-import FileFilterName from './filter/FileFilterName';
-import FileSortName from './filter/FileSortName';
 
 FilesList.propTypes = {
     categoryList: PropTypes.array,
