@@ -7,6 +7,7 @@ import Iconify from '../iconify';
 import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
+import SingleFileNewPreview from './preview/SingleFileNewPreview';
 
 const StyledDropZone = styled('div')(({ theme }) => ({
     outline: 'none',
@@ -36,12 +37,13 @@ Upload.propTypes = {
     thumbnail: PropTypes.bool,
     helperText: PropTypes.node,
     onRemoveAll: PropTypes.func,
+    acceptedFiles: PropTypes.object,
 };
 
 export default function Upload({
     disabled,
     pdfMessage,
-    multiple = false,
+    multiple = true,
     error,
     helperText,
 
@@ -54,23 +56,25 @@ export default function Upload({
     onRemove,
     onRemoveAll,
     sx,
-    minimumSize = 0,
-    maximumSize = 2097152,
     acceptedFiles = {},
     ...other
 }) {
+    let { acceptType = {}, maximumSize = 2097152, minimumSize = 0, maxNumber = 10 } = acceptedFiles;
     const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
         multiple,
         disabled,
         maxSize: maximumSize,
         minSize: minimumSize,
-        accept: acceptedFiles,
+        accept: acceptType,
+        maxFiles: maxNumber,
         ...other,
     });
 
     const isFileTooLarge = fileRejections?.length > 0 && fileRejections[0].file?.size > maximumSize;
 
     const hasFile = !!file && !multiple;
+
+    const hasNewFile = !!files && !multiple;
 
     const hasFiles = files && multiple && files.length > 0;
 
@@ -111,7 +115,7 @@ export default function Upload({
                 {hasFile && <SingleFilePreview file={file} />}
             </StyledDropZone>
 
-            <RejectionFiles fileRejections={fileRejections} isFileTooLarge={isFileTooLarge} />
+            <RejectionFiles fileRejections={fileRejections} isFileTooLarge={isFileTooLarge} maximumSize={maximumSize} maxNumber={maxNumber} />
 
             {hasFile && onDelete && (
                 <IconButton
@@ -153,6 +157,12 @@ export default function Upload({
                         )}
                     </Stack>
                 </>
+            )}
+
+            {hasNewFile && (
+                <Box sx={{ my: 3 }}>
+                    <SingleFileNewPreview files={files[files.length - 1]} onRemove={onRemove} />
+                </Box>
             )}
 
             {helperText && helperText}
