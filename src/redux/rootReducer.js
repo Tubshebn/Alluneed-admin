@@ -25,7 +25,10 @@ const rootPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-    survey: surveyReducer,
+    blank: function (state) {
+        if (state == null) state = [];
+        return state;
+    },
 });
 
 export { rootPersistConfig, rootReducer };
