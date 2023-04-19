@@ -10,7 +10,13 @@ const ICONS = {
 const navConfig = [
     {
         subheader: 'general',
-        items: [{ title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard }],
+        items: [
+            {
+                title: 'app',
+                path: PATH_DASHBOARD.general.app,
+                icon: ICONS.dashboard,
+            },
+        ],
     },
 ];
 

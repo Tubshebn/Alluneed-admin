@@ -23,6 +23,8 @@ import { AuthContext } from 'src/context/Auth/authContext';
 import { Api } from 'src/auth/Api';
 import { SWRConfig } from 'swr';
 import { ToastContainer } from 'react-toastify';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from 'src/redux/store';
 import 'react-toastify/dist/ReactToastify.css';
 
 MyApp.propTypes = {
@@ -48,20 +50,22 @@ export default function MyApp(props) {
                         state,
                     }}
                 >
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <MotionLazyContainer>
-                            <ThemeProvider>
-                                <ThemeLocalization>
-                                    <SnackbarProvider>
-                                        <StyledChart />
-                                        <ProgressBar />
-                                        <ToastContainer />
-                                        {getLayout(<Component {...pageProps} />)}
-                                    </SnackbarProvider>
-                                </ThemeLocalization>
-                            </ThemeProvider>
-                        </MotionLazyContainer>
-                    </LocalizationProvider>
+                    <ReduxProvider store={store}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <MotionLazyContainer>
+                                <ThemeProvider>
+                                    <ThemeLocalization>
+                                        <SnackbarProvider>
+                                            <StyledChart />
+                                            <ProgressBar />
+                                            <ToastContainer />
+                                            {getLayout(<Component {...pageProps} />)}
+                                        </SnackbarProvider>
+                                    </ThemeLocalization>
+                                </ThemeProvider>
+                            </MotionLazyContainer>
+                        </LocalizationProvider>
+                    </ReduxProvider>
                 </AuthContext.Provider>
             </SWRConfig>
         </>
