@@ -2,7 +2,6 @@
 import { combineReducers } from 'redux';
 // default import
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-import surveyReducer from 'src/redux/slices/survey';
 
 const createNoopStorage = () => ({
     getItem() {
