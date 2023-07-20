@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { LOGIN_URL, LOGIN_AUTH_USERNAME, LOGIN_AUTH_PASSWORD } from 'src/config-global';
+import { LOGIN_URL } from 'src/config-global';
 //default import
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -24,8 +24,8 @@ export default function AuthLoginForm() {
    const [showPassword, setShowPassword] = useState(false);
 
    const LoginSchema = Yup.object().shape({
-      username: Yup.string().required('username is required'),
-      password: Yup.string().required('Password is required'),
+      username: Yup.string().required('Нэвтрэх нэрээ оруулна уу!'),
+      password: Yup.string().required('Нууц үгээ оруулна уу!'),
    });
 
    const defaultValues = { username: '', password: '' };
@@ -39,40 +39,19 @@ export default function AuthLoginForm() {
       watch,
       formState: { errors, isSubmitting, isSubmitSuccessful },
    } = methods;
-   const values = watch();
-   console.log(values);
-
-   // const onSubmit = async (data) => {
-   //     try {
-   //         const response = await axios.post(
-   //             `${LOGIN_URL}/token?username=${data.username}&password=${data.password}&grant_type=password`,
-   //             {},
-   //             { auth: { username: LOGIN_AUTH_USERNAME, password: LOGIN_AUTH_PASSWORD } }
-   //         );
-   //         signIn(response.data.access_token);
-   //     } catch (error) {
-   //         reset();
-   //         setError('afterSubmit', { ...error, message: error.message });
-   //     }
-   // };
 
    const onSubmit = async (data) => {
       try {
-         const response = await axios.post(
-            `${LOGIN_URL}login/oauth/basic_login`,
-            { username: data?.username, password: data?.password },
-            { auth: { username: LOGIN_AUTH_USERNAME, password: LOGIN_AUTH_PASSWORD } }
-         );
-
-         if (response?.data?.token) {
-            signIn(response.data.token);
+         const response = await axios.post(`${LOGIN_URL}`, { username: data?.username, password: data?.password });
+         if (response?.data?.data?.accessToken) {
+            signIn(response?.data?.data?.accessToken);
          } else {
             reset();
-            setError('afterSubmit', { message: 'Таньд хандах эрх байхгүй байна.' });
+            setError('afterSubmit', { message: response?.data?.responseMsg });
          }
       } catch (error) {
          reset();
-         setError('afterSubmit', { ...error, message: error.response?.data?.error_description || 'Нэвтрэх нэр эсвэл нууц үг буруу байна.' });
+         setError('afterSubmit', { ...error, message: error.response?.data?.responseMsg || 'Алдаа гарлаа.Дахин оролдоно уу' });
       }
    };
 
@@ -80,10 +59,10 @@ export default function AuthLoginForm() {
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
          <Stack spacing={3}>
             {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
-            <RHFTextField name="username" label="username" />
+            <RHFTextField name="username" label="Нэвтрэх нэр" />
             <RHFTextField
                name="password"
-               label="Password"
+               label="Нууц үг"
                type={showPassword ? 'text' : 'password'}
                InputProps={{
                   endAdornment: (
