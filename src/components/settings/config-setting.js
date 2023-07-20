@@ -2,10 +2,10 @@
 // ----------------------------------------------------------------------
 
 export const defaultSettings = {
-  themeMode: 'light',
-  themeDirection: 'ltr',
-  themeContrast: 'default',
-  themeLayout: 'vertical',
-  themeColorPresets: 'default',
-  themeStretch: false,
+   themeMode: 'dark',
+   themeDirection: 'rtl',
+   themeContrast: 'default',
+   themeLayout: 'vertical',
+   themeColorPresets: 'default',
+   themeStretch: false,
 };

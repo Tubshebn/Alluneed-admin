@@ -10,103 +10,104 @@ import MenuPopover from 'src/components/menu-popover';
 import { IconButtonAnimate } from 'src/components/animate';
 
 const OPTIONS = [
-  {
-    label: 'Нүүр',
-    linkTo: '/',
-  },
-  {
-    label: 'Би',
-    linkTo: PATH_DASHBOARD.general.app,
-  },
-  {
-    label: 'Тохиргоо',
-    linkTo: PATH_DASHBOARD.general.app,
-  },
+   {
+      label: 'Нүүр',
+      linkTo: '/',
+   },
+   {
+      label: 'Би',
+      linkTo: PATH_DASHBOARD.general.app,
+   },
+   {
+      label: 'Тохиргоо',
+      linkTo: PATH_DASHBOARD.general.app,
+   },
 ];
 
 export default function AccountPopover() {
-  const { replace, push } = useRouter();
-  const {
-    handlers: { logOut },
-    user,
-  } = useAuthContext();
+   const { replace, push } = useRouter();
 
-  const { enqueueSnackbar } = useSnackbar();
+   const {
+      handlers: { logOut },
+      state: { user },
+   } = useAuthContext();
 
-  const [openPopover, setOpenPopover] = useState(null);
+   const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
-  };
+   const [openPopover, setOpenPopover] = useState(null);
 
-  const handleClosePopover = () => {
-    setOpenPopover(null);
-  };
+   const handleOpenPopover = (event) => {
+      setOpenPopover(event.currentTarget);
+   };
 
-  const handleLogout = async () => {
-    try {
-      logOut();
-      replace(PATH_AUTH.login);
+   const handleClosePopover = () => {
+      setOpenPopover(null);
+   };
+
+   const handleLogout = async () => {
+      try {
+         logOut();
+         replace(PATH_AUTH.login);
+         handleClosePopover();
+      } catch (error) {
+         enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      }
+   };
+
+   const handleClickItem = (path) => {
       handleClosePopover();
-    } catch (error) {
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
-    }
-  };
+      push(path);
+   };
 
-  const handleClickItem = (path) => {
-    handleClosePopover();
-    push(path);
-  };
+   return (
+      <>
+         <IconButtonAnimate
+            onClick={handleOpenPopover}
+            sx={{
+               p: 0,
+               ...(openPopover && {
+                  '&:before': {
+                     zIndex: 1,
+                     content: "''",
+                     width: '100%',
+                     height: '100%',
+                     borderRadius: '50%',
+                     position: 'absolute',
+                     bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+                  },
+               }),
+            }}
+         >
+            <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+         </IconButtonAnimate>
 
-  return (
-    <>
-      <IconButtonAnimate
-        onClick={handleOpenPopover}
-        sx={{
-          p: 0,
-          ...(openPopover && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
-        }}
-      >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
-      </IconButtonAnimate>
+         <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
+            <Box sx={{ my: 1.5, px: 2.5 }}>
+               <Typography variant="subtitle2" noWrap>
+                  Amarjargal Batbold
+               </Typography>
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            Amarjargal Batbold
-          </Typography>
+               <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {user?.azure_id}
+               </Typography>
+            </Box>
 
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            amarjargalbatbold@gmail.com
-          </Typography>
-        </Box>
+            <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+            <Stack sx={{ p: 1 }}>
+               {OPTIONS.map((option) => (
+                  <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
+                     {option.label}
+                  </MenuItem>
+               ))}
+            </Stack>
 
-        <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
-              {option.label}
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
+            <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+               Гарах
             </MenuItem>
-          ))}
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Гарах
-        </MenuItem>
-      </MenuPopover>
-    </>
-  );
+         </MenuPopover>
+      </>
+   );
 }
