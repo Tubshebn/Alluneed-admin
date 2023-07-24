@@ -6,8 +6,8 @@ export default function Index() {
    const { pathname, push } = useRouter();
 
    useEffect(() => {
-      if (pathname === PATH_DASHBOARD.user.root) {
-         push(PATH_DASHBOARD.user.table);
+      if (pathname === PATH_DASHBOARD.merchant.root) {
+         push(PATH_DASHBOARD.merchant.table);
       }
    }, [pathname]);
 

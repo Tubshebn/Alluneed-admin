@@ -10,7 +10,7 @@ const ICONS = {
 
 const navConfig = [
    {
-      subheader: 'general',
+      subheader: 'Системийн удирдлага',
       items: [
          {
             title: 'app',
@@ -18,9 +18,9 @@ const navConfig = [
             icon: ICONS.dashboard,
          },
          {
-            title: 'Систем хэрэглэгчид',
-            path: PATH_DASHBOARD.user.table,
-            icon: <Iconify icon={'carbon:user-admin'} />,
+            title: 'Мерчант',
+            path: PATH_DASHBOARD.merchant.table,
+            icon: <Iconify icon={'raphael:customer'} />,
             hideSection: true,
          },
       ],

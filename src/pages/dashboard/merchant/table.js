@@ -14,18 +14,18 @@ import Scrollbar from 'src/components/scrollbar';
 import Iconify from 'src/components/iconify';
 import { labelDisplayedRows } from 'src/components/table/utils';
 ///Section
-import { UserActionDialog } from 'src/sections/user/action';
-import { UserTableRow, UserTableToolbar } from 'src/sections/user/table';
-import { TABLE_HEAD } from 'src/sections/user/utils/schema';
+import { MerchantActionDialog } from 'src/sections/merchant/action';
+import { MerchantTableRow, UserTableToolbar } from 'src/sections/merchant/table';
+import { TABLE_HEAD } from 'src/sections/merchant/utils/schema';
 
-UserListTable.getLayout = function getLayout(page) {
-   return <Layout headTitle="Систем хэрэглэгчид">{page}</Layout>;
+MerchantListTable.getLayout = function getLayout(page) {
+   return <Layout headTitle="Мерчант">{page}</Layout>;
 };
 
-export default function UserListTable() {
+export default function MerchantListTable() {
    const { postFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
-   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage, dense } = useTable();
+   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
    const [dialogActionType, setDialogActionType] = useState('');
    const [filterModel, setFilterModel] = useState({});
    const [row, setRow] = useState({});
@@ -39,8 +39,8 @@ export default function UserListTable() {
       //      roleId: filterModel.authType ? filterModel.authType : null,
       //      username: filterModel.username ? filterModel.username : null,
       //   },
-      page_no: page,
-      per_page: rowsPerPage,
+      pageNo: page,
+      perPage: rowsPerPage,
       sort: 'created_at desc',
    };
 
@@ -51,23 +51,23 @@ export default function UserListTable() {
       error,
       mutate: tableMutate,
       isValidating,
-   } = useSWR(['employee/employee/get_user_list', true, pagination], (args) => postFetcher(args), {
+   } = useSWR(['users/api/v1/merchant/list', true, pagination], (args) => postFetcher(args), {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
    });
    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
-   const {
-      data: adminList,
-      isLoading: adminListIsLoading,
-      error: adminListError,
-      mutate: adminListMuate,
-      isValidating: adminListisValidating,
-   } = useSWR(['user/role/select/all', true], (args) => getFetcher(args), {
-      revalidateOnFocus: false,
-      shouldRetryOnError: false,
-   });
-   error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
+   //    const {
+   //       data: adminList,
+   //       isLoading: adminListIsLoading,
+   //       error: adminListError,
+   //       mutate: adminListMuate,
+   //       isValidating: adminListisValidating,
+   //    } = useSWR(['user/role/select/all', true], (args) => getFetcher(args), {
+   //       revalidateOnFocus: false,
+   //       shouldRetryOnError: false,
+   //    });
+   //    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
    //Function
    const handleUpdate = async (row) => {
@@ -90,16 +90,18 @@ export default function UserListTable() {
       <>
          <Container maxWidth={'xl'}>
             <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" spacing={2}>
-               <Typography variant="h4">{'Систем хэрэглэгчдийн жагсаалт'}</Typography>
+               <Typography variant="h4" marginBottom={1}>
+                  {'Мерчантийн жагсаалт'}
+               </Typography>
                <Button variant="contained" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
                   {'Нэмэх'}
                </Button>
             </Stack>
 
-            {!adminListIsLoading && <UserTableToolbar adminList={adminList} filterFunction={filterFunction} />}
+            {/* {!adminListIsLoading && <UserTableToolbar adminList={adminList} filterFunction={filterFunction} />} */}
             <Card>
                <Scrollbar>
-                  <TableContainer sx={{ minWidth: 1500, position: 'relative' }}>
+                  <TableContainer sx={{ minWidth: 1430, position: 'relative' }}>
                      <Table>
                         <TableHeadCustom headLabel={TABLE_HEAD} />
                         <TableBody>
@@ -108,7 +110,7 @@ export default function UserListTable() {
                            ) : (
                               <TableRenderBody data={tableData?.data}>
                                  {tableData?.data?.map((row, index) => (
-                                    <UserTableRow
+                                    <MerchantTableRow
                                        key={index}
                                        index={index}
                                        row={row}
@@ -130,7 +132,7 @@ export default function UserListTable() {
                      <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={tableData?.pagination?.totalElements || 0}
+                        count={tableData?.pagination?.total_elements || 0}
                         page={page}
                         onPageChange={onChangePage}
                         rowsPerPage={rowsPerPage}
@@ -142,7 +144,7 @@ export default function UserListTable() {
                </Box>
             </Card>
          </Container>
-         <UserActionDialog
+         <MerchantActionDialog
             row={row}
             dialogActionType={dialogActionType}
             changeDialogStatus={(e) => {

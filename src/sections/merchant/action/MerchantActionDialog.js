@@ -12,44 +12,56 @@ import FormProvider from 'src/components/hook-form/FormProvider';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 ///Sections
-import useAction from 'src/sections/user/hooks/useAction';
+import useAction from 'src/sections/merchant/hooks/useAction';
 
 //Props
-UserActionDialog.propTypes = {
+MerchantActionDialog.propTypes = {
    row: PropTypes.object.isRequired,
    dialogActionType: PropTypes.string,
    refreshTable: PropTypes.func,
    changeDialchangeDialogStatusogStatus: PropTypes.func,
 };
 
-export default function UserActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
-   const { formFetcher, getFetcher } = useSwrFetcher();
+export default function MerchantActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
+   const { formFetcher, postFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
    const { form, actionState, actionFunction } = useAction(dialogActionType, row, changeDialogStatus);
 
-   const { trigger, isMutating } = useSWRMutation(`/api/${dialogActionType === 'update' ? 'edit_admin_user' : 'create_admin_user'}`, formFetcher, {
-      onSuccess: (newData) => {
-         newData?.success && enqueueSnackbar(dialogActionType === 'update' ? 'Амжилттай шинэчлэгдсэн' : 'Амжилттай бүртгэгдсэн');
-         form.reset();
-         actionFunction.handleClose();
-         refreshTable();
-      },
-      onError: (err) => {
-         err &&
-            enqueueSnackbar('Алдаа гарлаа, дахин оролдоно уу', {
-               variant: 'warning',
-            });
-         actionFunction.handleClose();
-      },
-   });
+   //RoleList Request body
+   const pagination = {
+      page_no: 0,
+      per_page: 1000,
+      sort: 'created_at desc',
+      filter: [],
+   };
+
+   const { trigger, isMutating } = useSWRMutation(
+      `/users/api/v1/merchant/${dialogActionType === 'update' ? 'update/' + row?.id : 'create'}`,
+      formFetcher,
+      {
+         onSuccess: (newData) => {
+            newData?.responseCode === true
+               ? enqueueSnackbar(dialogActionType === 'update' ? 'Амжилттай шинэчлэгдсэн' : 'Амжилттай бүртгэгдсэн')
+               : enqueueSnackbar(newData.responseMsg, { variant: 'warning' });
+            form.reset();
+            actionFunction.handleClose();
+            refreshTable();
+         },
+         onError: (err) => {
+            err &&
+               enqueueSnackbar('Алдаа гарлаа, дахин оролдоно уу', {
+                  variant: 'warning',
+               });
+            actionFunction.handleClose();
+         },
+      }
+   );
 
    const {
-      data: adminList,
+      data: roleList,
       isLoading,
       error,
-      mutate: tableMutate,
-      isValidating,
-   } = useSWR(['user/role/select/all', true], (args) => getFetcher(args), {
+   } = useSWR(['/users/api/v1/role/list', true, pagination], (args) => postFetcher(args), {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
    });
@@ -57,33 +69,20 @@ export default function UserActionDialog({ row, dialogActionType, refreshTable, 
 
    //Function
    const onSubmit = async () => {
-      var body = new FormData();
-      if (dialogActionType === 'update') {
-         body.append('id', form.values.id);
-      }
-      body.append('lastname', form.values.lastname);
-      body.append('firstname', form.values.firstname);
-      body.append('mobileNumber', form.values.phoneNumber);
-      body.append('email', form.values.email);
-      body.append('organizationName', form.values.organizationName);
-      body.append('position', form.values.position);
-      body.append('username', form.values.username);
-      body.append('roleId', form.values.roleId);
-      if (form.values.password !== '') {
-         body.append('password', form.values.password);
-      }
-      if (form.values.confirmPassword !== '') {
-         body.append('confirmPassword', form.values.confirmPassword);
-      }
-      trigger({ body, type: 'multipart/form-data' });
+      let body = {
+         username: form?.values?.username,
+         password: form?.values?.password || '',
+         roleId: form?.values?.roleId,
+      };
+      trigger({ body });
    };
 
    return (
       <Dialog open={actionState.dialogFormVisible} onClose={actionFunction.handleClose} sx={{ p: 5 }} maxWidth="sm" fullWidth>
-         <DialogTitle>{dialogActionType === 'update' ? 'Систем хэрэглэгч засах' : 'Систем хэрэглэгч нэмэх'}</DialogTitle>
+         <DialogTitle>{dialogActionType === 'update' ? 'Мерчант засах' : 'Мерчант нэмэх'}</DialogTitle>
          <DialogContent>
             <FormProvider methods={form.methods}>
-               <Stack spacing={3} sx={{ mt: 3 }}>
+               <Stack spacing={3} sx={{ mt: 2 }}>
                   {actionState.dialogLoader ? (
                      <Stack justifyContent="center" alignItems="center" sx={{ height: 400 }}>
                         <CircularProgress size={100} thickness={0.6} sx={{ padding: '5px' }} />
@@ -94,17 +93,28 @@ export default function UserActionDialog({ row, dialogActionType, refreshTable, 
                            fullWidth
                            name="roleId"
                            label="Хэрэглэгчийн эрх"
-                           InputLabelProps={{ shrink: true }}
                            SelectProps={{
                               native: false,
                               sx: { textTransform: 'capitalize' },
                            }}
                         >
+                           <MenuItem
+                              value={''}
+                              sx={{
+                                 mx: 1,
+                                 my: 0.5,
+                                 borderRadius: 0.75,
+                                 typography: 'body2',
+                                 textTransform: 'capitalize',
+                              }}
+                           >
+                              Сонгох
+                           </MenuItem>
                            {!isLoading &&
-                              adminList?.map((option, index) => (
+                              roleList?.data?.map((option, index) => (
                                  <MenuItem
                                     key={index}
-                                    value={option.id}
+                                    value={option?.id || row?.roleId || ''}
                                     sx={{
                                        mx: 1,
                                        my: 0.5,
@@ -117,23 +127,9 @@ export default function UserActionDialog({ row, dialogActionType, refreshTable, 
                                  </MenuItem>
                               ))}
                         </RHFSelect>
-                        <RHFTextField name="organizationName" label="Байгууллагын нэр" fullWidth />
-
-                        <RHFTextField name="lastname" label="Ажилтны овог" fullWidth />
-
-                        <RHFTextField name="firstname" label="Ажилтны Нэр" fullWidth />
-
-                        <RHFTextField name="position" label="Албан тушаал" fullWidth />
-
-                        <RHFTextField name="email" label="И-Мэйл" fullWidth />
-
-                        <RHFTextField name="phoneNumber" label="Утасны дугаар" fullWidth />
-
-                        <RHFTextField name="username" label="Нэвтрэх нэр" fullWidth />
-
-                        <RHFTextField type="text" name="password" label="Нууц үг" fullWidth />
-
-                        <RHFTextField type="text" name="confirmPassword" label="Нууц үг давтах" fullWidth />
+                        <RHFTextField type="text" name="username" label="Нэвтрэх нэр" fullWidth />
+                        {dialogActionType === 'create' && <RHFTextField type="text" name="password" label="Нууц үг" fullWidth />}
+                        {dialogActionType === 'create' && <RHFTextField type="text" name="confirmPassword" label="Нууц үг давтах" fullWidth />}
                      </>
                   )}
                </Stack>
