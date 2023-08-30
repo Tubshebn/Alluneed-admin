@@ -43,8 +43,8 @@ export default function InvoiceActionDialog({ row, handleClose, handleUpdate, di
    //Function
 
    return (
-      <Dialog open={dialogFormVisible} onClose={handleClose} sx={{ p: 5 }} maxWidth="lg" fullWidth>
-         <DialogTitle variant="h5" sx={{ textAlign: 'center' }}>
+      <Dialog open={dialogFormVisible} onClose={handleClose} sx={{ p: 5 }} maxWidth="xl" fullWidth>
+         <DialogTitle variant="h4" sx={{ textAlign: 'center' }}>
             {'Билл төлөлт дэлгэрэнгүй'}
          </DialogTitle>
          <Typography variant="body2" sx={{ textAlign: 'center', mb: 3 }}>

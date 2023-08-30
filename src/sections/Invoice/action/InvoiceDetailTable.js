@@ -1,11 +1,15 @@
-import { Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
 import { useState } from 'react';
 import Iconify from 'src/components/iconify/Iconify';
 import Label from 'src/components/label/Label';
 import Scrollbar from 'src/components/scrollbar/Scrollbar';
 import { TableHeadCustom, TableRenderBody, TableSkeleton } from 'src/components/table';
+import useSwrFetcher from 'src/hooks/useSwrFetcher';
 import { DETAIL_TABLE_HEAD } from 'src/sections/Invoice/utils/schema';
+
 import { fCurrency } from 'src/utils/formatNumber';
+import { useSnackbar } from 'notistack';
+import useSWRMutation from 'swr/mutation';
 
 export default function InvoiceDetailTable({ data, isLoading, isValidating }) {
    return (
@@ -20,7 +24,7 @@ export default function InvoiceDetailTable({ data, isLoading, isValidating }) {
                      ) : (
                         <TableRenderBody data={data}>
                            {data?.map((row, index) => (
-                              <InvoiceDetailTableRow key={index} index={index} row={row} />
+                              <InvoiceDetailTableRow key={index} index={index} row={row} isLoading={isLoading} />
                            ))}
                         </TableRenderBody>
                      )}
@@ -33,8 +37,7 @@ export default function InvoiceDetailTable({ data, isLoading, isValidating }) {
 }
 
 function InvoiceDetailTableRow({ row, index }) {
-   console.log('🚀 ~ file: InvoiceDetailTable.js:36 ~ InvoiceDetailTableRow ~ row:', row);
-   const { code, total_amount, transaction, bills } = row;
+   const { code, billAmount, billTotalAmount, lossAmount, paidAmount, transaction, bills } = row;
    const [open, setOpen] = useState(false);
 
    return (
@@ -43,30 +46,30 @@ function InvoiceDetailTableRow({ row, index }) {
             <TableCell align="left">{index + 1}</TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
                <Label variant="filled" color="success">
-                  {transaction?.transactionId}
+                  {code}
                </Label>
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {transaction.transactionId}
+               {transaction?.transactionId}
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {fCurrency(total_amount.toFixed(2))}
+               {fCurrency(billAmount.toFixed(2))}
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {fCurrency(total_amount.toFixed(2))}
+               {fCurrency(lossAmount.toFixed(2))}
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {fCurrency(total_amount.toFixed(2))}
+               {fCurrency(billTotalAmount.toFixed(2))}
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {fCurrency(total_amount.toFixed(2))}
+               {fCurrency(paidAmount.toFixed(2))}
             </TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-               {fCurrency(total_amount.toFixed(2))}
+               {transaction.statusId === 1001 ? 0 : billAmount}
             </TableCell>
             <TableCell>
                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                  <Label variant={'soft'} color={status === 'Төлөгдөж буй' ? 'warning' : 'success'} sx={{ textTransform: 'capitalize' }}>
+                  <Label variant="soft" color="success">
                      {open ? <Iconify icon="ep:arrow-up-bold" /> : <Iconify icon="ep:arrow-down-bold" />}
                   </Label>
                </IconButton>
@@ -75,7 +78,7 @@ function InvoiceDetailTableRow({ row, index }) {
          <TableRow>
             <TableCell style={{ padding: 4 }} colSpan={10}>
                <Collapse in={open} timeout="auto" unmountOnExit>
-                  <DetailSubTable data={bills} />
+                  <DetailSubTable data={bills} transactionId={transaction?.transactionId} />
                </Collapse>
             </TableCell>
          </TableRow>
@@ -83,8 +86,26 @@ function InvoiceDetailTableRow({ row, index }) {
    );
 }
 
-function DetailSubTable({ data }) {
-   console.log('🚀 ~ file: InvoiceDetailTable.js:87 ~ DetailSubTable ~ data:', data);
+function DetailSubTable({ data, isLoading, transactionId }) {
+   const { getFetcher } = useSwrFetcher();
+   const { enqueueSnackbar } = useSnackbar();
+
+   const { trigger } = useSWRMutation([`payment/api/v1/admin/invoice/check/${transactionId}`, true], (args) => getFetcher(args), {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+      onSuccess: (newData) => {
+         newData?.responseCode === false
+            ? enqueueSnackbar(newData.responseMsg, { variant: 'warning' })
+            : enqueueSnackbar(newData.responseMsg, { variant: 'success' });
+      },
+      onError: (err) => {
+         err &&
+            enqueueSnackbar('Алдаа гарлаа, дахин оролдоно уу', {
+               variant: 'warning',
+            });
+      },
+   });
+
    const isNotFound = !data?.length;
 
    return (
@@ -103,25 +124,34 @@ function DetailSubTable({ data }) {
                   <TableCell>{'Хаагдаагүй төлөлт'}</TableCell>
                </TableRow>
             </TableHead>
+
             <TableBody>
-               {data?.map((o, i) => (
-                  <TableRow key={i}>
-                     <TableCell>{o.factor_name}</TableCell>
-                     <TableCell>{o.min_value}</TableCell>
-                     <TableCell>{o.max_value}</TableCell>
-                  </TableRow>
-               ))}
+               {isLoading ? (
+                  <TableSkeleton number={3} />
+               ) : (
+                  <TableRenderBody data={data}>
+                     {data?.map((row, i) => (
+                        <TableRow key={i}>
+                           <TableCell>{i + 1}</TableCell>
+                           <TableCell>{row?.billId}</TableCell>
+                           <TableCell>{`${row?.year} - ${row?.month} сар`}</TableCell>
+                           <TableCell>{row.orgName}</TableCell>
+                           <TableCell>{fCurrency(row.billAmount.toFixed(2))}</TableCell>
+                           <TableCell>{fCurrency(row.lossAmount.toFixed(2))}</TableCell>
+                           <TableCell>{fCurrency(row.totalAmount.toFixed(2))}</TableCell>
+                           <TableCell>{fCurrency(row?.paidAmount.toFixed(2))}</TableCell>
+                           <TableCell>{row.statusId === 1001 ? 0 : row?.billAmount}</TableCell>
+                        </TableRow>
+                     ))}
+                  </TableRenderBody>
+               )}
             </TableBody>
-            {isNotFound && (
-               <TableBody>
-                  <TableRow>
-                     <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
-                        <SearchNotFound />
-                     </TableCell>
-                  </TableRow>
-               </TableBody>
-            )}
          </Table>
+         <Box sx={{ justifyContent: 'flex-end', alignItems: 'flex-end', display: 'flex', pr: 4 }}>
+            <Button size="medium" onClick={trigger} variant="contained">
+               Төлөлт лавлах
+            </Button>
+         </Box>
       </Box>
    );
 }
