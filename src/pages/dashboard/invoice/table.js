@@ -1,6 +1,8 @@
 ///React
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 ///Named
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 import { useSnackbar } from 'notistack';
 //Mui
 import { Box, Card, Table, TableBody, Container, TableContainer, TablePagination, Typography, Button, Stack } from '@mui/material';
@@ -11,37 +13,70 @@ import useSWR from 'swr';
 ///Components
 import { TableHeadCustom, TableRenderBody, useTable, TableSkeleton } from 'src/components/table';
 import Scrollbar from 'src/components/scrollbar';
-import Iconify from 'src/components/iconify';
 import { labelDisplayedRows } from 'src/components/table/utils';
 ///Section
-import { MerchantActionDialog } from 'src/sections/merchant/action';
-import { MerchantTableRow, UserTableToolbar } from 'src/sections/merchant/table';
-import { TABLE_HEAD } from 'src/sections/merchant/utils/schema';
+import { TABLE_HEAD } from 'src/sections/Invoice/utils/schema';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import InvoiceActionDialog from 'src/sections/Invoice/action/InvoiceActionDialog';
+import InvoiceTableToolbar from 'src/sections/Invoice/table/InvoiceTableToolbar';
+import { fDate } from 'src/utils/formatTime';
+import InvoiceTableRow from 'src/sections/Invoice/table/InvoiceTableRow';
 
-MerchantListTable.getLayout = function getLayout(page) {
-   return <Layout headTitle="Мерчант">{page}</Layout>;
+InvoiceListTable.getLayout = function getLayout(page) {
+   return <Layout headTitle="Билл төлөлт">{page}</Layout>;
 };
 
-export default function MerchantListTable() {
+export default function InvoiceListTable() {
    const { postFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
    const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
-   const [dialogActionType, setDialogActionType] = useState('');
+   const [dialogFormVisible, setDialogFormVisible] = useState(false);
    const [filterModel, setFilterModel] = useState({});
    const [row, setRow] = useState({});
 
    //Table List pagination
    let pagination = {
-      //   filter: {
-      //      email: filterModel.email ? filterModel.email : null,
-      //      organization: filterModel.organization ? filterModel.organization : null,
-      //      phoneNumber: filterModel.phoneNumber ? filterModel.phoneNumber : null,
-      //      roleId: filterModel.authType ? filterModel.authType : null,
-      //      username: filterModel.username ? filterModel.username : null,
-      //   },
-      pageNo: page,
-      perPage: rowsPerPage,
-      sort: 'created_at desc',
+      filter: [
+         {
+            fieldName: 'c.bpay_code',
+            fieldType: 'text',
+            value: filterModel.bpayCode ? filterModel.bpayCode : null,
+            operation: 'like',
+         },
+         {
+            fieldName: 'tg.transaction_id',
+            fieldType: 'text',
+            value: filterModel.transactionId ? filterModel.transactionId : null,
+            operation: 'like',
+         },
+         {
+            fieldName: 'payment_group.total_amount',
+            fieldType: 'number',
+            value: filterModel.totalAmount,
+            operation: 'like',
+         },
+         {
+            fieldName: 'payment_group.updated_at',
+            fieldType: 'date',
+            value: filterModel.startDate && filterModel.endDate ? `${fDate(filterModel.startDate)}` : null,
+            operation: '>',
+         },
+         {
+            fieldName: 'payment_group.updated_at',
+            fieldType: 'date',
+            value: filterModel.startDate && filterModel.endDate ? `${fDate(filterModel.endDate)}` : null,
+            operation: '<',
+         },
+         {
+            fieldName: 'r.id',
+            fieldType: 'select',
+            value: filterModel.status ? String(filterModel.status) : null,
+            operation: 'like',
+         },
+      ],
+      page_no: page,
+      per_page: rowsPerPage,
+      sort: 'id desc',
    };
 
    // swr
@@ -51,33 +86,31 @@ export default function MerchantListTable() {
       error,
       mutate: tableMutate,
       isValidating,
-   } = useSWR(['users/api/v1/merchant/list', true, pagination], (args) => postFetcher(args), {
+   } = useSWR(['payment/api/v1/admin/invoice/list', true, pagination], (args) => postFetcher(args), {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
    });
    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
-   //    const {
-   //       data: adminList,
-   //       isLoading: adminListIsLoading,
-   //       error: adminListError,
-   //       mutate: adminListMuate,
-   //       isValidating: adminListisValidating,
-   //    } = useSWR(['user/role/select/all', true], (args) => getFetcher(args), {
-   //       revalidateOnFocus: false,
-   //       shouldRetryOnError: false,
-   //    });
-   //    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
+   const {
+      data: statusList,
+      isLoading: statusLoading,
+      error: errorr,
+      mutate: tableMutating,
+      isValidating: validate,
+   } = useSWR(['payment/api/v1/reference', true, { ref_code: 'BILL_STATUS', field3: 'admin' }], (args) => postFetcher(args), {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+   });
+   errorr && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
    //Function
    const handleUpdate = async (row) => {
       setRow(row);
-      setDialogActionType('update');
+      setDialogFormVisible(true);
    };
-
-   const handleCreate = async () => {
-      setRow({});
-      setDialogActionType('create');
+   const handleClose = async () => {
+      setDialogFormVisible(false);
    };
 
    const filterFunction = (data) => {
@@ -90,27 +123,23 @@ export default function MerchantListTable() {
       <>
          <Container maxWidth={'xl'}>
             <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" spacing={2}>
-               <Typography variant="h4" marginBottom={1}>
-                  {'Мерчантийн жагсаалт'}
+               <Typography variant="h3" sx={{ mb: 4 }}>
+                  {'Билл жагсаалт'}
                </Typography>
-               <Button variant="contained" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
-                  {'Нэмэх'}
-               </Button>
             </Stack>
-
-            {/* {!adminListIsLoading && <UserTableToolbar adminList={adminList} filterFunction={filterFunction} />} */}
+            {!statusLoading && <InvoiceTableToolbar statusList={statusList} filterFunction={filterFunction} />}
             <Card>
                <Scrollbar>
-                  <TableContainer sx={{ minWidth: 1430, position: 'relative' }}>
+                  <TableContainer sx={{ minWidth: 1400, position: 'relative' }}>
                      <Table>
                         <TableHeadCustom headLabel={TABLE_HEAD} />
                         <TableBody>
                            {isLoading || isValidating ? (
-                              <TableSkeleton number={5} />
+                              <TableSkeleton number={rowsPerPage} />
                            ) : (
                               <TableRenderBody data={tableData?.data}>
                                  {tableData?.data?.map((row, index) => (
-                                    <MerchantTableRow
+                                    <InvoiceTableRow
                                        key={index}
                                        index={index}
                                        row={row}
@@ -144,14 +173,7 @@ export default function MerchantListTable() {
                </Box>
             </Card>
          </Container>
-         <MerchantActionDialog
-            row={row}
-            dialogActionType={dialogActionType}
-            changeDialogStatus={(e) => {
-               setDialogActionType(e);
-            }}
-            refreshTable={() => tableMutate()}
-         />
+         <InvoiceActionDialog row={row} dialogFormVisible={dialogFormVisible} handleClose={handleClose} handleUpdate={handleUpdate} />
       </>
    );
 }

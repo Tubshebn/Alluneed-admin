@@ -8,6 +8,7 @@ export const ROOTS_DASHBOARD = '/dashboard';
 export const PATH_AUTH = {
    root: ROOTS_AUTH,
    login: path(ROOTS_AUTH, '/login'),
+   forgotPassword: path(ROOTS_AUTH, '/forgotPassword'),
 };
 
 export const PATH_PAGE = {
@@ -16,11 +17,10 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
    root: ROOTS_DASHBOARD,
-   general: {
-      app: path(ROOTS_DASHBOARD, '/app'),
-   },
-   merchant: {
-      root: path(ROOTS_DASHBOARD, '/merchant'),
-      table: path(ROOTS_DASHBOARD, '/merchant/table'),
+
+   invoice: {
+      root: path(ROOTS_DASHBOARD, '/invoice'),
+      table: path(ROOTS_DASHBOARD, '/invoice/table'),
+      view: (id) => path(ROOTS_DASHBOARD, `/invoice/detail/${id}`),
    },
 };

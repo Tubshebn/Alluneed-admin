@@ -10,6 +10,7 @@ const useFormHook = (schema, defaultValues) => {
    });
    const { reset, watch, setValue, control, handleSubmit, formState } = methods;
    const values = watch();
+
    return {
       form: {
          Controller,

@@ -3,6 +3,7 @@ import { HOST_API_KEY, HOST_IMAGE_UPLOAD_KEY, HOST_FILE_UPLOAD_KEY } from '../co
 import { setSession, removeSession, tokenCheck, toastExpireAccess, jwtDecode } from './utils';
 import AuthReducer from 'src/context/Auth/authReducer';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const instance = axios.create({
    baseURL: HOST_API_KEY,
@@ -46,10 +47,10 @@ export const Api = () => {
          },
 
          stateDynamicUpdate: (obj) => {
-            //   payload = {
-            //    type:obj.type
-            //    value:obj.value
-            //  }
+            // payload = {
+            //    type: obj.type,
+            //    value: obj.value,
+            // };
             dispatch({ type: 'DYNAMIC_UPDATE', payload: obj });
          },
 
@@ -60,7 +61,7 @@ export const Api = () => {
                   isToken
                      ? {
                           headers: {
-                             Authorization: `Bearer ${state.userToken}`,
+                             Authorization: `Bearer ${state?.userToken}`,
                              'Content-Type': contentType,
                           },
                           responseType,

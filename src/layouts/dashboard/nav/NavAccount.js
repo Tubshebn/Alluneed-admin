@@ -3,7 +3,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { PATH_DASHBOARD } from 'src/routes/paths';
-import { CustomAvatar } from 'src/components/custom-avatar';
+import Logo from 'src/components/logo/Logo';
 
 const StyledRoot = styled('div')(({ theme }) => ({
    display: 'flex',
@@ -20,15 +20,12 @@ export default function NavAccount() {
    const { user } = useAuthContext();
 
    return (
-      <Link component={NextLink} href={PATH_DASHBOARD.general.app} underline="none" color="inherit">
+      <Link component={NextLink} href={PATH_DASHBOARD.invoice.root} underline="none" color="inherit">
          <StyledRoot>
-            <CustomAvatar src={user?.photoURL} alt={'Amarjargal'} name={'Amarjargal'} />
+            <Logo sx={{ mr: 2.5 }} />
             <Box sx={{ ml: 2, minWidth: 0 }}>
                <Typography variant="subtitle2" noWrap>
-                  Tuvshulenshudeeeee
-               </Typography>
-               <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-                  Ulsuuleeendaaaa
+                  Trading platform
                </Typography>
             </Box>
          </StyledRoot>

@@ -1,7 +1,7 @@
 //react
 import { useState } from 'react';
 //mui
-import { Stack, Alert, IconButton, InputAdornment, Box } from '@mui/material';
+import { Stack, Alert, IconButton, InputAdornment, Box, Link, FormControlLabel, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 //named import
 import { useForm } from 'react-hook-form';
@@ -9,8 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { LOGIN_URL } from 'src/config-global';
+import { PATH_AUTH } from 'src/routes/paths';
+import { useTheme } from '@mui/material/styles';
 //default import
 import * as Yup from 'yup';
+import NextLink from 'next/link';
 import axios from 'axios';
 //components
 import Iconify from 'src/components/iconify';
@@ -18,8 +21,9 @@ import Iconify from 'src/components/iconify';
 export default function AuthLoginForm() {
    const {
       handlers: { signIn },
-      user,
+      state: { user },
    } = useAuthContext();
+   const theme = useTheme();
 
    const [showPassword, setShowPassword] = useState(false);
 
@@ -36,7 +40,7 @@ export default function AuthLoginForm() {
       reset,
       setError,
       handleSubmit,
-      watch,
+
       formState: { errors, isSubmitting, isSubmitSuccessful },
    } = methods;
 
@@ -75,7 +79,13 @@ export default function AuthLoginForm() {
                }}
             />
          </Stack>
-         <Box sx={{ mt: 3 }} />
+         <Box sx={{ my: 1 }}>
+            <Stack sx={{ display: 'flex', alignItems: 'flex-end' }}>
+               <Link component={NextLink} href={PATH_AUTH.forgotPassword} variant="subtitle2" sx={{ textDecoration: 'underline' }}>
+                  Нууц үг сэргээх
+               </Link>
+            </Stack>
+         </Box>
          <LoadingButton
             fullWidth
             color="inherit"
@@ -84,12 +94,12 @@ export default function AuthLoginForm() {
             variant="contained"
             loading={isSubmitSuccessful || isSubmitting}
             sx={{
-               bgcolor: 'text.primary',
+               bgcolor: 'primary.main',
                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-               '&:hover': { bgcolor: 'text.primary', color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800') },
+               '&:hover': { bgcolor: 'primary.dark', color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800') },
             }}
          >
-            Login
+            Нэвтрэх
          </LoadingButton>
       </FormProvider>
    );

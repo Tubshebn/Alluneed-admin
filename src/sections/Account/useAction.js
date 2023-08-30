@@ -3,28 +3,26 @@ import { useEffect, useState, useCallback } from 'react';
 // default import
 import useForm from 'src/hooks/useForm';
 // section
-import { defaultValues, MerchantCreateSchema, MerchantUpdateSchema } from 'src/sections/merchant/utils/schema';
+import { userUpdateSchema, defaultValues, passwordSchema } from './schema';
 
-const useAction = (dialogActionType, row, changeDialogStatus) => {
-   const schema = dialogActionType === 'update' ? MerchantUpdateSchema() : MerchantCreateSchema();
-   const { form } = useForm(schema, defaultValues);
+const useAction = (dialogActionType, user, changeDialogStatus) => {
+   const { form } = useForm(userUpdateSchema(), defaultValues, passwordSchema());
    const [dialogFormVisible, setDialogFormVisible] = useState(false);
    const [dialogLoader, setDialogLoader] = useState(false);
 
    useEffect(() => {
-      if (dialogActionType === 'create' || dialogActionType === 'update') {
+      if (dialogActionType === 'update') {
          return setDialogFormVisible(true);
       }
       if (dialogFormVisible) handleClose();
-   }, [dialogActionType, row]);
+   }, [dialogActionType]);
 
    useEffect(() => {
       if (dialogActionType === 'update') {
          setDialogLoader(true);
          form.reset({
-            ...row,
-            id: row?.id,
-            roleId: row?.roleId,
+            ...user,
+            id: user?.id,
          });
          setTimeout(() => {
             setDialogLoader(false);
@@ -49,7 +47,7 @@ const useAction = (dialogActionType, row, changeDialogStatus) => {
 
    const handleClose = () => {
       setDialogFormVisible(false);
-
+      changeDialogStatus('');
       form.reset(defaultValues);
    };
 

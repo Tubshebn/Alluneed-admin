@@ -13,15 +13,10 @@ const navConfig = [
       subheader: 'Системийн удирдлага',
       items: [
          {
-            title: 'app',
-            path: PATH_DASHBOARD.general.app,
-            icon: ICONS.dashboard,
-         },
-         {
-            title: 'Мерчант',
-            path: PATH_DASHBOARD.merchant.table,
-            icon: <Iconify icon={'raphael:customer'} />,
-            hideSection: true,
+            title: 'Билл төлөлт',
+            path: PATH_DASHBOARD.invoice.root,
+            icon: <Iconify icon="fluent:window-ad-20-filled" />,
+            code: 'PERM_INVOICE',
          },
       ],
    },
