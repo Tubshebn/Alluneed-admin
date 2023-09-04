@@ -8,7 +8,7 @@ import { CustomAvatar } from 'src/components/custom-avatar';
 import { useSnackbar } from 'src/components/snackbar';
 import MenuPopover from 'src/components/menu-popover';
 import { IconButtonAnimate } from 'src/components/animate';
-import AccountDialog from 'src/sections/Account/AccountDialog';
+import AccountDialog from 'src/sections/account/AccountDialog';
 
 const OPTIONS = [
    {

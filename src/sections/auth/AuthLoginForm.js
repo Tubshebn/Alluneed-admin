@@ -79,7 +79,7 @@ export default function AuthLoginForm() {
                }}
             />
          </Stack>
-         <Box sx={{ my: 1 }}>
+         <Box sx={{ my: 3 }}>
             <Stack sx={{ display: 'flex', alignItems: 'flex-end' }}>
                <Link component={NextLink} href={PATH_AUTH.forgotPassword} variant="subtitle2" sx={{ textDecoration: 'underline' }}>
                   Нууц үг сэргээх

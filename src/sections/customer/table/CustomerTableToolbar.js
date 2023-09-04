@@ -10,12 +10,11 @@ import PropTypes from 'prop-types';
 import Iconify from 'src/components/iconify/Iconify';
 
 // props
-InvoiceTableToolbar.propTypes = {
+CustomerTableToolbar.propTypes = {
    filterFunction: PropTypes.func,
-   statusList: PropTypes.array,
 };
 
-export default function InvoiceTableToolbar({ filterFunction, statusList, clearFilter }) {
+export default function CustomerTableToolbar({ filterFunction, clearFilter }) {
    const [filterModel, setFilterModel] = useState({});
    const { enqueueSnackbar } = useSnackbar();
 
@@ -43,7 +42,6 @@ export default function InvoiceTableToolbar({ filterFunction, statusList, clearF
          handlingFilterChange(type, '');
       }
    };
-
    const clearFunction = () => {
       clearFilter();
       setFilterModel('');
@@ -53,6 +51,7 @@ export default function InvoiceTableToolbar({ filterFunction, statusList, clearF
       <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
          <DatePicker
             label="Эхлэх өдөр"
+            maxDate={Date.now()}
             value={filterModel?.startDate ? filterModel?.startDate : null}
             ampm={false}
             onChange={(event) => handlingFilterChange('startDate', event)}
@@ -73,70 +72,30 @@ export default function InvoiceTableToolbar({ filterFunction, statusList, clearF
             sx={{
                maxWidth: 220,
             }}
-            value={filterModel?.bpayCode ? filterModel?.bpayCode : ''}
-            onChange={(event) => isValid(100, event.target.value, 'bpayCode')}
+            value={filterModel?.bpay_code ? filterModel?.bpay_code : ''}
+            onChange={(event) => isValid(100, event.target.value, 'bpay_code')}
          />
 
          <TextField
             fullWidth
-            label="Гүйлгээний ID "
+            label="Имэил хаяг"
             sx={{
                maxWidth: 220,
             }}
-            value={filterModel?.transactionId ? filterModel?.transactionId : ''}
-            onChange={(event) => handlingFilterChange('transactionId', event.target.value)}
+            value={filterModel?.email ? filterModel?.email : ''}
+            onChange={(event) => handlingFilterChange('email', event.target.value)}
          />
 
          <TextField
             fullWidth
-            label="Төлсөн дүнгээр"
+            label="Утасны дугаар"
             sx={{
                maxWidth: 220,
             }}
-            value={filterModel?.totalAmount ? filterModel?.totalAmount : ''}
-            onChange={(event) => handlingFilterChange('totalAmount', event.target.value)}
+            value={filterModel?.phone_number ? filterModel?.phone_number : ''}
+            onChange={(event) => handlingFilterChange('phone_number', event.target.value)}
          />
 
-         <TextField
-            fullWidth
-            select
-            label="Төлөв"
-            InputLabelProps={{ shrink: true }}
-            sx={{
-               maxWidth: 220,
-            }}
-            value={filterModel?.status ? filterModel?.status : ''}
-            onChange={(event) => handlingFilterChange('status', event.target.value)}
-         >
-            <MenuItem
-               value=""
-               sx={{
-                  mx: 1,
-                  my: 0.5,
-                  borderRadius: 0.75,
-                  typography: 'body2',
-                  textTransform: 'capitalize',
-               }}
-            >
-               Бүгд
-            </MenuItem>
-            {statusList &&
-               statusList?.map((option, index) => (
-                  <MenuItem
-                     key={index}
-                     value={option?.id}
-                     sx={{
-                        mx: 1,
-                        my: 0.5,
-                        borderRadius: 0.75,
-                        typography: 'body2',
-                        textTransform: 'capitalize',
-                     }}
-                  >
-                     {option?.name}
-                  </MenuItem>
-               ))}
-         </TextField>
          <IconButton onClick={clearFunction} sx={{ mt: 4, maxHeight: 60 }}>
             <Iconify icon="tabler:reload" sx={{ fontSize: 25 }} align="center" />
          </IconButton>

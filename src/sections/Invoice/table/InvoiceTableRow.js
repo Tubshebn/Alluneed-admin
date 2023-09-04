@@ -1,25 +1,20 @@
 ///React
 import { useState } from 'react';
 ///Named
-import { useSnackbar } from 'notistack';
+import { fDate } from 'src/utils/formatTime';
+import { fCurrency } from 'src/utils/formatNumber';
 //Mui
-import { TableRow, TableCell, MenuItem, IconButton } from '@mui/material';
+import { TableRow, TableCell, IconButton } from '@mui/material';
 ///Default
-import useSwrFetcher from 'src/hooks/useSwrFetcher';
-import useSWRMutation from 'swr/mutation';
 import PropTypes from 'prop-types';
 ///Components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import DeleteDialog from 'src/components/DeleteDialog';
-import MenuPopover from 'src/components/menu-popover';
-import { fDate } from 'src/utils/formatTime';
-import { fCurrency } from 'src/utils/formatNumber';
 
 // props
 InvoiceTableRow.propTypes = {
    row: PropTypes.object.isRequired,
-   refreshTable: PropTypes.func,
    handleUpdate: PropTypes.func,
    index: PropTypes.number,
    page: PropTypes.number,
@@ -48,15 +43,8 @@ export default function InvoiceTableRow({ row, handleUpdate, index, page, rowsPe
       setConfirmModal(false);
    };
 
-   const showUpDeleteDialog = () => {
-      if (confirmModal) {
-         return <DeleteDialog handleDeleteRow={trigger} open={confirmModal} close={handleClose} />;
-      }
-   };
-
    return (
       <TableRow hover>
-         {showUpDeleteDialog()}
          <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell>
          <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
             <Label variant="filled" color="success">

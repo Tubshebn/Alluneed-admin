@@ -1,15 +1,26 @@
-import { Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+//React
 import { useState } from 'react';
+//Named
+import { fCurrency } from 'src/utils/formatNumber';
+import { useSnackbar } from 'notistack';
+//MUI
+import { Box, Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+//Default
+import useSWRMutation from 'swr/mutation';
+import useSwrFetcher from 'src/hooks/useSwrFetcher';
+import PropTypes from 'prop-types';
+//Components
 import Iconify from 'src/components/iconify/Iconify';
 import Label from 'src/components/label/Label';
 import Scrollbar from 'src/components/scrollbar/Scrollbar';
 import { TableHeadCustom, TableRenderBody, TableSkeleton } from 'src/components/table';
-import useSwrFetcher from 'src/hooks/useSwrFetcher';
+//sections
 import { DETAIL_TABLE_HEAD } from 'src/sections/Invoice/utils/schema';
 
-import { fCurrency } from 'src/utils/formatNumber';
-import { useSnackbar } from 'notistack';
-import useSWRMutation from 'swr/mutation';
+//Props
+InvoiceDetailTable.propTypes = {
+   data: PropTypes.array.isRequired,
+};
 
 export default function InvoiceDetailTable({ data, isLoading, isValidating }) {
    return (
@@ -42,7 +53,7 @@ function InvoiceDetailTableRow({ row, index }) {
 
    return (
       <>
-         <TableRow hover>
+         <TableRow hover onClick={() => setOpen(!open)}>
             <TableCell align="left">{index + 1}</TableCell>
             <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
                <Label variant="filled" color="success">
@@ -68,7 +79,7 @@ function InvoiceDetailTableRow({ row, index }) {
                {transaction.statusId === 1001 ? 0 : billAmount}
             </TableCell>
             <TableCell>
-               <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+               <IconButton aria-label="expand row" size="small">
                   <Label variant="soft" color="success">
                      {open ? <Iconify icon="ep:arrow-up-bold" /> : <Iconify icon="ep:arrow-down-bold" />}
                   </Label>
@@ -105,8 +116,6 @@ function DetailSubTable({ data, isLoading, transactionId }) {
             });
       },
    });
-
-   const isNotFound = !data?.length;
 
    return (
       <Box>
@@ -148,7 +157,7 @@ function DetailSubTable({ data, isLoading, transactionId }) {
             </TableBody>
          </Table>
          <Box sx={{ justifyContent: 'flex-end', alignItems: 'flex-end', display: 'flex', pr: 4 }}>
-            <Button size="medium" onClick={trigger} variant="contained">
+            <Button size="medium" onClick={trigger} variant="contained" color="info">
                Төлөлт лавлах
             </Button>
          </Box>

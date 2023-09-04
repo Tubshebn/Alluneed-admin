@@ -1,26 +1,23 @@
 ///Named
-import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, MenuItem, CircularProgress, Box, Grid, Typography } from '@mui/material';
+import { fDateTime } from 'src/utils/formatTime';
 ///Default
 import PropTypes from 'prop-types';
-import useSWRMutation from 'swr/mutation';
 import useSWR from 'swr';
 import useSwrFetcher from 'src/hooks/useSwrFetcher';
 //Components
 import Iconify from 'src/components/iconify';
-import { fDateTime } from 'src/utils/formatTime';
 import Label from 'src/components/label/Label';
-import InvoiceDetailTable from './InvoiceDetailTable';
 ///Sections
+import InvoiceDetailTable from './InvoiceDetailTable';
 
 //Props
 InvoiceActionDialog.propTypes = {
    row: PropTypes.object.isRequired,
-   refreshTable: PropTypes.func,
 };
 
-export default function InvoiceActionDialog({ row, handleClose, handleUpdate, dialogFormVisible }) {
+export default function InvoiceActionDialog({ row, handleClose, dialogFormVisible }) {
    const { getFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
 
@@ -62,40 +59,24 @@ export default function InvoiceActionDialog({ row, handleClose, handleUpdate, di
                   <>
                      <Grid container spacing={2} justifyContent="space-between" sx={{ minHeight: 170 }}>
                         <Grid item>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Гүйлгээний ID:  ${row?.transactionId}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Гүйлгээ хийсэн огноо:  ${fDateTime(
+                              row?.paidAt
+                           )}`}</Typography>
                            <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`Гүйлгээний ID:  ${row?.transactionId}`}</Typography>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`Гүйлгээний огноо:  ${fDateTime(row?.paidAt)}`}</Typography>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
+                              sx={{ wordSpacing: 2, mb: 0.4 }}
                               variant="subtitle1"
                            >{`Нийт билл дүн:  ${DetailData?.data?.total_amount}`}</Typography>
                            <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.3 }}
+                              sx={{ wordSpacing: 2, mb: 0.3 }}
                               variant="subtitle1"
                            >{`Нийт төлсөн дүн:  ${DetailData?.data?.total_amount}`}</Typography>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`Нийт хаагдаагүй төлөлт дүн:  ${'0'}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Нийт хаагдаагүй төлөлт дүн:  ${'0'}`}</Typography>
                         </Grid>
                         <Grid item>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`BPAY ID:  ${row?.bpayCode}`}</Typography>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`Хэрэглэгч овог:  ${'Хоосон'}`}</Typography>
-                           <Typography
-                              sx={{ wordSpacing: 2, textTransform: 'capitalize', mb: 0.4 }}
-                              variant="subtitle1"
-                           >{`Хэрэглэгч нэр:  ${'Хоосон'}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`BPAY ID:  ${row?.bpayCode}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Хэрэглэгч овог:  ${'Хоосон'}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Хэрэглэгч нэр:  ${'Хоосон'}`}</Typography>
                         </Grid>
                      </Grid>
                   </>

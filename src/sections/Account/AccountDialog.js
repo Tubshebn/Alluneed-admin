@@ -12,7 +12,7 @@ import FormProvider from 'src/components/hook-form/FormProvider';
 import { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 ///Sections
-import useAction from 'src/sections/Account/useAction';
+import useAction from 'src/sections/account/useAction';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { useState } from 'react';
 import { fDate } from 'src/utils/formatTime';
@@ -88,6 +88,10 @@ export default function AccountDialog({ dialogActionType, changeDialogStatus }) 
    const handleChange = (event, newValue) => {
       setValue(newValue);
    };
+   const handleClose = () => {
+      actionFunction.handleClose();
+      setStop(false);
+   };
 
    return (
       <Dialog open={actionState.dialogFormVisible} onClose={actionFunction.handleClose} sx={{ p: 3 }} maxWidth="md" fullWidth>
@@ -130,21 +134,16 @@ export default function AccountDialog({ dialogActionType, changeDialogStatus }) 
                   </TabPanel>
                   <TabPanel value="2">
                      <Stack spacing={3} width="80%" mx={6} marginTop={3}>
-                        <RHFTextField type="text" name="oldPassword" label="Нууц үг" fullWidth />
-                        <RHFTextField type="text" name="newPassword" label="Шинэ нууц үг" fullWidth />
-                        <RHFTextField type="text" name="confirmPassword" label="Нууц үгээ дахин оруулна уу" fullWidth />
+                        <RHFTextField type="text" name="oldPassword" label="Нууц үг" fullWidth disabled={stop === false} />
+                        <RHFTextField type="text" name="newPassword" label="Шинэ нууц үг" fullWidth disabled={stop === false} />
+                        <RHFTextField type="text" name="confirmPassword" label="Нууц үгээ дахин оруулна уу" fullWidth disabled={stop === false} />
                      </Stack>
                   </TabPanel>
                </TabContext>
             </FormProvider>
          </DialogContent>
          <DialogActions>
-            <Button
-               onClick={() => actionFunction.handleClose()}
-               color="inherit"
-               size="medium"
-               startIcon={<Iconify icon={'eva:arrow-ios-back-fill'} />}
-            >
+            <Button onClick={() => handleClose()} color="inherit" size="medium" startIcon={<Iconify icon={'eva:arrow-ios-back-fill'} />}>
                {'Буцах'}
             </Button>
             {stop === false && (

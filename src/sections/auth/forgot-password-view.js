@@ -55,7 +55,6 @@ export default function ForgotPasswordView() {
    const onSubmit = handleSubmit(async (data) => {
       try {
          const response = await POST('/users/api/v1/user/reset/password', true, { email: data?.email });
-         console.log('🚀 ~ file: forgot-password-view.js:58 ~ onSubmit ~ response:', response.responseCode);
 
          reset();
          response?.responseCode === true

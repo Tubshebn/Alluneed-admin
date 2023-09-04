@@ -1,7 +1,6 @@
 import NextLink from 'next/link';
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
-import { useAuthContext } from 'src/auth/useAuthContext';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import Logo from 'src/components/logo/Logo';
 
@@ -17,15 +16,13 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 export default function NavAccount() {
-   const { user } = useAuthContext();
-
    return (
       <Link component={NextLink} href={PATH_DASHBOARD.invoice.root} underline="none" color="inherit">
          <StyledRoot>
-            <Logo sx={{ mr: 2.5 }} />
-            <Box sx={{ ml: 2, minWidth: 0 }}>
+            <Logo sx={{ mr: 1 }} />
+            <Box sx={{ ml: 1, minWidth: 0 }}>
                <Typography variant="subtitle2" noWrap>
-                  Trading platform
+                  Bpay admin system
                </Typography>
             </Box>
          </StyledRoot>

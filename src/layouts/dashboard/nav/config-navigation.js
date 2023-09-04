@@ -16,7 +16,11 @@ const navConfig = [
             title: 'Билл төлөлт',
             path: PATH_DASHBOARD.invoice.root,
             icon: <Iconify icon="fluent:window-ad-20-filled" />,
-            code: 'PERM_INVOICE',
+         },
+         {
+            title: 'Хэрэглэгчийн бүртгэл',
+            path: PATH_DASHBOARD.customer.root,
+            icon: <Iconify icon="mdi:user" />,
          },
       ],
    },

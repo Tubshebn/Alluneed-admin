@@ -21,6 +21,9 @@ export const PATH_DASHBOARD = {
    invoice: {
       root: path(ROOTS_DASHBOARD, '/invoice'),
       table: path(ROOTS_DASHBOARD, '/invoice/table'),
-      view: (id) => path(ROOTS_DASHBOARD, `/invoice/detail/${id}`),
+   },
+   customer: {
+      root: path(ROOTS_DASHBOARD, '/customer'),
+      table: path(ROOTS_DASHBOARD, '/customer/table'),
    },
 };

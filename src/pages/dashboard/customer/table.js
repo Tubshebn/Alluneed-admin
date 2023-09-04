@@ -14,13 +14,13 @@ import { TableHeadCustom, TableRenderBody, useTable, TableSkeleton } from 'src/c
 import Scrollbar from 'src/components/scrollbar';
 import { labelDisplayedRows } from 'src/components/table/utils';
 ///Section
-import { TABLE_HEAD } from 'src/sections/Invoice/utils/schema';
-import InvoiceActionDialog from 'src/sections/Invoice/action/InvoiceActionDialog';
-import InvoiceTableToolbar from 'src/sections/Invoice/table/InvoiceTableToolbar';
-import InvoiceTableRow from 'src/sections/Invoice/table/InvoiceTableRow';
+import { TABLE_HEAD } from 'src/sections/customer/utils/schema';
+import CustomerTableRow from 'src/sections/customer/table/CustomerTableRow';
+import CustomerTableToolbar from 'src/sections/customer/table/CustomerTableToolbar';
+import CustomerActionDialog from 'src/sections/customer/action/CustomerActionDialog';
 
 InvoiceListTable.getLayout = function getLayout(page) {
-   return <Layout headTitle="Билл төлөлт">{page}</Layout>;
+   return <Layout headTitle="Хэрэглэгчийн жагсаалт">{page}</Layout>;
 };
 
 export default function InvoiceListTable() {
@@ -30,49 +30,45 @@ export default function InvoiceListTable() {
    const [dialogFormVisible, setDialogFormVisible] = useState(false);
    const [filterModel, setFilterModel] = useState({});
    const [row, setRow] = useState({});
-
+   const [open, setOpen] = useState(false);
    //Table List pagination
    let pagination = {
       filter: [
          {
-            fieldName: 'c.bpay_code',
+            fieldName: 'email',
             fieldType: 'text',
-            value: filterModel.bpayCode ? filterModel.bpayCode : null,
+            value: filterModel.email ? filterModel.email : null,
             operation: 'like',
          },
+
          {
-            fieldName: 'tg.transaction_id',
+            fieldName: 'bpay_code',
             fieldType: 'text',
-            value: filterModel.transactionId ? filterModel.transactionId : null,
+            value: filterModel.bpay_code ? filterModel.bpay_code : null,
+            operation: 'like',
+         },
+
+         {
+            fieldName: 'phone_number',
+            fieldType: 'text',
+            value: filterModel.phone_number ? filterModel.phone_number : null,
             operation: 'like',
          },
          {
-            fieldName: 'payment_group.total_amount',
-            fieldType: 'number',
-            value: filterModel.totalAmount,
-            operation: 'like',
-         },
-         {
-            fieldName: 'payment_group.updated_at',
+            fieldName: 'created_at',
             fieldType: 'date',
             value: filterModel.startDate && filterModel.endDate ? `${fDate(filterModel.startDate)}` : null,
             operation: '>',
          },
          {
-            fieldName: 'payment_group.updated_at',
+            fieldName: 'created_at',
             fieldType: 'date',
             value: filterModel.startDate && filterModel.endDate ? `${fDate(filterModel.endDate)}` : null,
             operation: '<',
          },
-         {
-            fieldName: 'r.id',
-            fieldType: 'select',
-            value: filterModel.status ? String(filterModel.status) : null,
-            operation: 'like',
-         },
       ],
-      page_no: page + 1,
-      per_page: rowsPerPage,
+      pageNo: page + 1,
+      perPage: rowsPerPage,
       sort: 'id desc',
    };
 
@@ -83,23 +79,11 @@ export default function InvoiceListTable() {
       error,
       mutate: tableMutate,
       isValidating,
-   } = useSWR(['payment/api/v1/admin/invoice/list', true, pagination], (args) => postFetcher(args), {
+   } = useSWR(['payment/api/v1/admin/customer/list', true, pagination], (args) => postFetcher(args), {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
    });
    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
-
-   const {
-      data: statusList,
-      isLoading: statusLoading,
-      error: errorr,
-      mutate: tableMutating,
-      isValidating: validate,
-   } = useSWR(['payment/api/v1/reference', true, { ref_code: 'BILL_STATUS', field3: 'admin' }], (args) => postFetcher(args), {
-      revalidateOnFocus: false,
-      shouldRetryOnError: false,
-   });
-   errorr && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
    //Function
    const handleUpdate = async (row) => {
@@ -115,19 +99,24 @@ export default function InvoiceListTable() {
          setFilterModel(data);
       }
    };
+   const handleOpen = () => {
+      setOpen(true);
+   };
+   const handleCloose = () => {
+      setOpen(false);
+   };
    const clearFilter = () => {
       setFilterModel('');
    };
-
    return (
       <>
          <Container maxWidth={'xl'}>
             <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" spacing={2}>
                <Typography variant="h3" sx={{ mb: 4 }}>
-                  {'Билл төлөлт'}
+                  {'Хэрэглэгчийн бүртгэл'}
                </Typography>
             </Stack>
-            {!statusLoading && <InvoiceTableToolbar statusList={statusList} filterFunction={filterFunction} clearFilter={clearFilter} />}
+            {!isLoading && <CustomerTableToolbar filterFunction={filterFunction} clearFilter={clearFilter} />}
             <Card>
                <Scrollbar>
                   <TableContainer sx={{ minWidth: 1400, position: 'relative' }}>
@@ -139,7 +128,7 @@ export default function InvoiceListTable() {
                            ) : (
                               <TableRenderBody data={tableData?.data}>
                                  {tableData?.data?.map((row, index) => (
-                                    <InvoiceTableRow
+                                    <CustomerTableRow
                                        key={index}
                                        index={index}
                                        row={row}
@@ -173,7 +162,15 @@ export default function InvoiceListTable() {
                </Box>
             </Card>
          </Container>
-         <InvoiceActionDialog row={row} dialogFormVisible={dialogFormVisible} handleClose={handleClose} handleUpdate={handleUpdate} />
+         <CustomerActionDialog
+            row={row}
+            dialogFormVisible={dialogFormVisible}
+            handleCloose={handleCloose}
+            handleClose={handleClose}
+            handleUpdate={handleUpdate}
+            open={open}
+            handleOpen={handleOpen}
+         />
       </>
    );
 }

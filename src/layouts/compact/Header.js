@@ -33,7 +33,7 @@ export default function Header({ isOffset }) {
                }),
             }}
          >
-            <Logo />
+            {/* <Logo /> */}
          </Toolbar>
 
          {isOffset && <Shadow />}
