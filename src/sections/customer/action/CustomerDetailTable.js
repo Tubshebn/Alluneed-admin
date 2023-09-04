@@ -14,13 +14,14 @@ import { TableHeadCustom, TableRenderBody, TableSkeleton } from 'src/components/
 //sections
 import { DETAIL_TABLE_HEAD, SUB_TABLE_HEAD } from 'src/sections/customer/utils/schema';
 import Iconify from 'src/components/iconify/Iconify';
+import { fDate } from 'src/utils/formatTime';
 
 //Props
 CustomerDetailTable.propTypes = {
    data: PropTypes.array.isRequired,
 };
 
-export default function CustomerDetailTable({ data, isLoading, isValidating, handleOpen, open, handleCloose }) {
+export default function CustomerDetailTable({ data, isLoading, isValidating, handleOpen, open, handleCloose, paidAt }) {
    const [bill, setBill] = useState();
    return (
       <Stack>
@@ -48,7 +49,6 @@ export default function CustomerDetailTable({ data, isLoading, isValidating, han
                            <TableRenderBody data={data}>
                               {data &&
                                  data?.map((row, index) => {
-                                    console.log('🚀 ~ file: CustomerDetailTable.js:51 ~ CustomerDetailTable ~ row:', row);
                                     const { total_amount, transaction, bills, code } = row;
                                     const pendingAmount = total_amount - transaction.total_amount;
                                     return (
@@ -74,6 +74,9 @@ export default function CustomerDetailTable({ data, isLoading, isValidating, han
                                           <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                                              {fCurrency(pendingAmount.toFixed(2))}
                                           </TableCell>
+                                          <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                                             {fDate(paidAt)}
+                                          </TableCell>
                                        </TableRow>
                                     );
                                  })}
@@ -83,14 +86,14 @@ export default function CustomerDetailTable({ data, isLoading, isValidating, han
                   </Table>
                </TableContainer>
             ) : (
-               <InvoiceDetailTableRow bill={bill} open={open} handleCloose={handleCloose} />
+               <CustomerDetailTableRow bill={bill} open={open} handleCloose={handleCloose} paidAt={paidAt} />
             )}
          </Scrollbar>
       </Stack>
    );
 }
 
-function InvoiceDetailTableRow({ bill, open, handleCloose }) {
+function CustomerDetailTableRow({ bill }) {
    return (
       <>
          <TableContainer>
@@ -130,20 +133,6 @@ function InvoiceDetailTableRow({ bill, open, handleCloose }) {
                </TableBody>
             </Table>
          </TableContainer>
-
-         <Box sx={{ position: 'relative' }}>
-            <TablePagination
-               rowsPerPageOptions={[50, 100, 250]}
-               component="div"
-               count={tableData?.pagination?.total_elements || 0}
-               page={page}
-               onPageChange={onChangePage}
-               rowsPerPage={rowsPerPage}
-               onRowsPerPageChange={onChangeRowsPerPage}
-               labelRowsPerPage={'Хуудсанд харуулах тоо' + ': '}
-               labelDisplayedRows={(to) => labelDisplayedRows(to, 'Нийт систем хэрэглэгч: ')}
-            />
-         </Box>
       </>
    );
 }

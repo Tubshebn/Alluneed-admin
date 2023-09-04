@@ -71,7 +71,9 @@ export default function InvoiceActionDialog({ row, handleClose, dialogFormVisibl
                               sx={{ wordSpacing: 2, mb: 0.3 }}
                               variant="subtitle1"
                            >{`Нийт төлсөн дүн:  ${DetailData?.data?.total_amount}`}</Typography>
-                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Нийт хаагдаагүй төлөлт дүн:  ${'0'}`}</Typography>
+                           <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`Нийт хаагдаагүй төлөлт дүн:  ${
+                              DetailData?.data?.statusId === 1001 ? 0 : total_amount
+                           }`}</Typography>
                         </Grid>
                         <Grid item>
                            <Typography sx={{ wordSpacing: 2, mb: 0.4 }} variant="subtitle1">{`BPAY ID:  ${row?.bpayCode}`}</Typography>

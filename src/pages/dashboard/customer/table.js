@@ -1,8 +1,10 @@
 ///React
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 ///Named
 import { useSnackbar } from 'notistack';
 import { fDate } from 'src/utils/formatTime';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { saveAs } from 'file-saver';
 //Mui
 import { Box, Card, Table, TableBody, Container, TableContainer, TablePagination, Typography, Stack } from '@mui/material';
 ///Default
@@ -26,11 +28,15 @@ InvoiceListTable.getLayout = function getLayout(page) {
 export default function InvoiceListTable() {
    const { postFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
-   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
+   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable({ defaultRowsPerPage: 25 });
    const [dialogFormVisible, setDialogFormVisible] = useState(false);
    const [filterModel, setFilterModel] = useState({});
    const [row, setRow] = useState({});
    const [open, setOpen] = useState(false);
+   const {
+      handlers: { POST },
+   } = useAuthContext();
+
    //Table List pagination
    let pagination = {
       filter: [
@@ -85,6 +91,20 @@ export default function InvoiceListTable() {
    });
    error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
+   const downloadExcel = useCallback(async () => {
+      try {
+         const response = await POST('payment/api/v1/admin/customer/list/?isExcel=true', true, pagination, 'application/json', 'arraybuffer');
+         if (response) {
+            const blob = new Blob([response], {
+               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            saveAs(blob, `Хэрэглэгчийн бүртгэл.xlsx`);
+         }
+      } catch (err) {
+         err && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
+      }
+   }, []);
+
    //Function
    const handleUpdate = async (row) => {
       setRow(row);
@@ -92,6 +112,7 @@ export default function InvoiceListTable() {
    };
    const handleClose = async () => {
       setDialogFormVisible(false);
+      setOpen(false);
    };
 
    const filterFunction = (data) => {
@@ -116,7 +137,7 @@ export default function InvoiceListTable() {
                   {'Хэрэглэгчийн бүртгэл'}
                </Typography>
             </Stack>
-            {!isLoading && <CustomerTableToolbar filterFunction={filterFunction} clearFilter={clearFilter} />}
+            {!isLoading && <CustomerTableToolbar filterFunction={filterFunction} clearFilter={clearFilter} downloadExcel={downloadExcel} />}
             <Card>
                <Scrollbar>
                   <TableContainer sx={{ minWidth: 1400, position: 'relative' }}>

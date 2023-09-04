@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 //Mui
-import { Stack, TextField, MenuItem, IconButton } from '@mui/material';
+import { Stack, TextField, MenuItem, IconButton, Tooltip } from '@mui/material';
 ///Default
 import PropTypes from 'prop-types';
 import Iconify from 'src/components/iconify/Iconify';
@@ -14,7 +14,7 @@ CustomerTableToolbar.propTypes = {
    filterFunction: PropTypes.func,
 };
 
-export default function CustomerTableToolbar({ filterFunction, clearFilter }) {
+export default function CustomerTableToolbar({ filterFunction, clearFilter, downloadExcel }) {
    const [filterModel, setFilterModel] = useState({});
    const { enqueueSnackbar } = useSnackbar();
 
@@ -48,57 +48,74 @@ export default function CustomerTableToolbar({ filterFunction, clearFilter }) {
    };
 
    return (
-      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
-         <DatePicker
-            label="Эхлэх өдөр"
-            maxDate={Date.now()}
-            value={filterModel?.startDate ? filterModel?.startDate : null}
-            ampm={false}
-            onChange={(event) => handlingFilterChange('startDate', event)}
-            renderInput={(params) => <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />}
-         />
+      <Stack flexDirection="row" justifyContent="space-between">
+         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
+            <DatePicker
+               label="Эхлэх өдөр"
+               maxDate={Date.now()}
+               value={filterModel?.startDate ? filterModel?.startDate : null}
+               ampm={false}
+               onChange={(event) => handlingFilterChange('startDate', event)}
+               renderInput={(params) => (
+                  <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />
+               )}
+            />
 
-         <DatePicker
-            label="Дуусах өдөр"
-            ampm={false}
-            minDate={filterModel?.startDate}
-            value={filterModel?.endDate ? filterModel?.endDate : null}
-            onChange={(event) => handlingFilterChange('endDate', event)}
-            renderInput={(params) => <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />}
-         />
-         <TextField
-            fullWidth
-            label="Bpay ID"
-            sx={{
-               maxWidth: 220,
-            }}
-            value={filterModel?.bpay_code ? filterModel?.bpay_code : ''}
-            onChange={(event) => isValid(100, event.target.value, 'bpay_code')}
-         />
+            <DatePicker
+               label="Дуусах өдөр"
+               ampm={false}
+               minDate={filterModel?.startDate}
+               value={filterModel?.endDate ? filterModel?.endDate : null}
+               onChange={(event) => handlingFilterChange('endDate', event)}
+               renderInput={(params) => (
+                  <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />
+               )}
+            />
+            <TextField
+               fullWidth
+               label="Bpay ID"
+               sx={{
+                  maxWidth: 220,
+               }}
+               value={filterModel?.bpay_code ? filterModel?.bpay_code : ''}
+               onChange={(event) => isValid(100, event.target.value, 'bpay_code')}
+            />
 
-         <TextField
-            fullWidth
-            label="Имэил хаяг"
-            sx={{
-               maxWidth: 220,
-            }}
-            value={filterModel?.email ? filterModel?.email : ''}
-            onChange={(event) => handlingFilterChange('email', event.target.value)}
-         />
+            <TextField
+               fullWidth
+               label="Имэил хаяг"
+               sx={{
+                  maxWidth: 220,
+               }}
+               value={filterModel?.email ? filterModel?.email : ''}
+               onChange={(event) => handlingFilterChange('email', event.target.value)}
+            />
 
-         <TextField
-            fullWidth
-            label="Утасны дугаар"
-            sx={{
-               maxWidth: 220,
-            }}
-            value={filterModel?.phone_number ? filterModel?.phone_number : ''}
-            onChange={(event) => handlingFilterChange('phone_number', event.target.value)}
-         />
+            <TextField
+               fullWidth
+               label="Утасны дугаар"
+               sx={{
+                  maxWidth: 220,
+               }}
+               value={filterModel?.phone_number ? filterModel?.phone_number : ''}
+               onChange={(event) => handlingFilterChange('phone_number', event.target.value)}
+            />
 
-         <IconButton onClick={clearFunction} sx={{ mt: 4, maxHeight: 60 }}>
-            <Iconify icon="tabler:reload" sx={{ fontSize: 25 }} align="center" />
-         </IconButton>
+            <IconButton onClick={clearFunction} sx={{ mt: 4, maxHeight: 60 }}>
+               <Iconify icon="tabler:reload" align="center" />
+            </IconButton>
+         </Stack>
+         <Stack justifyContent="center">
+            <Tooltip
+               title="Эксел татах"
+               sx={{ justifyContent: 'center', alignItems: 'center' }}
+               onClick={() => {
+                  downloadExcel();
+               }}
+            >
+               <IconButton>{<Iconify width={27} icon="vscode-icons:file-type-excel" />}</IconButton>
+            </Tooltip>
+         </Stack>
       </Stack>
    );
 }

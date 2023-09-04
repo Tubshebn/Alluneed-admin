@@ -26,7 +26,7 @@ InvoiceListTable.getLayout = function getLayout(page) {
 export default function InvoiceListTable() {
    const { postFetcher } = useSwrFetcher();
    const { enqueueSnackbar } = useSnackbar();
-   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
+   const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable({ defaultRowsPerPage: 25 });
    const [dialogFormVisible, setDialogFormVisible] = useState(false);
    const [filterModel, setFilterModel] = useState({});
    const [row, setRow] = useState({});

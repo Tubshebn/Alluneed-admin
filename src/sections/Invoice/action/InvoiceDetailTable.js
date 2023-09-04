@@ -149,7 +149,7 @@ function DetailSubTable({ data, isLoading, transactionId }) {
                            <TableCell>{fCurrency(row.lossAmount.toFixed(2))}</TableCell>
                            <TableCell>{fCurrency(row.totalAmount.toFixed(2))}</TableCell>
                            <TableCell>{fCurrency(row?.paidAmount.toFixed(2))}</TableCell>
-                           <TableCell>{row.statusId === 1001 ? 0 : row?.billAmount}</TableCell>
+                           <TableCell>{row.statusId === 1001 ? 0 : fCurrency(row?.billAmount.toFixed(2))}</TableCell>
                         </TableRow>
                      ))}
                   </TableRenderBody>

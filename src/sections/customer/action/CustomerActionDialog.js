@@ -80,6 +80,7 @@ export default function CustomerActionDialog({ row, handleClose, dialogFormVisib
                      handleOpen={handleOpen}
                      open={open}
                      data={DetailData?.data[0]?.paymentSubGroups || ''}
+                     paidAt={DetailData?.data[0]?.paidAt}
                      isLoading={isLoading}
                      isValidating={isValidating}
                   />
