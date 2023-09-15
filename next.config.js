@@ -13,13 +13,13 @@ module.exports = withTM({
    trailingSlash: false,
    env: {
       // HOST
-      HOST_API_KEY: 'https://api.traffic.ictgroup.mn/',
+      HOST_API_KEY: 'https://dashboard.mn/',
       //   HOST_API_IMAGE_KEY: 'https://test-khovd-mobileapp.digitalaimag.mn/api/files/',
       //   HOST_IMAGE_UPLOAD_KEY: 'https://test-khovd-mobileapp.digitalaimag.mn/api/upload/',
       //   HOST_FILE_UPLOAD_KEY: 'https://test-khovd-mobileapp.digitalaimag.mn/api/files/',
-      LOGIN_URL: 'https://api.traffic.ictgroup.mn/',
-      LOGIN_AUTH_USERNAME: 'john',
-      LOGIN_AUTH_PASSWORD: 'doe',
+      LOGIN_URL: 'https://dashboard.mn/users/api/v1/user/oauth/token',
+      LOGIN_AUTH_USERNAME: 'admin',
+      LOGIN_AUTH_PASSWORD: 'Asd123!!',
       TABLE_ROW_PER_PAGE: 6,
    },
 });

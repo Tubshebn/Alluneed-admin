@@ -6,7 +6,7 @@ export default function LoginPage() {
    return (
       <>
          <Head>
-            <title> Login | Bpay</title>
+            <title> Нэвтрэх | Bpay</title>
          </Head>
          <GuestGuard>
             <Login />

@@ -1,31 +1,25 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
+import { Box, Divider, Typography, Stack, MenuItem, Avatar } from '@mui/material';
 import { PATH_DASHBOARD, PATH_AUTH } from 'src/routes/paths';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { CustomAvatar } from 'src/components/custom-avatar';
 import { useSnackbar } from 'src/components/snackbar';
 import MenuPopover from 'src/components/menu-popover';
 import { IconButtonAnimate } from 'src/components/animate';
+import AccountDialog from 'src/sections/account/AccountDialog';
 
 const OPTIONS = [
    {
-      label: 'Нүүр',
+      label: 'Хувийн мэдээлэл',
       linkTo: '/',
-   },
-   {
-      label: 'Би',
-      linkTo: PATH_DASHBOARD.general.app,
-   },
-   {
-      label: 'Тохиргоо',
-      linkTo: PATH_DASHBOARD.general.app,
    },
 ];
 
 export default function AccountPopover() {
    const { replace, push } = useRouter();
+   const [dialogActionType, setDialogActionType] = useState('');
 
    const {
       handlers: { logOut },
@@ -50,13 +44,12 @@ export default function AccountPopover() {
          replace(PATH_AUTH.login);
          handleClosePopover();
       } catch (error) {
-         enqueueSnackbar('Unable to logout!', { variant: 'error' });
+         enqueueSnackbar('Алдаа гарлаа.Дахин оролдоно уу', { variant: 'warning' });
       }
    };
 
-   const handleClickItem = (path) => {
-      handleClosePopover();
-      push(path);
+   const handleUpdate = async () => {
+      setDialogActionType('update');
    };
 
    return (
@@ -78,25 +71,13 @@ export default function AccountPopover() {
                }),
             }}
          >
-            <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+            <Avatar alt={user?.username} name={user?.username} />
          </IconButtonAnimate>
 
          <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
-            <Box sx={{ my: 1.5, px: 2.5 }}>
-               <Typography variant="subtitle2" noWrap>
-                  Amarjargal Batbold
-               </Typography>
-
-               <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  {user?.azure_id}
-               </Typography>
-            </Box>
-
-            <Divider sx={{ borderStyle: 'dashed' }} />
-
             <Stack sx={{ p: 1 }}>
                {OPTIONS.map((option) => (
-                  <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
+                  <MenuItem key={option.label} onClick={() => handleUpdate()}>
                      {option.label}
                   </MenuItem>
                ))}
@@ -108,6 +89,12 @@ export default function AccountPopover() {
                Гарах
             </MenuItem>
          </MenuPopover>
+         <AccountDialog
+            dialogActionType={dialogActionType}
+            changeDialogStatus={(e) => {
+               setDialogActionType(e);
+            }}
+         />
       </>
    );
 }

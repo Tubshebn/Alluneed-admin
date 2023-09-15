@@ -10,18 +10,17 @@ const ICONS = {
 
 const navConfig = [
    {
-      subheader: 'general',
+      subheader: 'Системийн удирдлага',
       items: [
          {
-            title: 'app',
-            path: PATH_DASHBOARD.general.app,
-            icon: ICONS.dashboard,
+            title: 'Билл төлөлт',
+            path: PATH_DASHBOARD.invoice.root,
+            icon: <Iconify icon="fluent:window-ad-20-filled" />,
          },
          {
-            title: 'Систем хэрэглэгчид',
-            path: PATH_DASHBOARD.user.table,
-            icon: <Iconify icon={'carbon:user-admin'} />,
-            hideSection: true,
+            title: 'Хэрэглэгчийн бүртгэл',
+            path: PATH_DASHBOARD.customer.root,
+            icon: <Iconify icon="mdi:user" />,
          },
       ],
    },

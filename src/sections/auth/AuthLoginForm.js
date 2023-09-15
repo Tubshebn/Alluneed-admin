@@ -1,16 +1,19 @@
 //react
 import { useState } from 'react';
 //mui
-import { Stack, Alert, IconButton, InputAdornment, Box } from '@mui/material';
+import { Stack, Alert, IconButton, InputAdornment, Box, Link, FormControlLabel, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 //named import
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { LOGIN_URL, LOGIN_AUTH_USERNAME, LOGIN_AUTH_PASSWORD } from 'src/config-global';
+import { LOGIN_URL } from 'src/config-global';
+import { PATH_AUTH } from 'src/routes/paths';
+import { useTheme } from '@mui/material/styles';
 //default import
 import * as Yup from 'yup';
+import NextLink from 'next/link';
 import axios from 'axios';
 //components
 import Iconify from 'src/components/iconify';
@@ -18,14 +21,15 @@ import Iconify from 'src/components/iconify';
 export default function AuthLoginForm() {
    const {
       handlers: { signIn },
-      user,
+      state: { user },
    } = useAuthContext();
+   const theme = useTheme();
 
    const [showPassword, setShowPassword] = useState(false);
 
    const LoginSchema = Yup.object().shape({
-      username: Yup.string().required('username is required'),
-      password: Yup.string().required('Password is required'),
+      username: Yup.string().required('Нэвтрэх нэрээ оруулна уу!'),
+      password: Yup.string().required('Нууц үгээ оруулна уу!'),
    });
 
    const defaultValues = { username: '', password: '' };
@@ -36,43 +40,22 @@ export default function AuthLoginForm() {
       reset,
       setError,
       handleSubmit,
-      watch,
+
       formState: { errors, isSubmitting, isSubmitSuccessful },
    } = methods;
-   const values = watch();
-   console.log(values);
-
-   // const onSubmit = async (data) => {
-   //     try {
-   //         const response = await axios.post(
-   //             `${LOGIN_URL}/token?username=${data.username}&password=${data.password}&grant_type=password`,
-   //             {},
-   //             { auth: { username: LOGIN_AUTH_USERNAME, password: LOGIN_AUTH_PASSWORD } }
-   //         );
-   //         signIn(response.data.access_token);
-   //     } catch (error) {
-   //         reset();
-   //         setError('afterSubmit', { ...error, message: error.message });
-   //     }
-   // };
 
    const onSubmit = async (data) => {
       try {
-         const response = await axios.post(
-            `${LOGIN_URL}login/oauth/basic_login`,
-            { username: data?.username, password: data?.password },
-            { auth: { username: LOGIN_AUTH_USERNAME, password: LOGIN_AUTH_PASSWORD } }
-         );
-
-         if (response?.data?.token) {
-            signIn(response.data.token);
+         const response = await axios.post(`${LOGIN_URL}`, { username: data?.username, password: data?.password });
+         if (response?.data?.data?.accessToken) {
+            signIn(response?.data?.data?.accessToken);
          } else {
             reset();
-            setError('afterSubmit', { message: 'Таньд хандах эрх байхгүй байна.' });
+            setError('afterSubmit', { message: response?.data?.responseMsg });
          }
       } catch (error) {
          reset();
-         setError('afterSubmit', { ...error, message: error.response?.data?.error_description || 'Нэвтрэх нэр эсвэл нууц үг буруу байна.' });
+         setError('afterSubmit', { ...error, message: error.response?.data?.responseMsg || 'Алдаа гарлаа.Дахин оролдоно уу' });
       }
    };
 
@@ -80,10 +63,10 @@ export default function AuthLoginForm() {
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
          <Stack spacing={3}>
             {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
-            <RHFTextField name="username" label="username" />
+            <RHFTextField name="username" label="Нэвтрэх нэр" />
             <RHFTextField
                name="password"
-               label="Password"
+               label="Нууц үг"
                type={showPassword ? 'text' : 'password'}
                InputProps={{
                   endAdornment: (
@@ -96,7 +79,13 @@ export default function AuthLoginForm() {
                }}
             />
          </Stack>
-         <Box sx={{ mt: 3 }} />
+         <Box sx={{ my: 3 }}>
+            <Stack sx={{ display: 'flex', alignItems: 'flex-end' }}>
+               <Link component={NextLink} href={PATH_AUTH.forgotPassword} variant="subtitle2" sx={{ textDecoration: 'underline' }}>
+                  Нууц үг сэргээх
+               </Link>
+            </Stack>
+         </Box>
          <LoadingButton
             fullWidth
             color="inherit"
@@ -105,12 +94,12 @@ export default function AuthLoginForm() {
             variant="contained"
             loading={isSubmitSuccessful || isSubmitting}
             sx={{
-               bgcolor: 'text.primary',
+               bgcolor: 'primary.main',
                color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-               '&:hover': { bgcolor: 'text.primary', color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800') },
+               '&:hover': { bgcolor: 'primary.dark', color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800') },
             }}
          >
-            Login
+            Нэвтрэх
          </LoadingButton>
       </FormProvider>
    );
