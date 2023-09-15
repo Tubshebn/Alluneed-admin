@@ -110,6 +110,7 @@ export default function InvoiceListTable() {
       setRow(row);
       setDialogFormVisible(true);
    };
+
    const handleClose = async () => {
       setDialogFormVisible(false);
       setOpen(false);
@@ -120,12 +121,15 @@ export default function InvoiceListTable() {
          setFilterModel(data);
       }
    };
+
    const handleOpen = () => {
       setOpen(true);
    };
+
    const handleCloose = () => {
       setOpen(false);
    };
+
    const clearFilter = () => {
       setFilterModel('');
    };

@@ -40,12 +40,26 @@ export default function CustomerActionDialog({ row, handleClose, dialogFormVisib
       enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
    }
 
+   let group;
+   DetailData?.data?.forEach((row) => {
+      group = row?.paymentSubGroups;
+   });
+
+   let paidAt;
+   DetailData?.data?.map((row) => {
+      paidAt = row?.paidAt;
+   });
+
+   let status;
+   DetailData?.data?.map((row) => {
+      status = row?.status;
+   });
+
    return (
       <Dialog open={dialogFormVisible} onClose={handleClose} sx={{ p: 5 }} maxWidth="xl" fullWidth>
          <DialogTitle variant="h4" sx={{ textAlign: 'center' }}>
             {open === false ? 'Гүйлгээний түүх' : 'Гүйлгээний дэлгэрэнгүй'}
          </DialogTitle>
-
          <DialogContent sx={{ mx: 5 }}>
             {isLoading ? (
                <Stack justifyContent="center" alignItems="center" sx={{ height: 400 }}>
@@ -79,10 +93,11 @@ export default function CustomerActionDialog({ row, handleClose, dialogFormVisib
                      handleCloose={handleCloose}
                      handleOpen={handleOpen}
                      open={open}
-                     data={DetailData?.data[0]?.paymentSubGroups || ''}
-                     paidAt={DetailData?.data[0]?.paidAt}
+                     data={group}
+                     paidAt={paidAt}
                      isLoading={isLoading}
                      isValidating={isValidating}
+                     status={status}
                   />
                </Stack>
             )}

@@ -21,7 +21,7 @@ CustomerDetailTable.propTypes = {
    data: PropTypes.array.isRequired,
 };
 
-export default function CustomerDetailTable({ data, isLoading, isValidating, handleOpen, open, handleCloose, paidAt }) {
+export default function CustomerDetailTable({ data, isLoading, isValidating, handleOpen, open, handleCloose, paidAt, status }) {
    const [bill, setBill] = useState();
    return (
       <Stack>
@@ -50,7 +50,7 @@ export default function CustomerDetailTable({ data, isLoading, isValidating, han
                               {data &&
                                  data?.map((row, index) => {
                                     const { total_amount, transaction, bills, code } = row;
-                                    const pendingAmount = total_amount - transaction.total_amount;
+                                    const pendingAmount = total_amount - transaction?.total_amount;
                                     return (
                                        <TableRow
                                           hover
@@ -66,16 +66,19 @@ export default function CustomerDetailTable({ data, isLoading, isValidating, han
                                              </Label>
                                           </TableCell>
                                           <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                             {fCurrency(total_amount.toFixed(2))}
+                                             {fCurrency(total_amount?.toFixed(2))}
                                           </TableCell>
                                           <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                             {fCurrency(transaction?.total_amount.toFixed(2))}
+                                             {fCurrency(transaction?.total_amount?.toFixed(2))}
                                           </TableCell>
                                           <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-                                             {fCurrency(pendingAmount.toFixed(2))}
+                                             {fCurrency(pendingAmount?.toFixed(2))}
                                           </TableCell>
                                           <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
                                              {fDate(paidAt)}
+                                          </TableCell>
+                                          <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+                                             <Label color={status === 'Төлөгдөж буй' ? 'warning' : 'success'}>{status}</Label>
                                           </TableCell>
                                        </TableRow>
                                     );

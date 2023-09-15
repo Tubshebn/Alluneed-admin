@@ -15,6 +15,7 @@ export const DETAIL_TABLE_HEAD = [
    { id: 'PaidAmount', label: 'Нийт төлсөн дүн', align: 'center' },
    { id: 'pendingAmount', label: 'Хаагдаагүй төлөлт', align: 'center' },
    { id: 'time', label: 'Гүйлгээ хийсэн огноо', align: 'center' },
+   { id: 'status', label: 'Төлөв', align: 'center' },
 ];
 export const SUB_TABLE_HEAD = [
    { id: 'index', label: '№', align: 'left' },
