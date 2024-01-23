@@ -5,29 +5,29 @@ import Image from 'src/components/image';
 import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
 
 LoginLayout.propTypes = {
-   title: PropTypes.string,
-   children: PropTypes.node,
-   illustration: PropTypes.string,
+    title: PropTypes.string,
+    children: PropTypes.node,
+    illustration: PropTypes.string,
 };
 
-export default function LoginLayout({ children, illustration, title }) {
-   return (
-      <StyledRoot>
-         <StyledSection>
-            <Image
-               disabledEffect
-               visibleByDefault
-               alt="auth"
-               src={illustration || '/assets/illustrations/Project_67-03.png'}
-               sx={{ maxWidth: 820 }}
-            />
+export default function LoginLayout({ children, illustration }) {
+    return (
+        <StyledRoot>
+            <StyledSection>
+                <Image
+                    disabledEffect
+                    visibleByDefault
+                    alt="auth"
+                    src={illustration || '/assets/illustrations/Project_67-03.png'}
+                    sx={{ maxWidth: 820 }}
+                />
 
-            <StyledSectionBg />
-         </StyledSection>
+                <StyledSectionBg />
+            </StyledSection>
 
-         <StyledContent>
-            <Stack sx={{ width: 1 }}> {children} </Stack>
-         </StyledContent>
-      </StyledRoot>
-   );
+            <StyledContent>
+                <Stack sx={{ width: 1 }}> {children} </Stack>
+            </StyledContent>
+        </StyledRoot>
+    );
 }
