@@ -1,15 +1,16 @@
 //react
 import { useState } from 'react';
 //mui
-import { Stack, Alert, IconButton, InputAdornment, Box, Link } from '@mui/material';
+import { Stack, Alert, IconButton, InputAdornment, Box, Link, FormControlLabel, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 //named import
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { LOGIN_URL } from 'src/config-global';
+import { HOST_API_KEY } from 'src/config-global';
 import { PATH_AUTH } from 'src/routes/paths';
+import { useTheme } from '@mui/material/styles';
 //default import
 import * as Yup from 'yup';
 import NextLink from 'next/link';
@@ -43,15 +44,14 @@ export default function AuthLoginForm() {
 
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post(`${LOGIN_URL}/api/auth/login`, { email: data?.email, password: data?.password });
-            // if (response) {
-            console.log('🚀 ~ onSubmit ~ response:', response);
-            //     console.log('🚀 ~ onSubmit ~ response:', response);
-            //     signIn(response?.data?.data?.accessToken);
-            // } else {
-            //     reset();
-            //     setError('afterSubmit', { message: response?.data?.responseMsg });
-            // }
+            const response = await axios.post(`${HOST_API_KEY}/auth/login`, { email: data?.email, password: data?.password });
+            if (response?.data?.token) {
+                console.log(response?.data?.token, 'hehe');
+                signIn(response?.data?.token);
+            } else {
+                reset();
+                setError('afterSubmit', { message: response?.data?.status });
+            }
         } catch (error) {
             reset();
             setError('afterSubmit', { ...error, message: error.response?.data?.responseMsg || 'Алдаа гарлаа.Дахин оролдоно уу' });

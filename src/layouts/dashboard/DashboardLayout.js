@@ -16,99 +16,100 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 DashboardLayout.propTypes = {
-   children: PropTypes.node,
+    children: PropTypes.node,
 };
 
 export default function DashboardLayout({ children, headTitle }) {
-   const { themeLayout } = useSettingsContext();
-   const isDesktop = useResponsive('up', 'lg');
-   const [open, setOpen] = useState(false);
-   const isNavHorizontal = themeLayout === 'horizontal';
-   const isNavMini = themeLayout === 'mini';
-   const {
-      handlers: { stateDynamicUpdate },
-      state: { info },
-   } = useAuthContext();
+    const { themeLayout } = useSettingsContext();
+    const isDesktop = useResponsive('up', 'lg');
+    const [open, setOpen] = useState(false);
+    const isNavHorizontal = themeLayout === 'horizontal';
+    const isNavMini = themeLayout === 'mini';
+    const {
+        handlers: { stateDynamicUpdate },
+        state: { info },
+    } = useAuthContext();
 
-   const handleOpen = () => {
-      setOpen(true);
-   };
+    useEffect(() => {
+        getUserInfo();
+    }, []);
 
-   const handleClose = () => {
-      setOpen(false);
-   };
-   useEffect(() => {
-      getUserInfo();
-   }, []);
+    const handleOpen = () => {
+        setOpen(true);
+    };
 
-   const getUserInfo = () => {
-      const tk = Cookies.get('accessToken');
-      axios
-         .get(`${HOST_API_KEY}/users/api/v1/user/info`, {
-            headers: {
-               Authorization: `Bearer ${tk}`,
-               'Content-Type': 'application/json',
-            },
-         })
-         .then((resp) => {
-            let detail = resp?.data?.data;
-            stateDynamicUpdate({ type: 'user', value: detail });
-         });
-   };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
-   const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} />;
+    const getUserInfo = () => {
+        const tk = Cookies.get('accessToken');
+        axios
+            .get(`${HOST_API_KEY}/users/me`, {
+                headers: {
+                    Authorization: `Bearer ${tk}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((resp) => {
+                let detail = resp?.data?.data;
+                stateDynamicUpdate({ type: 'user', value: detail });
+            });
+    };
 
-   const renderContent = () => {
-      if (isNavHorizontal) {
-         return (
+    const renderNavVertical = <NavVertical openNav={open} onCloseNav={handleClose} />;
+
+    const renderContent = () => {
+        if (isNavHorizontal) {
+            return (
+                <>
+                    <Header onOpenNav={handleOpen} />
+
+                    {isDesktop ? <NavHorizontal /> : renderNavVertical}
+
+                    <Main>{children}</Main>
+                </>
+            );
+        }
+        if (isNavMini) {
+            return (
+                <>
+                    <Header onOpenNav={handleOpen} />
+                    <Box
+                        sx={{
+                            display: { lg: 'flex' },
+                            minHeight: { lg: 1 },
+                        }}
+                    >
+                        {isDesktop ? <NavMini /> : renderNavVertical}
+                        <Main>{children}</Main>
+                    </Box>
+                </>
+            );
+        }
+        return (
             <>
-               <Header onOpenNav={handleOpen} />
+                <Header onOpenNav={handleOpen} />
+                <Box
+                    sx={{
+                        display: { lg: 'flex' },
+                        minHeight: { lg: 1 },
+                    }}
+                >
+                    {renderNavVertical}
 
-               {isDesktop ? <NavHorizontal /> : renderNavVertical}
-
-               <Main>{children}</Main>
+                    <Main>{children}</Main>
+                </Box>
             </>
-         );
-      }
-      if (isNavMini) {
-         return (
-            <>
-               <Header onOpenNav={handleOpen} />
-               <Box
-                  sx={{
-                     display: { lg: 'flex' },
-                     minHeight: { lg: 1 },
-                  }}
-               >
-                  {isDesktop ? <NavMini /> : renderNavVertical}
-                  <Main>{children}</Main>
-               </Box>
-            </>
-         );
-      }
-      return (
-         <>
-            <Header onOpenNav={handleOpen} />
-            <Box
-               sx={{
-                  display: { lg: 'flex' },
-                  minHeight: { lg: 1 },
-               }}
-            >
-               {renderNavVertical}
+        );
+    };
 
-               <Main>{children}</Main>
-            </Box>
-         </>
-      );
-   };
-
-   return (
-      <AuthGuard>
-         <Head>
-            <title>{headTitle || `Удирдах хуудас`}</title>
-         </Head>
-         {renderContent()}
-      </AuthGuard>
-   );
+    return (
+        <AuthGuard>
+            <Head>
+                <title>{headTitle || `Удирдах хуудас`}</title>
+            </Head>
+            {renderContent()}
+        </AuthGuard>
+    );
 }

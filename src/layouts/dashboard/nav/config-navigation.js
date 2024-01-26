@@ -5,25 +5,25 @@ import Iconify from 'src/components/iconify/Iconify';
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
 const ICONS = {
-   dashboard: icon('ic_dashboard'),
+    dashboard: icon('ic_dashboard'),
 };
 
 const navConfig = [
-   {
-      subheader: 'Системийн удирдлага',
-      items: [
-         {
-            title: 'Билл төлөлт',
-            path: PATH_DASHBOARD.invoice.root,
-            icon: <Iconify icon="fluent:window-ad-20-filled" />,
-         },
-         {
-            title: 'Хэрэглэгчийн бүртгэл',
-            path: PATH_DASHBOARD.customer.root,
-            icon: <Iconify icon="mdi:user" />,
-         },
-      ],
-   },
+    {
+        subheader: 'Системийн удирдлага',
+        items: [
+            {
+                title: 'Хэрэглэгчийн удирдлага',
+                path: PATH_DASHBOARD.user.root,
+                icon: <Iconify icon="mdi:user" />,
+            },
+            {
+                title: 'Билл төлөлт',
+                path: PATH_DASHBOARD.invoice.root,
+                icon: <Iconify icon="fluent:window-ad-20-filled" />,
+            },
+        ],
+    },
 ];
 
 export default navConfig;
