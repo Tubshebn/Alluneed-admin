@@ -10,7 +10,6 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { HOST_API_KEY } from 'src/config-global';
 import { PATH_AUTH } from 'src/routes/paths';
-import { useTheme } from '@mui/material/styles';
 //default import
 import * as Yup from 'yup';
 import NextLink from 'next/link';

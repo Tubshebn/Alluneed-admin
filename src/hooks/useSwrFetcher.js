@@ -10,8 +10,8 @@ const useSwrFetcher = () => {
     const deleteFetcher = (args) => DELETE(args[0], args[1] || false, args[2] || 'json');
     const putFetcher = (args) => PUT(args[0], args[1] || false, args[2] || 'json');
     const formFetcher = (url, { arg }) => {
-        let arr = [url, true, arg.body, arg.type || 'application/json'];
-        return postFetcher(arr);
+        let arr = [url, true, arg.body, arg.type || 'application/json', arg.method];
+        return arg.method === 'put' ? putFetcher(arr) : postFetcher(arr);
     };
     return { postFetcher, getFetcher, deleteFetcher, putFetcher, formFetcher };
 };

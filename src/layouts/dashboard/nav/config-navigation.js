@@ -18,9 +18,24 @@ const navConfig = [
                 icon: <Iconify icon="mdi:user" />,
             },
             {
-                title: 'Билл төлөлт',
-                path: PATH_DASHBOARD.invoice.root,
+                title: 'Тохиргоо',
+                path: PATH_DASHBOARD.role.root,
                 icon: <Iconify icon="fluent:window-ad-20-filled" />,
+                children: [
+                    {
+                        title: 'Role тохиргоо',
+                        path: PATH_DASHBOARD.role.root,
+                    },
+                    {
+                        title: 'Reference',
+                        path: PATH_DASHBOARD.reference.root,
+                    },
+                ],
+            },
+            {
+                title: 'Байгууллага',
+                path: PATH_DASHBOARD.organization.root,
+                icon: <Iconify icon="mdi:user" />,
             },
         ],
     },

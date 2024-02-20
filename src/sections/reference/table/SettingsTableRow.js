@@ -1,22 +1,19 @@
-///React
+// react
 import { useState } from 'react';
-///Named
+// mui
+import { TableRow, TableCell, MenuItem, IconButton } from '@mui/material';
+// named import
 import { useSnackbar } from 'notistack';
-//Mui
-import { TableRow, TableCell, MenuItem, IconButton, Avatar } from '@mui/material';
-///Default
+// default import
 import useSwrFetcher from 'src/hooks/useSwrFetcher';
 import useSWRMutation from 'swr/mutation';
 import PropTypes from 'prop-types';
-///Components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
+// components
 import DeleteDialog from 'src/components/DeleteDialog';
+import Iconify from 'src/components/iconify';
 import MenuPopover from 'src/components/menu-popover';
-import TextMaxLine from 'src/components/text-max-line/TextMaxLine';
 
-// props
-UserTableRow.propTypes = {
+SettingsTableRow.propTypes = {
     row: PropTypes.object.isRequired,
     refreshTable: PropTypes.func,
     handleUpdate: PropTypes.func,
@@ -25,14 +22,15 @@ UserTableRow.propTypes = {
     rowsPerPage: PropTypes.number,
 };
 
-export default function UserTableRow({ row, refreshTable, handleUpdate, handleView, index, page, rowsPerPage }) {
-    const { getFetcher } = useSwrFetcher();
-    const { enqueueSnackbar } = useSnackbar();
+export default function SettingsTableRow({ row, handleUpdate, refreshTable, page, index, rowsPerPage }) {
     const [confirmModal, setConfirmModal] = useState(false);
     const [openMenu, setOpenMenuActions] = useState(null);
-    const { id, name, email, phone_number, followers, location, role, photo } = row;
+    const { deleteFetcher } = useSwrFetcher();
+    const { enqueueSnackbar } = useSnackbar();
+    const { id, name, field1, field2, field3, description, code } = row;
 
-    const { trigger } = useSWRMutation([`api/delete_admin_user/id/${id}`, true], (args) => getFetcher(args), {
+    // swr
+    const { trigger } = useSWRMutation([`/reference/${id}`, true], (args) => deleteFetcher(args), {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
         onSuccess: (newData) => {
@@ -49,71 +47,35 @@ export default function UserTableRow({ row, refreshTable, handleUpdate, handleVi
         },
     });
 
-    //Functions
+    // functions
     const handleOpenMenu = (event) => {
         setOpenMenuActions(event.currentTarget);
     };
-
     const handleCloseMenu = () => {
         setOpenMenuActions(null);
     };
-
     const handleOpen = () => {
         setConfirmModal(true);
     };
-
     const handleClose = () => {
         setConfirmModal(false);
     };
 
-    const showUpDeleteDialog = () => {
-        if (confirmModal) {
-            return <DeleteDialog handleDeleteRow={trigger} open={confirmModal} close={handleClose} />;
-        }
-    };
-
     return (
         <TableRow hover>
-            {showUpDeleteDialog()}
-
             <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell>
-            <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-                <Avatar src={photo} />
-            </TableCell>
-            <TableCell align="left" color="gray" sx={{ textTransform: 'capitalize' }}>
-                {name}
-            </TableCell>
-            <TableCell align="left" color="gray" sx={{ textTransform: 'capitalize' }}>
-                {phone_number}
-            </TableCell>
-            <TableCell align="left">
-                <Label variant={'soft'} color={'success'} sx={{ textTransform: 'capitalize' }}>
-                    {email}
-                </Label>
-            </TableCell>
-
-            <TableCell align="left" color="gray" sx={{ textTransform: 'capitalize' }}>
-                {role}
-            </TableCell>
-            <TableCell align="left" color="gray" sx={{ textTransform: 'capitalize' }}>
-                {location}
-            </TableCell>
-
+            <TableCell align="left">{name}</TableCell>
+            <TableCell align="left">{code}</TableCell>
+            <TableCell align="left">{description}</TableCell>
+            <TableCell align="left">{field1}</TableCell>
+            <TableCell align="left">{field2}</TableCell>
+            <TableCell align="left">{field3}</TableCell>
             <TableCell align="center">
                 <IconButton color={openMenu ? 'inherit' : 'default'} onClick={handleOpenMenu}>
                     <Iconify icon="eva:more-vertical-fill" />
                 </IconButton>
             </TableCell>
             <MenuPopover open={openMenu} onClose={handleCloseMenu} arrow="right-top" sx={{ width: 140 }}>
-                <MenuItem
-                    onClick={() => {
-                        handleView();
-                        handleCloseMenu();
-                    }}
-                >
-                    <Iconify icon="eva:eye-fill" />
-                    Харах
-                </MenuItem>
                 <MenuItem
                     onClick={() => {
                         handleUpdate();
@@ -123,7 +85,18 @@ export default function UserTableRow({ row, refreshTable, handleUpdate, handleVi
                     <Iconify icon="eva:edit-fill" />
                     Засах
                 </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleOpen();
+                        handleCloseMenu();
+                    }}
+                    sx={{ color: 'error.main' }}
+                >
+                    <Iconify icon="eva:trash-2-outline" />
+                    Устгах
+                </MenuItem>
             </MenuPopover>
+            {confirmModal && <DeleteDialog handleDeleteRow={trigger} open={confirmModal} close={handleClose} />}
         </TableRow>
     );
 }

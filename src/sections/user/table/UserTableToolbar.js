@@ -1,20 +1,19 @@
 ///React
-import { useState, useEffect } from 'react';
-//Named
-import { useSnackbar } from 'notistack';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useEffect, useState } from 'react';
 //Mui
-import { Stack, TextField, MenuItem, IconButton, Tooltip } from '@mui/material';
+import { Button, MenuItem, Stack, TextField } from '@mui/material';
 ///Default
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
-import Iconify from 'src/components/iconify/Iconify';
+import Iconify from 'src/components/iconify';
 
 // props
 UserTableToolbar.propTypes = {
     filterFunction: PropTypes.func,
+    adminList: PropTypes.array,
 };
 
-export default function UserTableToolbar({ filterFunction, clearFilter, downloadExcel }) {
+export default function UserTableToolbar({ filterFunction, adminList }) {
     const [filterModel, setFilterModel] = useState({});
     const { enqueueSnackbar } = useSnackbar();
 
@@ -33,7 +32,7 @@ export default function UserTableToolbar({ filterFunction, clearFilter, download
 
     const isValid = (size, value, type) => {
         if (value) {
-            if (value?.length < size) {
+            if (value?.length <= size) {
                 handlingFilterChange(type, value);
             } else {
                 enqueueSnackbar(`${size}-с их тэмдэгт оруулж болохгүй`, { variant: 'warning' });
@@ -42,69 +41,94 @@ export default function UserTableToolbar({ filterFunction, clearFilter, download
             handlingFilterChange(type, '');
         }
     };
-    const clearFunction = () => {
-        clearFilter();
-        setFilterModel('');
-    };
 
     return (
-        <Stack flexDirection="row" justifyContent="space-between">
-            <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
-                <DatePicker
-                    label="Эхлэх өдөр"
-                    maxDate={Date.now()}
-                    value={filterModel?.startDate ? filterModel?.startDate : null}
-                    ampm={false}
-                    onChange={(event) => handlingFilterChange('startDate', event)}
-                    renderInput={(params) => (
-                        <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />
-                    )}
-                />
+        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
+            <TextField
+                fullWidth
+                label='Байгууллагын нэрээр хайх'
+                sx={{
+                    maxWidth: 240,
+                }}
+                value={filterModel?.organization ? filterModel?.organization : ''}
+                onChange={(event) => isValid(100, event.target.value, 'organization')}
+            />
 
-                <DatePicker
-                    label="Дуусах өдөр"
-                    ampm={false}
-                    minDate={filterModel?.startDate}
-                    value={filterModel?.endDate ? filterModel?.endDate : null}
-                    onChange={(event) => handlingFilterChange('endDate', event)}
-                    renderInput={(params) => (
-                        <TextField {...params} fullWidth sx={{ maxWidth: { xs: 180, md: 200 } }} InputLabelProps={{ shrink: true }} />
-                    )}
-                />
-                <TextField
-                    fullWidth
-                    label="Bpay ID"
+            <TextField
+                fullWidth
+                label='Ажилтнаар хайх'
+                sx={{
+                    maxWidth: 240,
+                }}
+                value={filterModel?.username ? filterModel?.username : ''}
+                onChange={(event) => handlingFilterChange('username', event.target.value)}
+            />
+
+            <TextField
+                fullWidth
+                select
+                label='Хэрэглэгчийн эрхээр хайх'
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                    maxWidth: 240,
+                }}
+                value={filterModel?.authType ? filterModel?.authType : 0}
+                onChange={(event) => handlingFilterChange('authType', event.target.value)}
+            >
+                <MenuItem
+                    value={'0'}
                     sx={{
-                        maxWidth: 220,
+                        mx: 1,
+                        my: 0.5,
+                        borderRadius: 0.75,
+                        typography: 'body2',
+                        textTransform: 'capitalize',
                     }}
-                    value={filterModel?.bpay_code ? filterModel?.bpay_code : ''}
-                    onChange={(event) => isValid(100, event.target.value, 'bpay_code')}
-                />
+                >
+                    {'Бүгд'}
+                </MenuItem>
+                {adminList &&
+                    adminList?.map((option, index) => (
+                        <MenuItem
+                            key={index}
+                            value={option?.id}
+                            sx={{
+                                mx: 1,
+                                my: 0.5,
+                                borderRadius: 0.75,
+                                typography: 'body2',
+                                textTransform: 'capitalize',
+                            }}
+                        >
+                            {option?.name}
+                        </MenuItem>
+                    ))}
+            </TextField>
 
-                <TextField
-                    fullWidth
-                    label="Имэил хаяг"
-                    sx={{
-                        maxWidth: 220,
-                    }}
-                    value={filterModel?.email ? filterModel?.email : ''}
-                    onChange={(event) => handlingFilterChange('email', event.target.value)}
-                />
+            <TextField
+                fullWidth
+                label='Мэйл хаягаар хайх'
+                sx={{
+                    maxWidth: 240,
+                }}
+                value={filterModel?.email ? filterModel?.email : ''}
+                onChange={(event) => isValid(100, event.target.value, 'email')}
+            />
 
-                <TextField
-                    fullWidth
-                    label="Утасны дугаар"
-                    sx={{
-                        maxWidth: 220,
-                    }}
-                    value={filterModel?.phone_number ? filterModel?.phone_number : ''}
-                    onChange={(event) => handlingFilterChange('phone_number', event.target.value)}
-                />
-
-                <IconButton onClick={clearFunction} sx={{ mt: 4, maxHeight: 60 }}>
-                    <Iconify icon="tabler:reload" align="center" />
-                </IconButton>
-            </Stack>
+            <TextField
+                fullWidth
+                label='Утасны дугаараар хайх'
+                sx={{
+                    maxWidth: 240,
+                }}
+                value={filterModel?.phoneNumber ? filterModel?.phoneNumber : ''}
+                onChange={(event) => isValid(8, event.target.value, 'phoneNumber')}
+            />
+            {Object.keys(filterModel).length > 0 && (
+                <Button color='error' sx={{ flexShrink: 0 }} onClick={() => setFilterModel({})} startIcon={<Iconify icon='eva:trash-2-outline' />}>
+                    Цэвэрлэх
+                </Button>
+            )}
         </Stack>
     );
 }

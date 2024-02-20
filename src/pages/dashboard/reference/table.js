@@ -1,43 +1,39 @@
-// React
-import { useState } from 'react';
-// Mui
-import { Box, Button, Card, Container, Stack, Table, TableBody, TableContainer, TablePagination, Typography } from '@mui/material';
-// Named
+// react
+import React, { useState } from 'react';
+// mui
+import { Box, Card, Table, TableBody, Container, TableContainer, TablePagination, Typography, Button, Stack } from '@mui/material';
+// named import
 import { useSnackbar } from 'notistack';
-// Default
-import useSwrFetcher from 'src/hooks/useSwrFetcher';
-import Layout from 'src/layouts/dashboard';
+// default import
+import DashboardLayout from 'src/layouts/dashboard/DashboardLayout';
 import useSWR from 'swr';
-// Components
-import Iconify from 'src/components/iconify';
+import useSwrFetcher from 'src/hooks/useSwrFetcher';
+// components
 import Scrollbar from 'src/components/scrollbar';
-import { TableHeadCustom, TableRenderBody, TableSkeleton, useTable } from 'src/components/table';
-import { labelDisplayedRows } from 'src/components/table/utils';
-// Sections
-import { UserActionDialog } from 'src/sections/user/action';
-import { UserTableRow, UserTableToolbar } from 'src/sections/user/table';
-import { TABLE_HEAD } from 'src/sections/user/utils/schema';
+import Iconify from 'src/components/iconify';
+import { TableHeadCustom, TableSkeleton, useTable, TableRenderBody } from 'src/components/table';
+// section
+import { SettingsTableRow } from 'src/sections/reference/table';
+import { SettingsActionDialog } from 'src/sections/reference/action';
+import { TABLE_HEAD_SETTINGS } from 'src/sections/reference/utils/schema';
 
-UserListTable.getLayout = function getLayout(page) {
-    return <Layout headTitle="Систем хэрэглэгчид">{page}</Layout>;
+SettingsListTable.getLayout = function getLayout(page) {
+    return <DashboardLayout headTitle="Reference">{page}</DashboardLayout>;
 };
 
-export default function UserListTable() {
-    const [dialogActionType, setDialogActionType] = useState('');
-    const [filterModel, setFilterModel] = useState({});
-    const [row, setRow] = useState({});
-    const { postFetcher } = useSwrFetcher();
+export default function SettingsListTable() {
     const { enqueueSnackbar } = useSnackbar();
+    const [dialogActionType, setDialogActionType] = useState('');
+    const [row, setRow] = useState({});
     const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
+    const { postFetcher } = useSwrFetcher();
 
-    //Table List pagination
     let pagination = {
         filter: [],
         page_no: page + 1,
         per_page: rowsPerPage,
         sort: 'id desc',
     };
-
     // swr
     const {
         data: tableData,
@@ -45,66 +41,60 @@ export default function UserListTable() {
         error,
         mutate: tableMutate,
         isValidating,
-    } = useSWR(['/users/list', true, pagination], (args) => postFetcher(args), {
+    } = useSWR(['/reference/list', true, pagination], (args) => postFetcher(args), {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
     });
     error && enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
-    //Function
+    // functions
+    const labelDisplayedRows = ({ to, count }) => {
+        return (
+            <span>
+                {'Нийт арга хэмжээ' + ': '}
+                <span>{count !== -1 ? count : `${to}-аас илүү`}</span>
+            </span>
+        );
+    };
+
     const handleUpdate = async (row) => {
         setRow(row);
         setDialogActionType('update');
     };
 
-    const handleCreate = async () => {
+    const handleCreate = () => {
         setRow({});
         setDialogActionType('create');
-    };
-    const handleView = async (row) => {
-        setRow(row);
-        setDialogActionType('view');
     };
 
     return (
         <>
             <Container maxWidth={'xl'}>
-                <Stack
-                    direction={{ xs: 'column', sm: 'row' }}
-                    alignItems={{ sm: 'center' }}
-                    justifyContent="space-between"
-                    spacing={2}
-                    sx={{ mb: 5 }}
-                >
-                    <Typography variant="h4" sx>
-                        {'Систем хэрэглэгчдийн жагсаалт'}
-                    </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" sx={{ mb: 4 }}>
+                    <Typography variant="h4">Reference</Typography>
                     <Button variant="contained" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
-                        {'Нэмэх'}
+                        Нэмэх
                     </Button>
                 </Stack>
-
-                {/* {!isLoading && <UserTableToolbar adminList={adminList} filterFunction={filterFunction} />} */}
                 <Card>
                     <Scrollbar>
-                        <TableContainer sx={{ minWidth: 1500, position: 'relative' }}>
+                        <TableContainer>
                             <Table>
-                                <TableHeadCustom headLabel={TABLE_HEAD} />
+                                <TableHeadCustom headLabel={TABLE_HEAD_SETTINGS} />
                                 <TableBody>
                                     {isLoading || isValidating ? (
                                         <TableSkeleton number={5} />
                                     ) : (
                                         <TableRenderBody data={tableData?.data}>
                                             {tableData?.data?.map((row, index) => (
-                                                <UserTableRow
-                                                    key={index}
+                                                <SettingsTableRow
+                                                    key={row?.id}
                                                     index={index}
                                                     row={row}
                                                     page={page}
                                                     rowsPerPage={rowsPerPage}
                                                     handleUpdate={() => handleUpdate(row)}
                                                     refreshTable={() => tableMutate()}
-                                                    handleView={() => handleView(row)}
                                                 />
                                             ))}
                                         </TableRenderBody>
@@ -113,32 +103,31 @@ export default function UserListTable() {
                             </Table>
                         </TableContainer>
                     </Scrollbar>
-
-                    <Box sx={{ position: 'relative' }}>
-                        {!isLoading && (
+                    {!isLoading && (
+                        <Box sx={{ position: 'relative' }}>
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={tableData?.pagination?.totalElements || 0}
+                                count={tableData?.pagination?.total_elements || 0}
                                 page={page}
                                 onPageChange={onChangePage}
                                 rowsPerPage={rowsPerPage}
                                 onRowsPerPageChange={onChangeRowsPerPage}
                                 labelRowsPerPage={'Хуудсанд харуулах тоо' + ': '}
-                                labelDisplayedRows={(to) => labelDisplayedRows(to, 'Нийт систем хэрэглэгч: ')}
+                                labelDisplayedRows={(to, count) => labelDisplayedRows(to, count)}
                             />
-                        )}
-                    </Box>
+                        </Box>
+                    )}
                 </Card>
             </Container>
             {!isLoading && (
-                <UserActionDialog
+                <SettingsActionDialog
                     row={row}
                     dialogActionType={dialogActionType}
+                    refreshTable={() => tableMutate()}
                     changeDialogStatus={(e) => {
                         setDialogActionType(e);
                     }}
-                    refreshTable={() => tableMutate()}
                 />
             )}
         </>

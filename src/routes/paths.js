@@ -18,12 +18,20 @@ export const PATH_PAGE = {
 export const PATH_DASHBOARD = {
     root: ROOTS_DASHBOARD,
 
-    invoice: {
-        root: path(ROOTS_DASHBOARD, '/invoice'),
-        table: path(ROOTS_DASHBOARD, '/invoice/table'),
+    role: {
+        root: path(ROOTS_DASHBOARD, '/role'),
+        table: path(ROOTS_DASHBOARD, '/role/table'),
+    },
+    reference: {
+        root: path(ROOTS_DASHBOARD, '/reference'),
+        table: path(ROOTS_DASHBOARD, '/reference/table'),
     },
     user: {
         root: path(ROOTS_DASHBOARD, '/user'),
         table: path(ROOTS_DASHBOARD, '/user/table'),
+    },
+    organization: {
+        root: path(ROOTS_DASHBOARD, '/organization'),
+        table: path(ROOTS_DASHBOARD, '/organization/table'),
     },
 };

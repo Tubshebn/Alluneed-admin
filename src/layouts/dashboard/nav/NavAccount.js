@@ -17,7 +17,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 export default function NavAccount() {
     return (
-        <Link component={NextLink} href={PATH_DASHBOARD.invoice.root} underline="none" color="inherit">
+        <Link component={NextLink} href={PATH_DASHBOARD.user.root} underline="none" color="inherit">
             <StyledRoot>
                 <Logo sx={{ mr: 1 }} />
                 <Box sx={{ ml: 1, minWidth: 0 }}>

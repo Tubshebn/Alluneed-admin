@@ -1,34 +1,40 @@
-// React
+///React
 import { useState } from 'react';
-// Mui
-import { Box, Button, Card, Container, Stack, Table, TableBody, TableContainer, TablePagination, Typography } from '@mui/material';
-// Named
+///Named
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-// Default
+//Mui
+import { Box, Button, Card, Container, Stack, Table, TableBody, TableContainer, TablePagination, Typography } from '@mui/material';
+///Default
 import useSwrFetcher from 'src/hooks/useSwrFetcher';
 import Layout from 'src/layouts/dashboard';
 import useSWR from 'swr';
-// Components
+///Components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom, TableRenderBody, TableSkeleton, useTable } from 'src/components/table';
 import { labelDisplayedRows } from 'src/components/table/utils';
-// Sections
-import { UserActionDialog } from 'src/sections/user/action';
-import { UserTableRow, UserTableToolbar } from 'src/sections/user/table';
-import { TABLE_HEAD } from 'src/sections/user/utils/schema';
+///Section
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { OrganizationActionDialog } from 'src/sections/organization/action';
+import { OrganizationTableRow, OrganizationTableToolbar } from 'src/sections/organization/table';
+import { TABLE_HEAD } from 'src/sections/organization/utils/schema';
 
-UserListTable.getLayout = function getLayout(page) {
-    return <Layout headTitle="Систем хэрэглэгчид">{page}</Layout>;
+OrganizationListTable.getLayout = function getLayout(page) {
+    return <Layout headTitle="Байгууллагууд">{page}</Layout>;
 };
 
-export default function UserListTable() {
-    const [dialogActionType, setDialogActionType] = useState('');
-    const [filterModel, setFilterModel] = useState({});
-    const [row, setRow] = useState({});
+export default function OrganizationListTable() {
+    const {
+        state: { user },
+    } = useAuthContext();
+    const { push } = useRouter();
     const { postFetcher } = useSwrFetcher();
     const { enqueueSnackbar } = useSnackbar();
     const { page, rowsPerPage, onChangePage, onChangeRowsPerPage } = useTable();
+    const [dialogActionType, setDialogActionType] = useState('');
+    const [filterModel, setFilterModel] = useState({});
+    const [row, setRow] = useState({});
 
     //Table List pagination
     let pagination = {
@@ -45,7 +51,7 @@ export default function UserListTable() {
         error,
         mutate: tableMutate,
         isValidating,
-    } = useSWR(['/users/list', true, pagination], (args) => postFetcher(args), {
+    } = useSWR(['company/list', true, pagination], (args) => postFetcher(args), {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
     });
@@ -61,9 +67,9 @@ export default function UserListTable() {
         setRow({});
         setDialogActionType('create');
     };
-    const handleView = async (row) => {
-        setRow(row);
-        setDialogActionType('view');
+
+    const filterFunction = (data) => {
+        setFilterModel(data);
     };
 
     return (
@@ -76,18 +82,16 @@ export default function UserListTable() {
                     spacing={2}
                     sx={{ mb: 5 }}
                 >
-                    <Typography variant="h4" sx>
-                        {'Систем хэрэглэгчдийн жагсаалт'}
-                    </Typography>
+                    <Typography variant="h4">{'Байгууллагуудын жагсаалт'}</Typography>
                     <Button variant="contained" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
-                        {'Нэмэх'}
+                        {'Бүртгэх'}
                     </Button>
                 </Stack>
 
-                {/* {!isLoading && <UserTableToolbar adminList={adminList} filterFunction={filterFunction} />} */}
+                {/* <OrganizationTableToolbar filterFunction={filterFunction} /> */}
                 <Card>
                     <Scrollbar>
-                        <TableContainer sx={{ minWidth: 1500, position: 'relative' }}>
+                        <TableContainer sx={{ position: 'relative' }}>
                             <Table>
                                 <TableHeadCustom headLabel={TABLE_HEAD} />
                                 <TableBody>
@@ -96,7 +100,7 @@ export default function UserListTable() {
                                     ) : (
                                         <TableRenderBody data={tableData?.data}>
                                             {tableData?.data?.map((row, index) => (
-                                                <UserTableRow
+                                                <OrganizationTableRow
                                                     key={index}
                                                     index={index}
                                                     row={row}
@@ -104,7 +108,6 @@ export default function UserListTable() {
                                                     rowsPerPage={rowsPerPage}
                                                     handleUpdate={() => handleUpdate(row)}
                                                     refreshTable={() => tableMutate()}
-                                                    handleView={() => handleView(row)}
                                                 />
                                             ))}
                                         </TableRenderBody>
@@ -119,7 +122,7 @@ export default function UserListTable() {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={tableData?.pagination?.totalElements || 0}
+                                count={tableData?.pagination?.total_elements || 0}
                                 page={page}
                                 onPageChange={onChangePage}
                                 rowsPerPage={rowsPerPage}
@@ -131,16 +134,14 @@ export default function UserListTable() {
                     </Box>
                 </Card>
             </Container>
-            {!isLoading && (
-                <UserActionDialog
-                    row={row}
-                    dialogActionType={dialogActionType}
-                    changeDialogStatus={(e) => {
-                        setDialogActionType(e);
-                    }}
-                    refreshTable={() => tableMutate()}
-                />
-            )}
+            <OrganizationActionDialog
+                row={row}
+                dialogActionType={dialogActionType}
+                changeDialogStatus={(e) => {
+                    setDialogActionType(e);
+                }}
+                refreshTable={() => tableMutate()}
+            />
         </>
     );
 }

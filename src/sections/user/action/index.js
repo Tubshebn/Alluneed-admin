@@ -1,1 +1,1 @@
-export { default as UserActionDialog } from './CustomerActionDialog';
+export { default as UserActionDialog } from "./UserActionDialog";
