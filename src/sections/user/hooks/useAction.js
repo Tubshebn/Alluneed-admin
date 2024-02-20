@@ -9,11 +9,11 @@ import {
   defaultValues,
 } from 'src/sections/user/utils/schema';
 
-const useAction = (dialogActionType, row, changeDialogStatus) => {
+const useAction = (dialogActionType, row, changeDialogStatus, value) => {
   const { form } = useForm(
-    UserCreateSchema(dialogActionType),
-    defaultValues,
-    UserUpdateSchema()
+    UserCreateSchema(dialogActionType, value),
+    defaultValues
+    // UserUpdateSchema()
   );
   const [dialogFormVisible, setDialogFormVisible] = useState(false);
   const [dialogLoader, setDialogLoader] = useState(false);

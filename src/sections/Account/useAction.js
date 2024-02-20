@@ -2,10 +2,15 @@
 import { useEffect, useState, useCallback } from 'react';
 // default import
 import useForm from 'src/hooks/useForm';
+import { defaultValues, passwordSchema, userUpdateSchema } from './schema';
 // section
 // import { userUpdateSchema, defaultValues, passwordSchema } from './schema';
 
-const useAction = (dialogActionType, user, changeDialogStatus) => {
+export default function useActionAccount({
+  dialogActionType,
+  user,
+  changeDialogStatus,
+}) {
   const { form } = useForm(userUpdateSchema(), defaultValues, passwordSchema());
   const [dialogFormVisible, setDialogFormVisible] = useState(false);
   const [dialogLoader, setDialogLoader] = useState(false);
@@ -62,5 +67,4 @@ const useAction = (dialogActionType, user, changeDialogStatus) => {
       handleClose,
     },
   };
-};
-export default useAction;
+}

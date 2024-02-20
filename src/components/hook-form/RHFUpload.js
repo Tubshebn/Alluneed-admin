@@ -1,16 +1,9 @@
 import PropTypes from 'prop-types';
-// form
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
-import { FormHelperText } from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
 //
 import { UploadAvatar, Upload, UploadBox } from '../upload';
-
-// ----------------------------------------------------------------------
-
-RHFUploadAvatar.propTypes = {
-  name: PropTypes.string,
-};
 
 // ----------------------------------------------------------------------
 
@@ -23,14 +16,7 @@ export function RHFUploadAvatar({ name, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <div>
-          <UploadAvatar
-            accept={{
-              'image/*': [],
-            }}
-            error={!!error}
-            file={field.value}
-            {...other}
-          />
+          <UploadAvatar error={!!error} file={field.value} {...other} />
 
           {!!error && (
             <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
@@ -43,11 +29,11 @@ export function RHFUploadAvatar({ name, ...other }) {
   );
 }
 
-// ----------------------------------------------------------------------
-
-RHFUploadBox.propTypes = {
+RHFUploadAvatar.propTypes = {
   name: PropTypes.string,
 };
+
+// ----------------------------------------------------------------------
 
 export function RHFUploadBox({ name, ...other }) {
   const { control } = useFormContext();
@@ -63,13 +49,11 @@ export function RHFUploadBox({ name, ...other }) {
   );
 }
 
-// ----------------------------------------------------------------------
-
-RHFUpload.propTypes = {
+RHFUploadBox.propTypes = {
   name: PropTypes.string,
-  multiple: PropTypes.bool,
-  helperText: PropTypes.node,
 };
+
+// ----------------------------------------------------------------------
 
 export function RHFUpload({ name, multiple, helperText, ...other }) {
   const { control } = useFormContext();
@@ -113,3 +97,9 @@ export function RHFUpload({ name, multiple, helperText, ...other }) {
     />
   );
 }
+
+RHFUpload.propTypes = {
+  helperText: PropTypes.string,
+  multiple: PropTypes.bool,
+  name: PropTypes.string,
+};

@@ -23,10 +23,11 @@ import FormProvider from 'src/components/hook-form/FormProvider';
 import { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 ///Sections
-// import useAction from 'src/sections/account/useAction';
+
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { useState } from 'react';
 import { fDate } from 'src/utils/formatTime';
+import useActionAccount from './useAction';
 
 //Props
 AccountDialog.propTypes = {
@@ -47,7 +48,7 @@ export default function AccountDialog({
   const [stop, setStop] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { form, actionState, actionFunction } = useAction(
+  const { form, actionState, actionFunction } = useActionAccount(
     dialogActionType,
     user,
     changeDialogStatus
