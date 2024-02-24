@@ -52,6 +52,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 export default function UserActionDialog({
   role,
+  reference,
   row,
   dialogActionType,
   refreshTable,
@@ -64,13 +65,13 @@ export default function UserActionDialog({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [roleId, setroleId] = useState(null);
-  const { formFetcher, postFetcher } = useSwrFetcher();
+  const { formFetcher, postFetcher, putFetcher } = useSwrFetcher();
   const { enqueueSnackbar } = useSnackbar();
   const { form, actionState, actionFunction } = useAction(
     dialogActionType,
     row,
     changeDialogStatus,
-    roleId
+    roleId || 1
   );
 
   useEffect(() => {
@@ -79,8 +80,42 @@ export default function UserActionDialog({
 
   const { trigger, isMutating } = useSWRMutation(
     `/auth${
-      form?.values?.roleId === 1 ? '/signup/admin' : 'create_admin_user'
+      form?.values?.roleId === 1
+        ? '/signup/admin'
+        : form?.values?.roleId === 2
+        ? '/signup/influencer'
+        : '/signup/company'
     }`,
+    formFetcher,
+    {
+      onSuccess: (newData) => {
+        newData?.response_code === 200
+          ? (enqueueSnackbar(
+              dialogActionType === 'update'
+                ? 'Амжилттай шинэчлэгдсэн'
+                : 'Амжилттай бүртгэгдсэн'
+            ),
+            form.reset(),
+            actionFunction.handleClose(),
+            refreshTable())
+          : enqueueSnackbar(
+              newData?.response_msg || 'Алдаа гарлаа, дахин оролдоно уу',
+              {
+                variant: 'warning',
+              }
+            );
+      },
+      onError: (err) => {
+        err &&
+          enqueueSnackbar('Алдаа гарлаа, дахин оролдоно уу', {
+            variant: 'warning',
+          });
+      },
+    }
+  );
+
+  const { trigger: putTrigger, isMutating: putMutating } = useSWRMutation(
+    `/users/${row?.id}`,
     formFetcher,
     {
       onSuccess: (newData) => {
@@ -117,29 +152,61 @@ export default function UserActionDialog({
         name: form?.values?.name,
         password: form?.values?.password,
         passwordConfirm: form?.values?.confirmPassword,
-        photo: form?.values?.image,
+        photo:
+          typeof form?.values?.image === 'string' ? null : form?.values?.image,
+      };
+      if (dialogActionType === 'update') {
+        body = { ...body, id: row?.id };
+      }
+    } else if (form?.values?.roleId === 2) {
+      var body = {
+        email: form?.values?.email,
+        password: form?.values?.password,
+        passwordConfirm: form?.values?.confirmPassword,
+        phone_number: form?.values?.phoneNumber,
+        audience_interests: form?.values?.audienceInterests,
+        average_likes: Number(form?.values?.averageLikes),
+        average_comments: form?.values?.averageComments,
+        avg_reel_plays: Number(form?.values?.avgReelPlays),
+        avg_views: Number(form?.values?.avgViews),
+        bio: form?.values?.bio,
+        engagement_rate: Number(form?.values?.engagementRate),
+        followers: Number(form?.values?.followers),
+        gender_split: form?.values?.genderSplit,
+        ig_name: form?.values?.igName,
+        location: form?.values?.location,
+        popular_posts: form?.values?.popularPosts,
+        total_posts: Number(form?.values?.totalPosts),
+        photo:
+          typeof form?.values?.image === 'string' ? null : form?.values?.image,
+        role_id: String(form?.values?.roleId),
+        name: form?.values?.name,
+      };
+      if (dialogActionType === 'update') {
+        body = { ...body, id: row?.id };
+      }
+    } else if (form?.values?.roleId === 3) {
+      var body = {
+        email: form?.values?.email,
+        password: form?.values?.password,
+        passwordConfirm: form?.values?.confirmPassword,
+        phone_number: form?.values?.phoneNumber,
+        manager_phone_number: form?.values?.manager_phone_number,
+        company_account: form?.values?.company_account,
+        location: form?.values?.location,
+        role_id: String(form?.values?.roleId),
+        name: form?.values?.name,
+        prole_id: String(form?.values?.prole),
+        photo:
+          typeof form?.values?.image === 'string' ? null : form?.values?.image,
       };
       if (dialogActionType === 'update') {
         body = { ...body, id: row?.id };
       }
     }
-    // body.append('lastname', form.values.lastname);
-    // body.append('profile', '');
-    // body.append('firstname', form.values.firstname);
-    // body.append('mobileNumber', form.values.phoneNumber);
-    // body.append('email', form.values.email);
-    // body.append('organizationName', '');
-    // body.append('position', form.values.position);
-    // body.append('username', form.values.username);
-    // body.append('roleId', form.values.roleId);
-    // body.append('organizationId', form.values.orgId);
-    // if (form.values.password) {
-    //   body.append('password', form.values.password);
-    // }
-    // if (form.values.confirmPassword) {
-    //   body.append('confirmPassword', form.values.confirmPassword);
-    // }
-    trigger({ body });
+    dialogActionType === 'update'
+      ? putTrigger({ body: body, method: 'put' })
+      : trigger({ body: body });
   };
 
   const handleDrop = useCallback(
@@ -179,7 +246,6 @@ export default function UserActionDialog({
           ? 'Систем хэрэглэгч засах'
           : 'Систем хэрэглэгч нэмэх'}
       </DialogTitle>
-      {console.log('🚀 ~ form:', form?.values)}
 
       <DialogContent>
         <FormProvider methods={form.methods}>
@@ -199,6 +265,7 @@ export default function UserActionDialog({
             ) : (
               <>
                 <RHFSelect
+                  disabled={dialogActionType === 'update'}
                   fullWidth
                   name='roleId'
                   label='Хэрэглэгчийн эрх'
@@ -224,7 +291,7 @@ export default function UserActionDialog({
                     </MenuItem>
                   ))}
                 </RHFSelect>
-                {[1]?.includes(form?.values?.roleId) && (
+                {[1, 2, 3]?.includes(form?.values?.roleId) && (
                   <>
                     <RHFUploadAvatar
                       name='image'
@@ -234,24 +301,123 @@ export default function UserActionDialog({
                     <RHFTextField name='name' label='Нэр' fullWidth />
                   </>
                 )}
-                {[1]?.includes(form?.values?.roleId) && (
-                  <RHFTextField name='email' label='И-Мэйл' fullWidth />
+                {[2, 3]?.includes(form?.values?.roleId) && (
+                  <>
+                    <RHFTextField name='email' label='И-Мэйл' fullWidth />
+                    <RHFTextField
+                      name='phoneNumber'
+                      label='Утасны дугаар'
+                      fullWidth
+                    />
+                  </>
                 )}
-                {/* <RHFTextField
-                  type='number'
-                  name='phoneNumber'
-                  label='Утасны дугаар'
-                  fullWidth
-                /> */}
-                {/* <RHFTextField name='username' label='Нэвтрэх нэр' fullWidth /> */}
-                {/* {dialogActionType !== 'create' && (
-                  <LabelStyle>
-                    Хэрэглэгчийн мэдээлэл засварлах бол нууц үг талбаруудыг
-                    заавал оруулах шаардлагагүй ба нууц үгийг солих бол шинэчлэх
-                    нууц үгээ оруулна уу.
-                  </LabelStyle>
-                )} */}
-                {[1]?.includes(form?.values?.roleId) && (
+
+                {[3]?.includes(form?.values?.roleId) && (
+                  <>
+                    <RHFTextField
+                      name='manager_phone_number'
+                      label='Менежр утасны дугаар'
+                      fullWidth
+                    />
+
+                    <RHFTextField
+                      name='company_account'
+                      label='Компанийн дансны дугаар'
+                      fullWidth
+                    />
+                    <RHFTextField name='location' label='Хаяг' fullWidth />
+                    <RHFSelect
+                      fullWidth
+                      name='prole'
+                      label='Prole'
+                      InputLabelProps={{ shrink: true }}
+                      SelectProps={{
+                        native: false,
+                        sx: { textTransform: 'capitalize' },
+                      }}
+                    >
+                      {reference?.map((option, index) => (
+                        <MenuItem
+                          key={index}
+                          value={option.ID}
+                          sx={{
+                            mx: 1,
+                            my: 0.5,
+                            borderRadius: 0.75,
+                            typography: 'body2',
+                            textTransform: 'capitalize',
+                          }}
+                        >
+                          {option?.name}
+                        </MenuItem>
+                      ))}
+                    </RHFSelect>
+                  </>
+                )}
+
+                {[2]?.includes(form?.values?.roleId) && (
+                  <>
+                    <RHFTextField
+                      name='audienceInterests'
+                      label='Үзэгчдийн сонирхол'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='averageLikes'
+                      label='Дундаж лайк'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='averageComments'
+                      label='Дундаж сэтгэгдэл'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='avgReelPlays'
+                      label='Дундаж reel үзэлт'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='avgViews'
+                      label='Дундаж хандалт'
+                      fullWidth
+                    />
+                    <RHFTextField name='bio' label='Bio' fullWidth />
+                    <RHFTextField
+                      name='engagementRate'
+                      label='engagement_rate'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='followers'
+                      label='Дагагчидын тоо'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='genderSplit'
+                      label='genderSplit'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='igName'
+                      label='Инстаграм нэр'
+                      fullWidth
+                    />
+                    <RHFTextField name='location' label='Хаяг' fullWidth />
+                    <RHFTextField
+                      name='popularPosts'
+                      label='popularPosts'
+                      fullWidth
+                    />
+                    <RHFTextField
+                      name='totalPosts'
+                      label='Нийтлэлийн тоо'
+                      fullWidth
+                    />
+                  </>
+                )}
+
+                {[1, 2, 3]?.includes(form?.values?.roleId) && (
                   <RHFTextField
                     type={showPassword ? 'text' : 'password'}
                     name='password'
@@ -277,7 +443,7 @@ export default function UserActionDialog({
                     }}
                   />
                 )}
-                {[1]?.includes(form?.values?.roleId) && (
+                {[1, 2, 3]?.includes(form?.values?.roleId) && (
                   <RHFTextField
                     type={showPassword ? 'text' : 'password'}
                     name='confirmPassword'

@@ -9,9 +9,9 @@ import {
   defaultValues,
 } from 'src/sections/user/utils/schema';
 
-const useAction = (dialogActionType, row, changeDialogStatus, value) => {
+const useAction = (dialogActionType, row, changeDialogStatus, id) => {
   const { form } = useForm(
-    UserCreateSchema(dialogActionType, value),
+    UserCreateSchema(dialogActionType, id),
     defaultValues
     // UserUpdateSchema()
   );
@@ -30,9 +30,24 @@ const useAction = (dialogActionType, row, changeDialogStatus, value) => {
       setDialogLoader(true);
       form.reset({
         ...row,
-        id: row?.id,
-        roleId: row?.userRole?.id,
-        orgId: row?.organization?.id,
+        roleId: Number(row.role?.role_id),
+        phoneNumber: row.phone_number || '',
+        prole: Number(row?.prole?.reference_id) || '',
+        image:
+          row?.photo?.file_name ||
+          row?.photo1?.file_name ||
+          row?.photo2?.file_name,
+
+        audienceInterests: row?.audience_interests || '',
+        averageLikes: row?.average_likes || '',
+        averageComments: row?.average_comments || '',
+        avgReelPlays: row?.avg_reel_plays || '',
+        avgViews: row?.avg_views || '',
+        engagementRate: row?.engagement_rate || '',
+        genderSplit: row?.gender_split || '',
+        igName: row?.influencer_ig_name || '',
+        popularPosts: row?.popular_posts || '',
+        totalPosts: row?.total_posts || '',
       });
       setTimeout(() => {
         setDialogLoader(false);

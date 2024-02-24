@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 //
 import Image from '../../image';
+import { HOST_API_KEY } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -13,11 +14,12 @@ export default function AvatarPreview({ file }) {
     return null;
   }
 
-  const imgUrl = typeof file === 'string' ? file : file.preview;
+  const imgUrl =
+    typeof file === 'string' ? HOST_API_KEY + '/file/' + file : file.preview;
 
   return (
     <Image
-      alt="avatar"
+      alt='avatar'
       src={imgUrl}
       sx={{
         zIndex: 8,

@@ -91,6 +91,36 @@ export default function UserListTable() {
   error &&
     enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
 
+  let paginationRef = {
+    filter: [
+      {
+        field_name: 'code',
+        field_type: 'string',
+        operation: '=',
+        value: 'PCODE',
+      },
+    ],
+    page_no: 1,
+    per_page: 1000,
+    sort: 'created_at desc',
+  };
+  // swr
+  const {
+    data: tableDataRef,
+    isLoading: isLoadingRef,
+    error: errorRef,
+    isValidating: isValidatingRef,
+  } = useSWR(
+    ['/reference/list', true, paginationRef],
+    (args) => postFetcher(args),
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    }
+  );
+  errorRef &&
+    enqueueSnackbar('Өгөгдөл татахад алдаа гарлаа', { variant: 'warning' });
+
   //Function
   const handleUpdate = async (row) => {
     setRow(row);
@@ -163,7 +193,7 @@ export default function UserListTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component='div'
-                count={tableData?.pagination?.totalElements || 0}
+                count={tableData?.pagination?.total_elements || 0}
                 page={page}
                 onPageChange={onChangePage}
                 rowsPerPage={rowsPerPage}
@@ -177,9 +207,10 @@ export default function UserListTable() {
           </Box>
         </Card>
       </Container>
-      {!roleDataLoading && (
+      {!roleDataLoading && !isLoadingRef && (
         <UserActionDialog
           role={roleData?.data}
+          reference={tableDataRef?.data}
           row={row}
           dialogActionType={dialogActionType}
           changeDialogStatus={(e) => {

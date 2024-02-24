@@ -15,29 +15,28 @@ import {
 // default
 import * as Yup from 'yup';
 
-export function UserCreateSchema(dilaog, form) {
-  console.log('🚀 ~ UserCreateSchema ~ form:', form);
+export function UserCreateSchema(dilaog, id) {
   let UserCreateSchema = {};
-  if (form ? form === 1 : true) {
-    UserCreateSchema = Yup.object().shape({
-      name: Yup.string()
-        .required(requiredMsg)
-        .min(1, min1Msg)
-        .max(50, max50Msg),
-      // image: Yup.string().required(requiredMsg).min(1, min1Msg),
-      email: Yup.string()
-        .email(emailRegexMsg)
-        .required(requiredMsg)
-        .max(100, max100Msg),
-      password: Yup.string()
-        .required(requiredMsg)
-        .min(8, minPass)
-        .max(50, minPass),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password')], confirmPasswordMsg)
-        .required(requiredMsg),
-    });
-  }
+  // if (id === 1) {
+  //   UserCreateSchema = Yup.object().shape({
+  //     name: Yup.string()
+  //       .required(requiredMsg)
+  //       .min(1, min1Msg)
+  //       .max(50, max50Msg),
+  //     // image: Yup.string().required(requiredMsg).min(1, min1Msg),
+  //     email: Yup.string()
+  //       .email(emailRegexMsg)
+  //       .required(requiredMsg)
+  //       .max(100, max100Msg),
+  //     password: Yup.string()
+  //       .required(requiredMsg)
+  //       .min(8, minPass)
+  //       .max(50, minPass),
+  //     confirmPassword: Yup.string()
+  //       .oneOf([Yup.ref('password')], confirmPasswordMsg)
+  //       .required(requiredMsg),
+  //   });
+  // }
   // if (dilaog === 'create') {
   //   UserCreateSchema = Yup.object().shape({
   //     lastname: Yup.string()
@@ -96,7 +95,7 @@ export function UserCreateSchema(dilaog, form) {
   //     roleId: Yup.string().required(requiredMsg),
   //   });
   // }
-  return form && UserCreateSchema;
+  return UserCreateSchema;
 }
 
 export function UserUpdateSchema() {
@@ -135,6 +134,23 @@ export const defaultValues = {
   email: '',
   roleId: '',
   image: '',
+  phoneNumber: '',
+  confirmPassword: '',
+  password: '',
+  audienceInterests: '',
+  averageLikes: '',
+  averageComments: '',
+  avgReelPlays: '',
+  avgViews: '',
+  bio: '',
+  engagementRate: '',
+  followers: '',
+  genderSplit: '',
+  igName: '',
+  location: '',
+  popularPosts: '',
+  totalPosts: '',
+  prole: '',
 };
 
 export const TABLE_HEAD = [

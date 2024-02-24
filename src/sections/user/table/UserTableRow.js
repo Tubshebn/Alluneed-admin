@@ -20,6 +20,7 @@ import Iconify from 'src/components/iconify';
 import DeleteDialog from 'src/components/DeleteDialog';
 import MenuPopover from 'src/components/menu-popover';
 import TextMaxLine from 'src/components/text-max-line/TextMaxLine';
+import { HOST_API_KEY } from 'src/config-global';
 
 // props
 UserTableRow.propTypes = {
@@ -40,24 +41,38 @@ export default function UserTableRow({
   page,
   rowsPerPage,
 }) {
-  console.log('🚀 ~ UserTableRow ~ row:', row);
-  const { getFetcher } = useSwrFetcher();
+  const { getFetcher, deleteFetcher } = useSwrFetcher();
   const { enqueueSnackbar } = useSnackbar();
   const [confirmModal, setConfirmModal] = useState(false);
   const [openMenu, setOpenMenuActions] = useState(null);
-  const { id, name, email, phone_number, followers, location, role, photo } =
-    row;
+  const {
+    id,
+    name,
+    email,
+    phone_number,
+    followers,
+    location,
+    role,
+    photo,
+    photo1,
+    photo2,
+  } = row;
 
   const { trigger } = useSWRMutation(
-    [`api/delete_admin_user/id/${id}`, true],
-    (args) => getFetcher(args),
+    [`/users/${id}`, true],
+    (args) => deleteFetcher(args),
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
       onSuccess: (newData) => {
-        newData?.success && enqueueSnackbar('Амжилттай устгагдсан');
-        handleClose();
-        refreshTable();
+        newData?.response_code === 200
+          ? (enqueueSnackbar('Амжилттай устгагдсан'),
+            handleClose(),
+            refreshTable())
+          : enqueueSnackbar(
+              newData?.response_msg || 'Алдаа гарлаа, дахин оролдоно уу',
+              'warning'
+            );
       },
       onError: (err) => {
         err &&
@@ -106,8 +121,9 @@ export default function UserTableRow({
       <TableCell align='left' sx={{ textTransform: 'capitalize' }}>
         <Avatar
           src={
-            photo?.length > 0 &&
-            'http://103.168.56.249:8080/file/' + photo?.[0]?.file_name
+            HOST_API_KEY +
+            '/file/' +
+            (photo?.file_name || photo1?.file_name || photo2?.file_name)
           }
         />
       </TableCell>
@@ -128,7 +144,7 @@ export default function UserTableRow({
       </TableCell>
 
       <TableCell align='left' color='gray' sx={{ textTransform: 'capitalize' }}>
-        {role}
+        {role?.name || 'Админ'}
       </TableCell>
       <TableCell align='left' color='gray' sx={{ textTransform: 'capitalize' }}>
         {location}
@@ -150,12 +166,13 @@ export default function UserTableRow({
       >
         <MenuItem
           onClick={() => {
-            handleView();
+            handleOpen();
             handleCloseMenu();
           }}
+          sx={{ color: 'error.main' }}
         >
-          <Iconify icon='eva:eye-fill' />
-          Харах
+          <Iconify icon='eva:trash-2-outline' />
+          Устгах
         </MenuItem>
         <MenuItem
           onClick={() => {

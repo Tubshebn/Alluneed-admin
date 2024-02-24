@@ -117,6 +117,7 @@ export const Api = () => {
                 }
               : ''
           );
+
           if (response?.status === 200 && response?.data) {
             return response.data;
           }
