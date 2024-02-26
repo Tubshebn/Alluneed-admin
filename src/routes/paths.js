@@ -34,4 +34,8 @@ export const PATH_DASHBOARD = {
         root: path(ROOTS_DASHBOARD, '/organization'),
         table: path(ROOTS_DASHBOARD, '/organization/table'),
     },
+    agency: {
+        root: path(ROOTS_DASHBOARD, '/agency'),
+        table: path(ROOTS_DASHBOARD, '/agency/table'),
+    },
 };

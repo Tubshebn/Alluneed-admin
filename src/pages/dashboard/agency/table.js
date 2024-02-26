@@ -20,11 +20,11 @@ import { OrganizationActionDialog } from 'src/sections/organization/action';
 import { OrganizationTableRow, OrganizationTableToolbar } from 'src/sections/organization/table';
 import { TABLE_HEAD } from 'src/sections/organization/utils/schema';
 
-OrganizationListTable.getLayout = function getLayout(page) {
-    return <Layout headTitle='Байгууллагууд'>{page}</Layout>;
+AgencyTable.getLayout = function getLayout(page) {
+    return <Layout headTitle='Агентууд'>{page}</Layout>;
 };
 
-export default function OrganizationListTable() {
+export default function AgencyTable() {
     const {
         state: { user },
     } = useAuthContext();
@@ -51,7 +51,7 @@ export default function OrganizationListTable() {
         error,
         mutate: tableMutate,
         isValidating,
-    } = useSWR(['company/list', true, pagination], (args) => postFetcher(args), {
+    } = useSWR(['agent/list', true, pagination], (args) => postFetcher(args), {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
     });
@@ -82,13 +82,12 @@ export default function OrganizationListTable() {
                     spacing={2}
                     sx={{ mb: 5 }}
                 >
-                    <Typography variant='h4'>{'Байгууллагуудын жагсаалт'}</Typography>
+                    <Typography variant='h4'>{'Агентуудын жагсаалт'}</Typography>
                     <Button variant='contained' startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
                         {'Бүртгэх'}
                     </Button>
                 </Stack>
 
-                {/* <OrganizationTableToolbar filterFunction={filterFunction} /> */}
                 <Card>
                     <Scrollbar>
                         <TableContainer sx={{ position: 'relative' }}>

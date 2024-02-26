@@ -15,12 +15,12 @@ const navConfig = [
             {
                 title: 'Хэрэглэгчийн удирдлага',
                 path: PATH_DASHBOARD.user.root,
-                icon: <Iconify icon="mdi:user" />,
+                icon: <Iconify icon='mdi:user' />,
             },
             {
                 title: 'Тохиргоо',
                 path: PATH_DASHBOARD.role.root,
-                icon: <Iconify icon="fluent:window-ad-20-filled" />,
+                icon: <Iconify icon='fluent:window-ad-20-filled' />,
                 children: [
                     {
                         title: 'Role тохиргоо',
@@ -35,7 +35,12 @@ const navConfig = [
             {
                 title: 'Байгууллага',
                 path: PATH_DASHBOARD.organization.root,
-                icon: <Iconify icon="mdi:user" />,
+                icon: <Iconify icon='mdi:user' />,
+            },
+            {
+                title: 'Агент',
+                path: PATH_DASHBOARD.agency.root,
+                icon: <Iconify icon='mdi:user' />,
             },
         ],
     },
