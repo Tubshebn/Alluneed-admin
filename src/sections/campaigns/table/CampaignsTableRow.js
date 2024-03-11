@@ -15,7 +15,7 @@ import Label from 'src/components/label';
 import MenuPopover from 'src/components/menu-popover';
 
 // props
-OrganizationTableRow.propTypes = {
+CampaignsTableRow.propTypes = {
     row: PropTypes.object.isRequired,
     refreshTable: PropTypes.func,
     handleUpdate: PropTypes.func,
@@ -24,7 +24,7 @@ OrganizationTableRow.propTypes = {
     rowsPerPage: PropTypes.number,
 };
 
-export default function OrganizationTableRow({ row, refreshTable, handleUpdate, index, page, rowsPerPage }) {
+export default function CampaignsTableRow({ row, refreshTable, handleUpdate, index, page, rowsPerPage }) {
     const { deleteFetcher } = useSwrFetcher();
     const { enqueueSnackbar } = useSnackbar();
     const [confirmModal, setConfirmModal] = useState(false);

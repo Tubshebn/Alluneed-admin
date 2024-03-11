@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 // default import
 import useForm from 'src/hooks/useForm';
 // section
-import { OrganizationCreateSchema, OrganizationUpdateSchema, defaultValues } from 'src/sections/organization/utils/schema';
+import { OrganizationCreateSchema, OrganizationUpdateSchema, defaultValues } from 'src/sections/campaigns/utils/schema';
 
 const useAction = (dialogActionType, row, changeDialogStatus) => {
     const { form } = useForm(OrganizationCreateSchema(dialogActionType), defaultValues, OrganizationUpdateSchema(dialogActionType));
@@ -23,8 +23,6 @@ const useAction = (dialogActionType, row, changeDialogStatus) => {
             form.reset({
                 ...row,
                 id: row?.id,
-                roleId: row?.userRole?.id,
-                aimagNiislelCode: 'Увс',
             });
             setTimeout(() => {
                 setDialogLoader(false);

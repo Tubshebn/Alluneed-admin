@@ -26,22 +26,22 @@ import Iconify from 'src/components/iconify';
 ///Sections
 import { styled } from '@mui/system';
 import { useCallback, useState } from 'react';
-import useAction from 'src/sections/organization/hooks/useAction';
+import useAction from 'src/sections/agency/hooks/useAction';
 
 //Props
-OrganizationActionDialog.propTypes = {
+AgencyActionDialog.propTypes = {
     row: PropTypes.object.isRequired,
     dialogActionType: PropTypes.string,
     refreshTable: PropTypes.func,
     changeDialogStatus: PropTypes.func,
 };
 
-export default function OrganizationActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
+export default function AgencyActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
     const { formFetcher, postFetcher } = useSwrFetcher();
     const { enqueueSnackbar } = useSnackbar();
     const { form, actionState, actionFunction } = useAction(dialogActionType, row, changeDialogStatus);
 
-    const { trigger, isMutating } = useSWRMutation(`/company`, formFetcher, {
+    const { trigger, isMutating } = useSWRMutation(dialogActionType === 'update' ? `agent/${row?.id}` : `agent/create`, formFetcher, {
         onSuccess: (newData) => {
             newData?.response_code === 200
                 ? (enqueueSnackbar(dialogActionType === 'update' ? 'Амжилттай шинэчлэгдсэн' : 'Амжилттай бүртгэгдсэн'),

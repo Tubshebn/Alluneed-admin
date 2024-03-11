@@ -20,23 +20,23 @@ import useSwrFetcher from 'src/hooks/useSwrFetcher';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 //Components
-import { RHFSelect, RHFTextField, RHFUpload } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFUpload, RHFUploadAvatar, RHFUploadBox } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/FormProvider';
 import Iconify from 'src/components/iconify';
 ///Sections
 import { styled } from '@mui/system';
 import { useCallback, useState } from 'react';
-import useAction from 'src/sections/organization/hooks/useAction';
+import useAction from 'src/sections/campaigns/hooks/useAction';
 
 //Props
-OrganizationActionDialog.propTypes = {
+CampaignsActionDialog.propTypes = {
     row: PropTypes.object.isRequired,
     dialogActionType: PropTypes.string,
     refreshTable: PropTypes.func,
     changeDialogStatus: PropTypes.func,
 };
 
-export default function OrganizationActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
+export default function CampaignsActionDialog({ row, dialogActionType, refreshTable, changeDialogStatus }) {
     const { formFetcher, postFetcher } = useSwrFetcher();
     const { enqueueSnackbar } = useSnackbar();
     const { form, actionState, actionFunction } = useAction(dialogActionType, row, changeDialogStatus);
@@ -94,7 +94,7 @@ export default function OrganizationActionDialog({ row, dialogActionType, refres
             city: form?.values?.city,
             address: form?.values?.address,
             areas_of_activity: form?.values?.areas_of_activity,
-            image: form?.values?.image,
+            image: typeof form?.values?.image === 'string' ? null : form?.values?.image,
             website: form?.values?.website,
             description: form?.values?.description,
         };
@@ -113,15 +113,16 @@ export default function OrganizationActionDialog({ row, dialogActionType, refres
                             </Stack>
                         ) : (
                             <>
-                                <RHFTextField name='name' label='Байгууллагын Нэр' fullWidth />
+                                <RHFTextField name='name' label='Нэр' fullWidth />
                                 <RHFTextField name='email' label='И-мэйл' fullWidth />
                                 <RHFTextField name='phone' label='Утас' fullWidth />
                                 <RHFTextField name='city' label='Хот' fullWidth />
+                                <RHFTextField name='youtube_link' label='Youtube Link' fullWidth />
                                 <RHFTextField name='address' label='Хаяг' fullWidth />
                                 <RHFTextField name='areas_of_activity' label='Үйл ажиллагааны чиглэл' fullWidth />
                                 <RHFTextField name='description' label='Тайлбар' fullWidth />
                                 <RHFTextField name='website' label='Website' fullWidth />
-                                <RHFUpload name='image' maxSize={3145728} onDrop={handleDrop} />
+                                <RHFUpload name='image' maxSize={3145728} onDrop={handleDrop} thumbnail />
                             </>
                         )}
                     </Stack>

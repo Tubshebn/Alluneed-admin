@@ -16,15 +16,15 @@ import { TableHeadCustom, TableRenderBody, TableSkeleton, useTable } from 'src/c
 import { labelDisplayedRows } from 'src/components/table/utils';
 ///Section
 import { useAuthContext } from 'src/auth/useAuthContext';
-import { OrganizationActionDialog } from 'src/sections/organization/action';
-import { OrganizationTableRow, OrganizationTableToolbar } from 'src/sections/organization/table';
-import { TABLE_HEAD } from 'src/sections/organization/utils/schema';
+import { OrganizationActionDialog } from 'src/sections/campaigns/action';
+import { OrganizationTableRow } from 'src/sections/campaigns/table';
+import { TABLE_HEAD } from 'src/sections/campaigns/utils/schema';
 
-OrganizationListTable.getLayout = function getLayout(page) {
+CampaignsTable.getLayout = function getLayout(page) {
     return <Layout headTitle='Байгууллагууд'>{page}</Layout>;
 };
 
-export default function OrganizationListTable() {
+export default function CampaignsTable() {
     const {
         state: { user },
     } = useAuthContext();
@@ -82,7 +82,7 @@ export default function OrganizationListTable() {
                     spacing={2}
                     sx={{ mb: 5 }}
                 >
-                    <Typography variant='h4'>{'Байгууллагуудын жагсаалт'}</Typography>
+                    <Typography variant='h4'>{'Campaigns жагсаалт'}</Typography>
                     <Button variant='contained' startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={() => handleCreate()}>
                         {'Бүртгэх'}
                     </Button>

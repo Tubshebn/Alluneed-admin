@@ -1,2 +1,2 @@
-export { default as OrganizationTableRow } from './OrganizationTableRow';
-export { default as OrganizationTableToolbar } from './OrganizationTableToolbar';
+export { default as AgencyTableRow } from './AgencyTableRow';
+export { default as AgencyTableToolbar } from './AgencyTableToolbar';

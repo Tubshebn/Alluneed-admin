@@ -16,9 +16,9 @@ import { TableHeadCustom, TableRenderBody, TableSkeleton, useTable } from 'src/c
 import { labelDisplayedRows } from 'src/components/table/utils';
 ///Section
 import { useAuthContext } from 'src/auth/useAuthContext';
-import { OrganizationActionDialog } from 'src/sections/organization/action';
-import { OrganizationTableRow, OrganizationTableToolbar } from 'src/sections/organization/table';
-import { TABLE_HEAD } from 'src/sections/organization/utils/schema';
+import { AgencyActionDialog } from 'src/sections/agency/action';
+import { AgencyTableRow } from 'src/sections/agency/table';
+import { TABLE_HEAD } from 'src/sections/agency/utils/schema';
 
 AgencyTable.getLayout = function getLayout(page) {
     return <Layout headTitle='Агентууд'>{page}</Layout>;
@@ -99,7 +99,7 @@ export default function AgencyTable() {
                                     ) : (
                                         <TableRenderBody data={tableData?.data}>
                                             {tableData?.data?.map((row, index) => (
-                                                <OrganizationTableRow
+                                                <AgencyTableRow
                                                     key={index}
                                                     index={index}
                                                     row={row}
@@ -133,7 +133,7 @@ export default function AgencyTable() {
                     </Box>
                 </Card>
             </Container>
-            <OrganizationActionDialog
+            <AgencyActionDialog
                 row={row}
                 dialogActionType={dialogActionType}
                 changeDialogStatus={(e) => {

@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 import Iconify from 'src/components/iconify';
 
 // props
-OrganizationTableToolbar.propTypes = {
+AgencyTableToolbar.propTypes = {
     filterFunction: PropTypes.func,
 };
 
-export default function OrganizationTableToolbar({ filterFunction }) {
+export default function AgencyTableToolbar({ filterFunction }) {
     const [filterModel, setFilterModel] = useState({});
     const { enqueueSnackbar } = useSnackbar();
 
@@ -47,7 +47,7 @@ export default function OrganizationTableToolbar({ filterFunction }) {
         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3, mb: 3 }}>
             <TextField
                 fullWidth
-                label="Байгууллагын нэрээр хайх"
+                label='Байгууллагын нэрээр хайх'
                 sx={{
                     maxWidth: 240,
                 }}
@@ -56,7 +56,7 @@ export default function OrganizationTableToolbar({ filterFunction }) {
             />
             <TextField
                 fullWidth
-                label="Байгууллагын РД хайх"
+                label='Байгууллагын РД хайх'
                 sx={{
                     maxWidth: 240,
                 }}
@@ -64,7 +64,7 @@ export default function OrganizationTableToolbar({ filterFunction }) {
                 onChange={(event) => isValid(7, event.target.value, 'rd')}
             />
             {Object.keys(filterModel).length > 0 && (
-                <Button color="error" sx={{ flexShrink: 0 }} onClick={() => setFilterModel({})} startIcon={<Iconify icon="eva:trash-2-outline" />}>
+                <Button color='error' sx={{ flexShrink: 0 }} onClick={() => setFilterModel({})} startIcon={<Iconify icon='eva:trash-2-outline' />}>
                     Цэвэрлэх
                 </Button>
             )}

@@ -30,9 +30,9 @@ export const PATH_DASHBOARD = {
         root: path(ROOTS_DASHBOARD, '/user'),
         table: path(ROOTS_DASHBOARD, '/user/table'),
     },
-    organization: {
-        root: path(ROOTS_DASHBOARD, '/organization'),
-        table: path(ROOTS_DASHBOARD, '/organization/table'),
+    campaigns: {
+        root: path(ROOTS_DASHBOARD, '/campaigns'),
+        table: path(ROOTS_DASHBOARD, '/campaigns/table'),
     },
     agency: {
         root: path(ROOTS_DASHBOARD, '/agency'),

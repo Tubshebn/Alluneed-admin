@@ -33,8 +33,8 @@ const navConfig = [
                 ],
             },
             {
-                title: 'Байгууллага',
-                path: PATH_DASHBOARD.organization.root,
+                title: 'Campaigns',
+                path: PATH_DASHBOARD.campaigns.root,
                 icon: <Iconify icon='mdi:user' />,
             },
             {

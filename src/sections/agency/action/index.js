@@ -1,1 +1,1 @@
-export { default as OrganizationActionDialog } from './OrganizationActionDialog';
+export { default as AgencyActionDialog } from './AgencyActionDialog';

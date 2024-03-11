@@ -35,6 +35,7 @@ export const defaultValues = {
     image: '',
     website: '',
     description: '',
+    youtube_link: '',
 };
 
 export const TABLE_HEAD = [
